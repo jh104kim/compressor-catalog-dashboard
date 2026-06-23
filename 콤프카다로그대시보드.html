@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>압축기 경쟁 인텔리전스 대시보드 — 앱 개요 보고서</title>
+<style>
+  :root {
+    --accent: #FF385C;
+    --re: #FF385C;
+    --ro: #00A699;
+    --sc: #FC642D;
+    --green: #067647;
+    --amber: #E8A100;
+    --blue: #1D6FB8;
+    --text: #111;
+    --sub: #555;
+    --muted: #888;
+    --border: #E8E8E8;
+    --bg: #FAFAFA;
+    --card: #fff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+  /* ── COVER ── */
+  .cover {
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+    color: #fff; padding: 80px 60px 70px; position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 40%, rgba(255,56,92,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(0,166,153,0.1) 0%, transparent 50%);
+  }
+  .cover-inner { max-width: 900px; position: relative; }
+  .cover-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 13px;
+    border-radius: 20px; background: rgba(255,56,92,0.18); color: #FF9DAE;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 24px; }
+  .cover-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: #FF385C; }
+  .cover h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+    margin-bottom: 18px; }
+  .cover h1 em { font-style: normal; color: #FF9DAE; }
+  .cover-sub { font-size: 17px; color: rgba(255,255,255,0.62); font-weight: 500;
+    max-width: 620px; line-height: 1.6; margin-bottom: 42px; }
+  .cover-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+  .cover-stat { display: flex; flex-direction: column; gap: 4px; }
+  .cover-stat .val { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+  .cover-stat .lbl { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; }
+  .cover-meta { margin-top: 50px; display: flex; gap: 24px; font-size: 11px;
+    color: rgba(255,255,255,0.4); font-weight: 600; flex-wrap: wrap; }
+  .cover-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 960px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* ── SECTION ── */
+  .sec { margin-top: 64px; }
+  .sec-label { display: inline-flex; align-items: center; gap: 7px; font-size: 10.5px;
+    font-weight: 800; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase;
+    margin-bottom: 10px; }
+  .sec-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .sec h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.025em; color: var(--text);
+    margin-bottom: 6px; }
+  .sec-desc { font-size: 14px; color: var(--sub); font-weight: 500; margin-bottom: 28px;
+    max-width: 680px; line-height: 1.6; }
+  .divider { height: 1px; background: var(--border); margin: 56px 0 0; }
+
+  /* ── CARDS ── */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+    padding: 26px 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .card h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .card p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+  /* ── STAT TILES ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px 22px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+  .stat .val { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; }
+  .stat .lbl { font-size: 11px; font-weight: 700; color: var(--muted); margin-top: 4px; }
+  .stat .note { font-size: 11.5px; color: var(--sub); font-weight: 500; margin-top: 3px; }
+
+  /* ── BADGE ── */
+  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 8px;
+    font-size: 11px; font-weight: 800; white-space: nowrap; }
+  .badge-red { background: #FDEEEA; color: #C13515; }
+  .badge-amber { background: #FFF4E2; color: #B25E00; }
+  .badge-green { background: #E8F7EF; color: #067647; }
+  .badge-blue { background: #E8F0FA; color: #1D6FB8; }
+  .badge-gray { background: #F2F2F2; color: #717171; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700;
+    color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid #F4F4F4; color: var(--sub); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #FAFAFA; }
+  td strong { color: var(--text); font-weight: 700; }
+  td .chip { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; }
+
+  /* ── CODE BLOCK ── */
+  .code-block { background: #1a1a2e; border-radius: 12px; padding: 20px 22px;
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; color: #c9d1d9;
+    overflow-x: auto; line-height: 1.7; }
+  .code-block .cm { color: #8b949e; }
+  .code-block .kw { color: #FF9DAE; }
+  .code-block .fn { color: #79c0ff; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .num { color: #f2cc60; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow { display: flex; align-items: center; gap: 0; margin: 24px 0; flex-wrap: wrap; }
+  .flow-box { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; text-align: center; flex: 1; min-width: 120px; }
+  .flow-box .icon { font-size: 22px; margin-bottom: 6px; }
+  .flow-box .title { font-size: 12.5px; font-weight: 800; color: var(--text); }
+  .flow-box .sub { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 3px; }
+  .flow-arrow { font-size: 20px; color: var(--muted); padding: 0 8px; flex: none; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 24px; margin-top: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 5px; top: 8px; bottom: 8px;
+    width: 2px; background: linear-gradient(180deg, var(--accent) 0%, var(--amber) 50%, var(--green) 100%);
+    border-radius: 2px; }
+  .tl-item { padding: 14px 0; border-top: 1px solid var(--border); position: relative; }
+  .tl-dot { position: absolute; left: -24px; top: 20px; width: 10px; height: 10px;
+    border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px; }
+  .tl-date { font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; }
+  .tl-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px; }
+  .tl-desc { font-size: 12.5px; color: var(--sub); line-height: 1.55; }
+
+  /* ── PRIORITY LIST ── */
+  .prio-list { display: flex; flex-direction: column; gap: 10px; }
+  .prio-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+  .prio-label { font-size: 22px; font-weight: 800; min-width: 36px; }
+  .prio-path { font-size: 14.5px; font-weight: 800; color: var(--text); }
+  .prio-urg { font-size: 11px; color: var(--sub); font-weight: 600; margin-top: 2px; }
+
+  /* ── TYPE COLORS ── */
+  .type-re { color: var(--re); }
+  .type-ro { color: var(--ro); }
+  .type-sc { color: var(--sc); }
+  .accent { color: var(--accent); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight { background: linear-gradient(135deg, #FFF1F3 0%, #FFF8F8 100%);
+    border: 1.5px solid #FFD9DF; border-radius: 16px; padding: 22px 26px; margin: 24px 0; }
+  .highlight.blue { background: linear-gradient(135deg, #EEF3FB 0%, #F8FAFF 100%);
+    border-color: #C3D8F2; }
+  .highlight.green { background: linear-gradient(135deg, #E8F7EF 0%, #F4FCF7 100%);
+    border-color: #B3DEC6; }
+  .highlight h4 { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+  .highlight p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+  /* ── CONDITION TABLE ── */
+  .cond-table { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+  .cond-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; text-align: center; }
+  .cond-card .cond-name { font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .cond-card .cond-temp { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .cond-card .cond-factor { font-size: 20px; font-weight: 800; }
+
+  /* ── TAB OVERVIEW ── */
+  .tab-overview { display: flex; flex-direction: column; gap: 14px; }
+  .tab-row { display: flex; align-items: flex-start; gap: 18px; background: var(--card);
+    border: 1px solid var(--border); border-left: 4px solid; border-radius: 14px;
+    padding: 18px 22px; }
+  .tab-num { font-size: 24px; font-weight: 800; min-width: 28px; }
+  .tab-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .tab-desc { font-size: 12.5px; color: var(--sub); line-height: 1.55; }
+  .tab-features { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (max-width: 700px) {
+    .cover { padding: 50px 24px 44px; }
+    .cover h1 { font-size: 32px; }
+    .stat-grid, .card-grid-2, .card-grid-3, .card-grid-4, .cond-table { grid-template-columns: 1fr 1fr; }
+    .page { padding: 0 20px 60px; }
+    .flow { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-eyebrow"><span></span> SAMSUNG COMPRESSOR INTELLIGENCE</div>
+    <h1>압축기 경쟁 인텔리전스<br><em>대시보드</em> 앱 개요 보고서</h1>
+    <p class="cover-sub">
+      Samsung(당사) 관점에서 공개 카탈로그·리서치 데이터를 구조화해
+      KPI·Decision·Reporting·모델 분석 4개 뷰로 시각화하는 정적 웹 대시보드의
+      전체 아키텍처, 구현 방법, 데이터 활용 가이드.
+    </p>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <span class="val">68</span>
+        <span class="lbl">전체 모델 수</span>
+      </div>
+      <div class="cover-stat">
+        <span class="val">27</span>
+        <span class="lbl">Samsung 모델</span>
+      </div>
+      <div class="cover-stat">
+        <span class="val">12</span>
+        <span class="lbl">비교 그룹</span>
+      </div>
+      <div class="cover-stat">
+        <span class="val">29</span>
+        <span class="lbl">데이터 소스</span>
+      </div>
+      <div class="cover-stat">
+        <span class="val">3.43</span>
+        <span class="lbl">Samsung TOP COP</span>
+      </div>
+    </div>
+    <div class="cover-meta">
+      <span>📅 기준일 2026-06-23</span>
+      <span>📁 Samsung Compressor Catalogue 2024 (96p)</span>
+      <span>🔬 Perplexity 리서치 2026-06</span>
+      <span>⚙️ React 18 + DC Framework</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══ 01 프로젝트 개요 ══════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot"></span> 01 PROJECT OVERVIEW</div>
+  <h2>프로젝트 개요</h2>
+  <p class="sec-desc">Samsung 압축기 사업부 경쟁 인텔리전스용 단일 페이지 대시보드. 9개 제조사 공개 카탈로그를 Samsung 기준으로 정규화·비교 시각화한다.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="val type-re">4</div>
+      <div class="lbl">Re 왕복동 모델</div>
+      <div class="note">R134a / R600a (냉장고)</div>
+    </div>
+    <div class="stat">
+      <div class="val type-ro">12</div>
+      <div class="lbl">Ro 로터리 모델</div>
+      <div class="note">R32 / R454B / R410A</div>
+    </div>
+    <div class="stat">
+      <div class="val type-sc">11</div>
+      <div class="lbl">Sc 스크롤 모델</div>
+      <div class="note">R290 / R454B / R32</div>
+    </div>
+    <div class="stat">
+      <div class="val accent">3.43</div>
+      <div class="lbl">Samsung TOP COP</div>
+      <div class="note">DS4HD5066FVT · R290 Sc</div>
+    </div>
+  </div>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <h3>핵심 목적</h3>
+      <p>냉매 전환 규제(AIM Act·EU F-Gas 2027) 대응을 위해 당사 압축기 포지션을 8개 경쟁사 대비 정량적으로 파악. 공백(P1: R290 왕복동)과 강점(R454B 스크롤 Variable 우위)을 데이터 기반으로 시각화.</p>
+    </div>
+    <div class="card">
+      <h3>경쟁사 커버리지</h3>
+      <p style="margin-bottom:10px;">LG · Copeland(Emerson) · GMCC(Midea) · Embraco(Nidec) · Danfoss/Secop · Panasonic · Highly</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="badge badge-gray">LG</span>
+        <span class="badge badge-gray">Copeland</span>
+        <span class="badge badge-gray">GMCC</span>
+        <span class="badge badge-gray">Embraco</span>
+        <span class="badge badge-gray">Danfoss</span>
+        <span class="badge badge-gray">Panasonic</span>
+        <span class="badge badge-gray">Highly</span>
+        <span class="badge badge-gray">Secop</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 02 아키텍처 ══════════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--ro)"></span> 02 ARCHITECTURE</div>
+  <h2>시스템 아키텍처</h2>
+  <p class="sec-desc">빌드 스텝 없는 순수 정적 파일. HTTP 서버 + CDN React. 데이터는 JS 객체 하나로 관리한다.</p>
+
+  <div class="flow">
+    <div class="flow-box">
+      <div class="icon">📄</div>
+      <div class="title">data/*.md</div>
+      <div class="sub">리서치 원천</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent);">
+      <div class="icon">⚡</div>
+      <div class="title">compressor-data.js</div>
+      <div class="sub">SSOT · window.COMPRESSOR_DATA</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="icon">⚙️</div>
+      <div class="title">support.js</div>
+      <div class="sub">DC 런타임 (React 18)</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="icon">🖥️</div>
+      <div class="title">Dashboard.dc.html</div>
+      <div class="sub">5탭 SPA</div>
+    </div>
+  </div>
+
+  <div class="card-grid-3" style="margin-top:20px;">
+    <div class="card">
+      <h3>📦 파일 구조</h3>
+      <div class="code-block" style="font-size:12px; margin-top:8px;">
+frontend/<br>
+├── <span style="color:#f2cc60">Compressor Dashboard.dc.html</span><br>
+├── <span style="color:#79c0ff">compressor-data.js</span>  ← SSOT<br>
+└── support.js  ← 런타임(수정금지)
+      </div>
+    </div>
+    <div class="card">
+      <h3>🔧 기술 스택</h3>
+      <p>
+        React 18.3.1 (unpkg CDN)<br>
+        DC Framework (design component)<br>
+        순수 JS 객체 데이터 레이어<br>
+        CSS 인라인 + 미디어쿼리<br>
+        빌드 스텝 없음
+      </p>
+    </div>
+    <div class="card">
+      <h3>🚀 실행 방법</h3>
+      <div class="code-block" style="font-size:12px; margin-top:8px;">
+<span class="cm"># 로컬 실행</span><br>
+cd frontend<br>
+python -m http.server 8000<br><br>
+<span class="cm"># URL</span><br>
+<span class="str">localhost:8000/<br>Compressor%20Dashboard.dc.html</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:24px;">
+    <h4>⚠️ file:// 직접 열기 불가</h4>
+    <p>DC 런타임이 <code>fetch(location.href)</code>를 사용하므로 반드시 HTTP 서버를 통해 접근해야 합니다. <code>file://</code> 프로토콜로 열면 CORS 에러가 발생합니다. React CDN 로딩을 위해 인터넷 연결도 필요합니다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 03 DC 프레임워크 ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--sc)"></span> 03 DC FRAMEWORK</div>
+  <h2>DC 프레임워크 구현 방법</h2>
+  <p class="sec-desc">support.js가 <code>{{ }}</code> 보간과 <code>&lt;sc-for&gt;</code>/<code>&lt;sc-if&gt;</code>를 React 18로 컴파일한다. 모든 계산 로직은 <code>renderVals()</code>에서 끝내고 결과만 템플릿에 바인딩.</p>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <h3>컴포넌트 구조</h3>
+      <div class="code-block" style="margin-top:10px;">
+<span class="kw">class</span> <span class="fn">Component</span> <span class="kw">extends</span> DCLogic {<br>
+  state = {<br>
+    view: <span class="str">'kpi'</span>,<br>
+    analysisType: <span class="str">'All'</span>,<br>
+    analysisModel: <span class="kw">null</span>,<br>
+    query: <span class="str">''</span>,<br>
+  };<br><br>
+  <span class="fn">renderVals</span>() {<br>
+    <span class="cm">// 모든 계산은 여기서</span><br>
+    <span class="kw">const</span> D = window.COMPRESSOR_DATA;<br>
+    <span class="kw">return</span> {<br>
+      myLabel: D.meta.asOf,<br>
+      onClick: () =><br>
+        <span class="kw">this</span>.<span class="fn">setState</span>({view: <span class="str">'kpi'</span>}),<br>
+    };<br>
+  }<br>
+}
+      </div>
+    </div>
+    <div class="card">
+      <h3>템플릿 문법</h3>
+      <div class="code-block" style="margin-top:10px;">
+<span class="cm">&lt;!-- 보간: 경로/비교/리터럴만 --&gt;</span><br>
+{{ analysis.model }}<br>
+{{ item.color === 'red' }}<br><br>
+<span class="cm">&lt;!-- 반복 --&gt;</span><br>
+&lt;sc-for list=<span class="str">"{{ arr }}"</span><br>
+  as=<span class="str">"item"</span><br>
+  hint-placeholder-count=<span class="str">"5"</span>&gt;<br>
+  {{ item.label }}<br>
+&lt;/sc-for&gt;<br><br>
+<span class="cm">&lt;!-- 조건부 --&gt;</span><br>
+&lt;sc-if value=<span class="str">"{{ flag }}"</span>&gt;<br>
+  ...보여줄 내용...<br>
+&lt;/sc-if&gt;
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight blue" style="margin-top:20px;">
+    <h4 style="color:var(--blue);">핵심 제약: {{ }} 안에 임의 JS 실행 불가</h4>
+    <p>산술 연산, 함수 호출, 삼항 연산자는 <code>{{ }}</code> 안에서 작동하지 않습니다. 모든 계산(정렬·환산·포맷팅·필터링)은 <code>renderVals()</code> 안 순수 JS로 끝내고 최종 값만 바인딩하세요.</p>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h3>renderVals() 패턴 예시 — 비교군 신뢰도 바</h3>
+    <div class="code-block" style="margin-top:10px;">
+<span class="cm">// ✅ 올바른 방법: renderVals()에서 계산 완료</span><br>
+<span class="kw">const</span> groupNav = (D.benchmarkGroups || []).<span class="fn">map</span>(g => {<br>
+  <span class="kw">const</span> rel = g.reliability || <span class="num">0</span>;<br>
+  <span class="kw">const</span> color = rel >= <span class="num">4</span> ? <span class="str">'#067647'</span> : rel >= <span class="num">3</span> ? <span class="str">'#1D6FB8'</span><br>
+              : rel >= <span class="num">2</span> ? <span class="str">'#E8A100'</span> : <span class="str">'#C13515'</span>;<br>
+  <span class="kw">return</span> {<br>
+    title: g.title,<br>
+    <span class="cm">// 5칸 색상 배열을 미리 계산해 전달</span><br>
+    relBar: Array.from({length: <span class="num">5</span>}, (_, i) =><br>
+      ({ color: i &lt; rel ? color : <span class="str">'#E4E4E4'</span> })),<br>
+  };<br>
+});<br><br>
+<span class="cm">// 템플릿에서는 단순 바인딩만</span><br>
+<span class="cm">// &lt;sc-for list="{{ g.relBar }}" as="rb"&gt;</span><br>
+<span class="cm">//   &lt;span style="background: {{ rb.color }}"&gt;&lt;/span&gt;</span><br>
+<span class="cm">// &lt;/sc-for&gt;</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 04 데이터 레이어 ═══════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--green)"></span> 04 DATA LAYER</div>
+  <h2>데이터 레이어 (SSOT)</h2>
+  <p class="sec-desc"><code>frontend/compressor-data.js</code>가 유일한 진실 소스. 수치 변경은 반드시 여기서만. 모든 탭은 <code>window.COMPRESSOR_DATA</code>만 읽는다.</p>
+
+  <div class="table-wrap" style="margin-bottom:24px;">
+    <table>
+      <thead>
+        <tr>
+          <th>스키마 키</th>
+          <th>타입</th>
+          <th>내용</th>
+          <th>현황</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>meta</strong></td>
+          <td>Object</td>
+          <td>기준일 · 소스 수 · 카탈로그 연도</td>
+          <td><span class="badge badge-green">2026-06-23</span></td>
+        </tr>
+        <tr>
+          <td><strong>models</strong></td>
+          <td>Array[68]</td>
+          <td>Samsung 27 + 경쟁사 41. cc·용량·COP·EER·조건·상태·출처·gap</td>
+          <td><span class="badge badge-green">최신</span></td>
+        </tr>
+        <tr>
+          <td><strong>benchmarkGroups</strong></td>
+          <td>Array[12]</td>
+          <td>유형×냉매×조건×구동 비교군. reliability(1~5) 포함</td>
+          <td><span class="badge badge-green">12군</span></td>
+        </tr>
+        <tr>
+          <td><strong>priorities</strong></td>
+          <td>Array[6]</td>
+          <td>P1~P6 냉매 전환 우선순위. urgency·action·driver</td>
+          <td><span class="badge badge-amber">P1 공백</span></td>
+        </tr>
+        <tr>
+          <td><strong>regulations</strong></td>
+          <td>Array[5]</td>
+          <td>AIM Act · EU F-Gas · ASHRAE 90.1 · 중국 GB · 인도</td>
+          <td><span class="badge badge-blue">모니터링</span></td>
+        </tr>
+        <tr>
+          <td><strong>samsungMoves</strong></td>
+          <td>Array[5]</td>
+          <td>Samsung 최신 동향 (카탈로그·양산·발표)</td>
+          <td><span class="badge badge-green">최신</span></td>
+        </tr>
+        <tr>
+          <td><strong>catalogSources</strong></td>
+          <td>Array[9]</td>
+          <td>9개 제조사 카탈로그 연도·URL·신선도</td>
+          <td><span class="badge badge-amber">점검 권장 2건</span></td>
+        </tr>
+        <tr>
+          <td><strong>gaps / kpi / conditions</strong></td>
+          <td>Object</td>
+          <td>공백 분석 · KPI 파생값 · 측정조건 환산계수</td>
+          <td><span class="badge badge-green">최신</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>model 객체 구조</h3>
+    <div class="code-block" style="margin-top:10px;">
+<span class="fn">M</span>({<br>
+  mfr: <span class="str">"Samsung"</span>,          <span class="cm">// 제조사</span><br>
+  type: <span class="str">"Sc"</span>,              <span class="cm">// Re | Ro | Sc</span><br>
+  model: <span class="str">"DS2LD5046F"</span>,    <span class="cm">// 모델명</span><br>
+  refrigerant: <span class="str">"R454B"</span>,   <span class="cm">// 냉매</span><br>
+  drive: <span class="str">"Variable"</span>,       <span class="cm">// Fixed | Variable</span><br>
+  cc: <span class="num">46</span>,                  <span class="cm">// 배제량 (cc)</span><br>
+  capW: <span class="num">13267</span>,             <span class="cm">// 냉방용량 (W)</span><br>
+  cop: <span class="num">3.37</span>,               <span class="cm">// COP (W/W)</span><br>
+  eer: <span class="num">11.5</span>,               <span class="cm">// EER (Btu/W·hr)</span><br>
+  condition: <span class="str">"ARI"</span>,         <span class="cm">// 측정조건 코드</span><br>
+  status: <span class="str">"양산"</span>,            <span class="cm">// 양산 | 개발중</span><br>
+  gap: <span class="str">"have"</span>,             <span class="cm">// have | prog | none</span><br>
+  confidence: <span class="str">"High"</span>,        <span class="cm">// 데이터 신뢰도</span><br>
+  src: <span class="str">"perplexity 2026..."</span>, <span class="cm">// 출처</span><br>
+  postCatalog: <span class="kw">true</span>,          <span class="cm">// 2024 카탈로그 이후</span><br>
+  <span class="cm">// 확장 스펙 (nullable)</span><br>
+  noiseDb: <span class="kw">null</span>, oilType: <span class="kw">null</span>, approvals: [],<br>
+  tech: [], oemWins: [], seer2: <span class="kw">null</span>,<br>
+})
+    </div>
+  </div>
+
+  <div class="highlight green" style="margin-top:20px;">
+    <h4 style="color:var(--green);">데이터 레이어링 규칙</h4>
+    <p>
+      <strong>베이스</strong>: Samsung Compressor Catalogue 2024 (96p) — Re/Ro/Sc 풀스펙, 측정조건(ARI/AHRI) 명기. 권위 소스.<br>
+      <strong>업데이트</strong>: Perplexity 리서치 2026-06 — 2024 카탈로그 이후 개발/양산분. <code>postCatalog:true</code> 마킹.<br>
+      경쟁사: 각사 최신 공개 카탈로그(2023~2026). LG Scroll 2025, GMCC Rotary 2026 등.
+    </p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 05 측정조건 ════════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--amber)"></span> 05 MEASUREMENT CONDITIONS</div>
+  <h2>측정조건 비교 규칙</h2>
+  <p class="sec-desc">ARI·DOE-A·DOE-B·EN12900·SEER60은 응축온도가 달라 <strong>COP/EER 직접 비교 금지</strong>. 같은 비교군(benchmarkGroup) 안에서만 Δ% 계산.</p>
+
+  <div class="cond-table" style="margin-bottom:24px;">
+    <div class="cond-card" style="border-left:3px solid var(--accent);">
+      <div class="cond-name">ARI / AHRI</div>
+      <div class="cond-temp">응축 54.4°C / 증발 7.2°C</div>
+      <div class="cond-factor accent">×1.00</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">북미 기준</div>
+    </div>
+    <div class="cond-card" style="border-left:3px solid var(--blue);">
+      <div class="cond-name">DOE-A</div>
+      <div class="cond-temp">응축 46.1°C / 증발 10.0°C</div>
+      <div class="cond-factor" style="color:var(--blue);">×~1.20</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">LG 스크롤 기준</div>
+    </div>
+    <div class="cond-card" style="border-left:3px solid var(--green);">
+      <div class="cond-name">DOE-B</div>
+      <div class="cond-temp">응축 37.8°C / 증발 10.0°C</div>
+      <div class="cond-factor" style="color:var(--green);">×~1.59</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">GMCC STD 기준</div>
+    </div>
+    <div class="cond-card" style="border-left:3px solid #C4C4C4;">
+      <div class="cond-name">EN12900</div>
+      <div class="cond-temp">난방 조건</div>
+      <div class="cond-factor" style="color:#C4C4C4;">환산불가</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Copeland 난방</div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <h4 style="color:var(--accent);">군 교차 순위 금지</h4>
+    <p>측정조건이 다른 모델을 한 순위표에 섞지 않습니다. <code>benchmarkGroup.reliability ≤ 1</code>인 군은 ⚠️ 경고 배너와 "조건불일치" 배지가 자동 노출됩니다. LG DOE-A 스크롤(COP 4.88~5.00)과 Samsung ARI 스크롤(COP 3.37)은 조건이 달라 직접 비교 불가 — 별도 참고군으로 관리합니다.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 06 5탭 구조 ════════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--ro)"></span> 06 DASHBOARD TABS</div>
+  <h2>5탭 대시보드 구조</h2>
+  <p class="sec-desc">각 탭은 <code>state.view</code>로 전환. React 조건부 렌더(<code>&lt;sc-if value="{{ isKpi }}"&gt;</code>)로 구현.</p>
+
+  <div class="tab-overview">
+    <div class="tab-row" style="border-left-color:var(--accent);">
+      <div class="tab-num accent">①</div>
+      <div>
+        <div class="tab-title">KPI 현황</div>
+        <div class="tab-desc">Samsung 모델 수·TOP COP·P1 갭 등 스탯 타일. Re/Ro/Sc 세그먼트별 경쟁 포지션 카드. 냉매 커버리지 매트릭스(11종). 제조사 강도 히트맵(8사). 조건별 벤치마크 + 측정조건 환산 레전드. 카탈로그 출처·신선도 사이드바.</div>
+        <div class="tab-features">
+          <span class="badge badge-gray">스탯 타일 5</span>
+          <span class="badge badge-gray">Re/Ro/Sc 포지션</span>
+          <span class="badge badge-gray">냉매 매트릭스</span>
+          <span class="badge badge-gray">히트맵</span>
+          <span class="badge badge-gray">벤치마크</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-row" style="border-left-color:#C13515;">
+      <div class="tab-num" style="color:#C13515;">②</div>
+      <div>
+        <div class="tab-title">Decision 전략</div>
+        <div class="tab-desc">P1 스포트라이트(R290 Re 공백). 냉매 전환 우선순위 P1~P6(시급성 순). 규제 압력(AIM Act·EU F-Gas 2027·ASHRAE 90.1·중국 GB·인도). 냉매 전환 타임라인(비주얼 도트+라인). 경쟁사 위협 모니터링(8사 위협 레벨). Gap→Action. Samsung 최신 동향 타임라인.</div>
+        <div class="tab-features">
+          <span class="badge badge-red">P1~P6 로드맵</span>
+          <span class="badge badge-amber">규제 5건</span>
+          <span class="badge badge-gray">경쟁사 위협</span>
+          <span class="badge badge-green">Samsung Moves</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-row" style="border-left-color:var(--ro);">
+      <div class="tab-num type-ro">③</div>
+      <div>
+        <div class="tab-title">모델 분석</div>
+        <div class="tab-desc">유형(Re/Ro/Sc) + 측정조건 배지 필터로 Samsung 모델 좁히기. 선택 모델의 보완 스펙 9개 필드(계절효율·운전영역·소음·오일·규제승인·OEM 채택 등). 유사 경쟁 모델 TOP 5 자동 추천(유형+냉매+조건+용량 유사도 순). 자동 분석 요약문.</div>
+        <div class="tab-features">
+          <span class="badge badge-blue">조건 배지 필터</span>
+          <span class="badge badge-gray">보완 스펙 9필드</span>
+          <span class="badge badge-green">TOP 5 추천</span>
+          <span class="badge badge-gray">자동 요약</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-row" style="border-left-color:var(--sc);">
+      <div class="tab-num type-sc">④</div>
+      <div>
+        <div class="tab-title">Reporting</div>
+        <div class="tab-desc">12개 비교군 선택기 (relBar 신뢰도 5칸 바·포지션 배지·저신뢰 ⚠️ 경고). 비교표 (Δ% 미니바·조건 배지·ARI 환산 참고). 모델 행 클릭 → 드릴다운 리포트 카드(풀스펙·출처·신뢰도). 모델분석 탭 연결 버튼. 인쇄/PDF.</div>
+        <div class="tab-features">
+          <span class="badge badge-gray">12 비교군</span>
+          <span class="badge badge-amber">relBar 신뢰도</span>
+          <span class="badge badge-red">저신뢰 경고</span>
+          <span class="badge badge-gray">드릴다운</span>
+          <span class="badge badge-gray">인쇄/PDF</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-row" style="border-left-color:#9b9b9b;">
+      <div class="tab-num" style="color:#9b9b9b;">⑤</div>
+      <div>
+        <div class="tab-title">보완 과제</div>
+        <div class="tab-desc">SSOT 미확인 항목 진행률(현재 56%). 제조사별 연락처(클릭 가능 링크). 우선순위 상태별 트래킹(미확보/조건불일치/미확인/부분확인/간접확인). 남은 P1 과제: Samsung UF 시리즈 ARI 공인값·GMCC ATF/ATQ ARI COP·LG UniRotary R454B.</div>
+        <div class="tab-features">
+          <span class="badge badge-green">진행률 56%</span>
+          <span class="badge badge-amber">미확인 4건</span>
+          <span class="badge badge-gray">클릭 가능 연락처</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 07 전략 우선순위 ══════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:#C13515"></span> 07 STRATEGIC PRIORITIES</div>
+  <h2>냉매 전환 우선순위 (P1~P6)</h2>
+  <p class="sec-desc">Samsung 관점 냉매 전환 긴급도 순위. 규제 일정·경쟁사 현황·당사 공백을 종합한 실행 로드맵.</p>
+
+  <div class="prio-list">
+    <div class="prio-item" style="border-left:4px solid #C13515;">
+      <div class="prio-label accent">P1</div>
+      <div>
+        <div class="prio-path">R134a → R290 왕복동(Re)</div>
+        <div class="prio-urg">시급성: 매우 높음 · <strong>당사 공백</strong> — 경쟁사 LG/Embraco/Secop/Panasonic 양산</div>
+      </div>
+      <span class="badge badge-red">공백</span>
+    </div>
+    <div class="prio-item" style="border-left:4px solid #E8A100;">
+      <div class="prio-label" style="color:var(--amber);">P2</div>
+      <div>
+        <div class="prio-path">R744/CO2 진입 검토</div>
+        <div class="prio-urg">시급성: 높음 · 초저GWP(1) · EU 상업냉동 성장</div>
+      </div>
+      <span class="badge badge-amber">검토</span>
+    </div>
+    <div class="prio-item" style="border-left:4px solid #1D6FB8;">
+      <div class="prio-label" style="color:var(--blue);">P3</div>
+      <div>
+        <div class="prio-path">R454B 스크롤 Fixed 양산 완성</div>
+        <div class="prio-urg">시급성: 중간 · DS8LC5049IN 개발중 → 양산 완성 목표</div>
+      </div>
+      <span class="badge badge-blue">개발중</span>
+    </div>
+    <div class="prio-item" style="border-left:4px solid var(--sc);">
+      <div class="prio-label type-sc">P4</div>
+      <div>
+        <div class="prio-path">R290 스크롤 라인 확대</div>
+        <div class="prio-urg">시급성: 중간 · DS4HD5066FVT(3.43) 양산 기반 라인업 확장</div>
+      </div>
+      <span class="badge badge-green">양산기반</span>
+    </div>
+    <div class="prio-item" style="border-left:4px solid var(--ro);">
+      <div class="prio-label type-ro">P5</div>
+      <div>
+        <div class="prio-path">R32 대용량 스크롤·로터리 확대</div>
+        <div class="prio-urg">시급성: 중간 · GMCC Two-Stage 위협 대응</div>
+      </div>
+      <span class="badge badge-gray">확대</span>
+    </div>
+    <div class="prio-item" style="border-left:4px solid #C4C4C4;">
+      <div class="prio-label" style="color:#C4C4C4;">P6</div>
+      <div>
+        <div class="prio-path">R1234yf 왕복동</div>
+        <div class="prio-urg">시급성: 낮음 · GWP 1 · 자동차 에어컨 틈새</div>
+      </div>
+      <span class="badge badge-gray">장기</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 08 Samsung 최신 동향 ════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--green)"></span> 08 SAMSUNG MOVES</div>
+  <h2>Samsung 최신 동향</h2>
+  <p class="sec-desc">2024 카탈로그 기준 + 2024 이후 확인된 개발·양산 동향.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--green);box-shadow-color:var(--green);"></div>
+      <div class="tl-date">2026</div>
+      <div class="tl-title">R454B 스크롤 (카탈로그 이후 개발) <span class="badge badge-green">양산</span></div>
+      <div class="tl-desc">DS2LD5046F Variable(ARI COP 3.37) 양산 + DS8LC5049IN Fixed 개발중. 2024 카탈로그 이후 신규 개발로 레이어링(postCatalog:true).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--amber);"></div>
+      <div class="tl-date">2024-12</div>
+      <div class="tl-title">AI 인버터 압축기 (CES 2025) <span class="badge badge-blue">발표</span></div>
+      <div class="tl-desc">모터효율 95%+, 효율 +10%(950~1450rpm), 소음 &lt;35dB(A). 냉장고 AI Hybrid Cooling. 프리미엄 차별화 포인트.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--green);"></div>
+      <div class="tl-date">2024</div>
+      <div class="tl-title">R454B 로터리 Unitary <span class="badge badge-green">양산</span></div>
+      <div class="tl-desc">UF 시리즈(17.6~49.4cc, ARI COP 3.22~3.25) 양산. AIM Act(2025) 선제 대응. 2024 카탈로그 수록.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--green);"></div>
+      <div class="tl-date">2024-03</div>
+      <div class="tl-title">R290 모노블록 히트펌프 <span class="badge badge-green">양산</span></div>
+      <div class="tl-desc">AE120CXYDGK-EU · 난방 12kW · COP 4.80 (A7/W35). EU F-Gas 2027 선제 대응. 시스템 레벨 사례(압축기 단품 보유와 별도).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--blue);"></div>
+      <div class="tl-date">2024</div>
+      <div class="tl-title">2024 압축기 카탈로그 발행 <span class="badge badge-gray">카탈로그</span></div>
+      <div class="tl-desc">Re/Ro/Sc 전 라인업 96p 공개. 측정조건(ASHRAE/ARI) 명기. 구 2018 PDF 대체. SSOT 베이스 소스.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 09 데이터 활용 가이드 ════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--blue)"></span> 09 HOW TO USE THE DATA</div>
+  <h2>데이터(DB) 활용 가이드</h2>
+  <p class="sec-desc">SSOT 업데이트 방법, 비교군 관리, 데이터 검증 워크플로우.</p>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <h3>📝 모델 수치 업데이트</h3>
+      <p style="margin-bottom:12px;">1. <code>data/</code> 폴더에 새 리서치 md 추가<br>
+      2. <code>frontend/compressor-data.js</code>의 해당 <code>M({...})</code> 수정<br>
+      3. <code>src</code> 필드에 출처 명기<br>
+      4. HTTP 서버 하드 리프레시로 확인</p>
+      <div class="highlight blue" style="padding:14px 16px;">
+        <h4 style="color:var(--blue);">주의</h4>
+        <p>.dc.html에 수치 하드코딩 금지. 반드시 compressor-data.js에서만 변경.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🔲 비교군 추가/수정</h3>
+      <p style="margin-bottom:12px;"><code>benchmarkGroups</code> 배열에 항목 추가:</p>
+      <div class="code-block" style="font-size:12px;">
+{<br>
+  id: <span class="str">"r454b-sc-var"</span>,<br>
+  title: <span class="str">"R454B 스크롤 · Variable · ARI"</span>,<br>
+  type: <span class="str">"Sc"</span>,<br>
+  refrigerant: <span class="str">"R454B"</span>,<br>
+  condition: <span class="str">"ARI"</span>,<br>
+  drive: <span class="str">"Variable"</span>,<br>
+  samsungRef: <span class="str">"DS2LD5046F"</span>,<br>
+  members: [<span class="str">"DS2LD5046F"</span>,<span class="str">"DSH240"</span>,...],<br>
+  reliability: <span class="num">4</span>,  <span class="cm">// 1~5</span><br>
+  note: <span class="str">"비교군 설명..."</span>,<br>
+}
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <h3>🔍 비교 신뢰도(reliability) 기준</h3>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:12px;">
+      <div style="text-align:center;padding:12px;background:#E8F7EF;border-radius:10px;">
+        <div style="font-size:18px;font-weight:800;color:var(--green);">5</div>
+        <div style="font-size:11px;color:var(--green);font-weight:700;">최고</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:3px;">동일 조건·공식 인증</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#E8F0FA;border-radius:10px;">
+        <div style="font-size:18px;font-weight:800;color:var(--blue);">4</div>
+        <div style="font-size:11px;color:var(--blue);font-weight:700;">높음</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:3px;">동일 조건·카탈로그</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#FFF4E2;border-radius:10px;">
+        <div style="font-size:18px;font-weight:800;color:var(--amber);">3</div>
+        <div style="font-size:11px;color:var(--amber);font-weight:700;">중간</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:3px;">동일 냉매·다른 조건</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#FFF4E2;border-radius:10px;">
+        <div style="font-size:18px;font-weight:800;color:var(--amber);">2</div>
+        <div style="font-size:11px;color:var(--amber);font-weight:700;">낮음</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:3px;">참고군·조건 불일치</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#FDEEEA;border-radius:10px;">
+        <div style="font-size:18px;font-weight:800;color:#C13515;">1</div>
+        <div style="font-size:11px;color:#C13515;font-weight:700;">매우 낮음</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:3px;">⚠️ 경고 배너 표시</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <h3>📊 데이터 검증 워크플로우</h3>
+    <div class="code-block" style="margin-top:10px;">
+<span class="cm"># 1. 서버 실행</span><br>
+cd frontend && python -m http.server 8000<br><br>
+<span class="cm"># 2. 브라우저 DevTools Console에서 확인</span><br>
+window.COMPRESSOR_DATA.models.length  <span class="cm">// 68</span><br>
+window.COMPRESSOR_DATA.models<br>
+  .filter(m => m.mfr === <span class="str">'Samsung'</span>).length  <span class="cm">// 27</span><br><br>
+<span class="cm"># 3. benchmarkGroup members 실존 확인</span><br>
+<span class="kw">const</span> names = <span class="kw">new</span> Set(<br>
+  window.COMPRESSOR_DATA.models.map(m => m.model));<br>
+window.COMPRESSOR_DATA.benchmarkGroups.<span class="fn">forEach</span>(g =><br>
+  g.members.<span class="fn">forEach</span>(id =><br>
+    !names.has(id) && console.error(<span class="str">'missing:'</span>, id)<br>
+  )<br>
+);
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ 10 잔여 과제 ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-label"><span class="dot" style="background:var(--amber)"></span> 10 REMAINING TASKS</div>
+  <h2>잔여·후속 과제</h2>
+  <p class="sec-desc">SSOT 보완 과제(보완 과제 탭 참고) + 기능 후속 개발 항목.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>우선순위</th>
+          <th>상태</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Samsung UF 시리즈 ARI 공인값</strong></td>
+          <td><span class="badge badge-red">P1</span></td>
+          <td><span class="badge badge-amber">미확인</span></td>
+          <td>AHRI Directory 직접 조회 필요</td>
+        </tr>
+        <tr>
+          <td><strong>GMCC ATF/ATQ ARI 조건 COP</strong></td>
+          <td><span class="badge badge-amber">P2</span></td>
+          <td><span class="badge badge-amber">조건불일치</span></td>
+          <td>현재 SEER60 — ARI 전환 또는 제조사 문의</td>
+        </tr>
+        <tr>
+          <td><strong>LG UniRotary R454B 로터리</strong></td>
+          <td><span class="badge badge-amber">P2</span></td>
+          <td><span class="badge badge-amber">미확인</span></td>
+          <td>LG B2B 포털(partner.lge.com)</td>
+        </tr>
+        <tr>
+          <td><strong>Danfoss VZH 스크롤 R454B 최신</strong></td>
+          <td><span class="badge badge-gray">P3</span></td>
+          <td><span class="badge badge-green">부분확인</span></td>
+          <td>VZH+DSH hybrid 로드맵 확인 중</td>
+        </tr>
+        <tr>
+          <td><strong>Panasonic R290 스크롤 공식 스펙</strong></td>
+          <td><span class="badge badge-gray">P3</span></td>
+          <td><span class="badge badge-green">부분확인</span></td>
+          <td>카탈로그 갱신 대기</td>
+        </tr>
+        <tr>
+          <td><strong>계절효율(SEER2/SCOP) 보완</strong></td>
+          <td><span class="badge badge-amber">P2</span></td>
+          <td><span class="badge badge-gray">미착수</span></td>
+          <td>DATA-ENRICHMENT.md Tier 1 참고</td>
+        </tr>
+        <tr>
+          <td><strong>운전영역(온도 범위·rps) 보완</strong></td>
+          <td><span class="badge badge-amber">P2</span></td>
+          <td><span class="badge badge-gray">미착수</span></td>
+          <td>GMCC Two-Stage 위협 정량화에 필요</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════ -->
+<div style="margin-top:60px; padding: 32px 0; border-top: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+  <div>
+    <div style="font-size:14px;font-weight:800;color:var(--text);">압축기 경쟁 인텔리전스 대시보드</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:3px;">Samsung(당사) 관점 · 내부 연구용</div>
+  </div>
+  <div style="text-align:right;">
+    <div style="font-size:12px;color:var(--muted);">기준일: 2026-06-23</div>
+    <div style="font-size:12px;color:var(--muted);">소스: 29건 · 모델: 68개 · 비교군: 12개</div>
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>

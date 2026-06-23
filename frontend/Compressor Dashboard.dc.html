@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./compressor-data.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; background: #fff; -webkit-font-smoothing: antialiased; }
+  ::selection { background: #FFE0E5; }
+  aside::-webkit-scrollbar { width: 6px; }
+  aside::-webkit-scrollbar-thumb { background: #E4E4E4; border-radius: 3px; }
+  .dc-kpi-panel{ min-width: 0; }
+  .dc-scroll-x{ width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    background:
+      linear-gradient(to right, #fff 40%, rgba(255,255,255,0)) left center,
+      linear-gradient(to left, #fff 40%, rgba(255,255,255,0)) right center,
+      linear-gradient(to right, rgba(0,0,0,0.10), rgba(0,0,0,0)) left center,
+      linear-gradient(to left, rgba(0,0,0,0.10), rgba(0,0,0,0)) right center;
+    background-repeat: no-repeat;
+    background-size: 30px 100%, 30px 100%, 14px 100%, 14px 100%;
+    background-attachment: local, local, scroll, scroll; }
+  .dc-matrix-grid{ min-width: 760px; }
+  .dc-heatmap-grid{ min-width: 720px; }
+  .dc-comp-grid{ min-width: 520px; }
+  .dc-cmp-grid{ min-width: 640px; }
+  /* allow nested overflow scroll: flex/grid descendants must be shrinkable */
+  .dc-report, .dc-report > *, .dc-report > * > *{ min-width: 0; }
+  .dc-analysis, .dc-analysis > *, .dc-analysis > * > *{ min-width: 0; }
+  main, main section, main section > div{ min-width: 0; }
+  .dc-gaps4 > *, .dc-cards3 > *, .dc-tiles > *, .dc-2col > *{ min-width: 0; }
+  @media print { aside, header { display: none !important; } main { background: #fff !important; }
+    .dc-noprint { display: none !important; }
+    .dc-report { grid-template-columns: 1fr !important; }
+    .dc-report > div:first-child { display: none !important; }
+    .dc-scroll-x { overflow: visible !important; background: none !important; }
+    .dc-wide, .dc-matrix-grid, .dc-heatmap-grid, .dc-comp-grid, .dc-cmp-grid { min-width: 0 !important; } }
+  /* ---- responsive ---- */
+  @media (max-width: 1024px){
+    .dc-2col{ grid-template-columns: 1fr !important; }
+    .dc-analysis{ grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 820px){
+    .dc-header{ height: auto !important; min-height: 72px !important; flex-wrap: wrap !important; padding: 12px 16px !important; gap: 10px !important; }
+    .dc-search-wrap{ order: 3 !important; flex: 1 0 100% !important; justify-content: flex-start !important; }
+    .dc-meta{ margin-left: auto !important; gap: 8px !important; }
+    .dc-meta-date{ display: none !important; }
+    .dc-body{ flex-direction: column !important; align-items: stretch !important; }
+    .dc-aside{ position: static !important; width: 100% !important; height: auto !important; border-right: none !important; border-bottom: 1px solid #EBEBEB !important; }
+    .dc-tiles{ grid-template-columns: repeat(2,1fr) !important; }
+    .dc-cards3{ grid-template-columns: 1fr !important; }
+    .dc-gaps4{ grid-template-columns: 1fr 1fr !important; }
+    .dc-report{ grid-template-columns: 1fr !important; }
+    main section{ padding-left: 18px !important; padding-right: 18px !important; }
+    main h1{ font-size: 27px !important; }
+    .dc-kpi-panel{ padding: 20px !important; }
+  }
+  @media (max-width: 480px){
+    .dc-tiles{ grid-template-columns: 1fr 1fr !important; }
+    .dc-gaps4{ grid-template-columns: 1fr !important; }
+  }
+</style>
+</helmet>
+
+<div style="--accent: {{ accent }}; min-height: 100vh; background: #fff; color: #222222; font-family: 'Plus Jakarta Sans', sans-serif;">
+
+  <!-- ============ HEADER ============ -->
+  <header class="dc-header" style="position: sticky; top: 0; z-index: 50; height: 72px; background: rgba(255,255,255,0.92); backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid #EBEBEB; display: flex; align-items: center; padding: 0 28px; gap: 24px;">
+    <div style="display: flex; align-items: center; gap: 11px; flex: none;">
+      <div style="width: 34px; height: 34px; border-radius: 9px; background: var(--accent, #FF385C); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(255,56,92,0.35);">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.3" stroke="#fff" stroke-width="2.1"/><circle cx="12" cy="12" r="2.2" fill="#fff"/><path d="M12 4.7V2M12 22v-2.7M19.3 12H22M2 12h2.7" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/></svg>
+      </div>
+      <div style="line-height: 1.1;">
+        <div style="font-size: 16px; font-weight: 800; letter-spacing: -0.02em; color: #222;">Compressor<span style="color: var(--accent, #FF385C);">IQ</span></div>
+        <div style="font-size: 10.5px; font-weight: 600; color: #9b9b9b; letter-spacing: 0.04em;">SAMSUNG · C&M INTELLIGENCE</div>
+      </div>
+    </div>
+
+    <div class="dc-search-wrap" style="flex: 1; display: flex; justify-content: center;">
+      <div style="position: relative; width: 100%; max-width: 420px;">
+        <div style="display: flex; align-items: center; gap: 10px; width: 100%; height: 46px; padding: 0 8px 0 20px; border: 1px solid #DDDDDD; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:none;"><circle cx="11" cy="11" r="7" stroke="#717171" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#717171" stroke-width="2" stroke-linecap="round"/></svg>
+          <input value="{{ query }}" onInput="{{ onSearch }}" placeholder="모델 · 냉매 · 제조사 검색" style="font-size: 14px; color: #222; font-weight: 500; flex: 1; border: none; outline: none; background: transparent;" />
+          <span style="font-size: 11px; font-weight: 700; color: #717171; background: #F2F2F2; padding: 5px 9px; border-radius: 8px; flex: none;">{{ searchCount }}</span>
+        </div>
+        <sc-if value="{{ searchOpen }}">
+        <div style="position: absolute; top: 52px; left: 0; right: 0; background: #fff; border: 1px solid #EBEBEB; border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,0.16); z-index: 60; max-height: 60vh; overflow-y: auto; padding: 6px;">
+          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; padding: 8px 12px 6px; letter-spacing: 0.02em;">{{ searchResultLabel }}</div>
+          <sc-for list="{{ searchResults }}" as="s" hint-placeholder-count="6">
+            <button onClick="{{ s.select }}" style="width: 100%; text-align: left; border: none; background: transparent; border-radius: 10px; padding: 9px 12px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <span style="display: flex; align-items: center; gap: 9px; min-width: 0;">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ s.dot }}; flex: none;"></span>
+                <span style="min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 700; color: {{ s.nameColor }};">{{ s.mfr }} {{ s.model }}</span>
+                  <span style="font-size: 11px; color: #9b9b9b; display: block;">{{ s.sub }}</span>
+                </span>
+              </span>
+              <span style="font-size: 12px; font-weight: 800; color: {{ s.metricColor }}; flex: none; white-space: nowrap;">{{ s.metric }}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ searchEmpty }}"><div style="padding: 16px 12px; font-size: 12.5px; color: #9b9b9b;">검색 결과 없음 — 모델·냉매·제조사·유형으로 검색하세요.</div></sc-if>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <div class="dc-meta" style="display: flex; align-items: center; gap: 14px; flex: none;">
+      <div class="dc-meta-date" style="display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #717171; padding: 8px 13px; border: 1px solid #EBEBEB; border-radius: 22px;">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #00A699; display: inline-block;"></span>
+        데이터 {{ asOf }}
+      </div>
+      <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #484848, #6b6b6b); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">CM</div>
+    </div>
+  </header>
+
+  <!-- ============ BODY ROW ============ -->
+  <div class="dc-body" style="display: flex; align-items: flex-start;">
+
+    <!-- ---------- SIDEBAR ---------- -->
+    <aside class="dc-aside" style="position: sticky; top: 72px; width: 256px; flex: none; height: calc(100vh - 72px); overflow-y: auto; border-right: 1px solid #EBEBEB; padding: 24px 16px; background: #fff;">
+      <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.07em; padding: 0 12px 10px;">DASHBOARDS</div>
+      <button onClick="{{ viewKpi }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 12px; margin-bottom: 4px; border: none; border-radius: 12px; cursor: pointer; text-align: left; background: {{ nav.kpiBg }}; color: {{ nav.kpiFg }};">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="5" height="9" rx="1.3" fill="currentColor"/><rect x="10" y="6" width="5" height="14" rx="1.3" fill="currentColor"/><rect x="17" y="3" width="4" height="17" rx="1.3" fill="currentColor" opacity="0.5"/></svg>
+        <span style="font-size: 14px; font-weight: {{ nav.kpiFw }};">KPI 현황</span>
+      </button>
+      <button onClick="{{ viewDecision }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 12px; margin-bottom: 4px; border: none; border-radius: 12px; cursor: pointer; text-align: left; background: {{ nav.decBg }}; color: {{ nav.decFg }};">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v5c0 4.4 3.2 7.8 8 9 4.8-1.2 8-4.6 8-9V7l-8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size: 14px; font-weight: {{ nav.decFw }};">Decision 전략</span>
+      </button>
+      <button onClick="{{ viewAnalysis }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 12px; margin-bottom: 4px; border: none; border-radius: 12px; cursor: pointer; text-align: left; background: {{ nav.anaBg }}; color: {{ nav.anaFg }};">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 19V5a2 2 0 0 1 2-2h6l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 3v6h6M8 14h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="font-size: 14px; font-weight: {{ nav.anaFw }};">모델 분석</span>
+      </button>
+      <button onClick="{{ viewReporting }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 12px; margin-bottom: 4px; border: none; border-radius: 12px; cursor: pointer; text-align: left; background: {{ nav.repBg }}; color: {{ nav.repFg }};">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M5 3h9l5 5v13a0 0 0 0 1 0 0H5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="font-size: 14px; font-weight: {{ nav.repFw }};">Reporting</span>
+      </button>
+      <button onClick="{{ viewBacklog }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 12px; border: none; border-radius: 12px; cursor: pointer; text-align: left; background: {{ nav.blBg }}; color: {{ nav.blFg }};">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size: 14px; font-weight: {{ nav.blFw }};">보완 과제</span>
+        <span style="margin-left: auto; font-size: 11px; font-weight: 700; background: {{ nav.blBadgeBg }}; color: {{ nav.blBadgeFg }}; padding: 2px 7px; border-radius: 20px;">{{ backlogBadge }}</span>
+      </button>
+
+      <div style="height: 1px; background: #EFEFEF; margin: 20px 12px;"></div>
+
+      <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.07em; padding: 0 12px 10px;">압축기 유형 필터</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <button onClick="{{ typeAll }}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: none; border-radius: 10px; cursor: pointer; background: {{ tf.all.bg }}; color: {{ tf.all.fg }}; font-weight: {{ tf.all.fw }};">
+          <span style="font-size: 13.5px;">전체</span><span style="font-size: 12px; opacity: .65;">{{ counts.all }}</span>
+        </button>
+        <button onClick="{{ typeRe }}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: none; border-radius: 10px; cursor: pointer; background: {{ tf.re.bg }}; color: {{ tf.re.fg }}; font-weight: {{ tf.re.fw }};">
+          <span style="font-size: 13.5px; display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #FF385C;"></span>Re 왕복동</span><span style="font-size: 12px; opacity: .65;">{{ counts.re }}</span>
+        </button>
+        <button onClick="{{ typeRo }}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: none; border-radius: 10px; cursor: pointer; background: {{ tf.ro.bg }}; color: {{ tf.ro.fg }}; font-weight: {{ tf.ro.fw }};">
+          <span style="font-size: 13.5px; display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #00A699;"></span>Ro 로터리</span><span style="font-size: 12px; opacity: .65;">{{ counts.ro }}</span>
+        </button>
+        <button onClick="{{ typeSc }}" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: none; border-radius: 10px; cursor: pointer; background: {{ tf.sc.bg }}; color: {{ tf.sc.fg }}; font-weight: {{ tf.sc.fw }};">
+          <span style="font-size: 13.5px; display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #FC642D;"></span>Sc 스크롤</span><span style="font-size: 12px; opacity: .65;">{{ counts.sc }}</span>
+        </button>
+      </div>
+
+      <div style="height: 1px; background: #EFEFEF; margin: 20px 12px;"></div>
+
+      <div style="margin: 0 6px; padding: 16px; border-radius: 14px; background: #FFF1F3; border: 1px solid #FFD9DF;">
+        <div style="display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; color: #C13515;">
+          <span style="font-size: 14px;">⚠</span> P1 긴급 공백
+        </div>
+        <div style="margin-top: 7px; font-size: 12px; line-height: 1.55; color: #7a3a2c; font-weight: 500;">{{ p1Summary }}</div>
+      </div>
+
+      <div style="height: 1px; background: #EFEFEF; margin: 20px 12px;"></div>
+
+      <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.07em; padding: 0 12px 6px;">카탈로그 출처 · 연도</div>
+      <div style="font-size: 10.5px; font-weight: 600; color: #9b9b9b; padding: 0 12px 10px;">{{ catalogSummary }}</div>
+      <div style="display: flex; flex-direction: column; gap: 1px;">
+        <sc-for list="{{ catalogSources }}" as="s" hint-placeholder-count="9">
+          <a href="{{ s.url }}" target="_blank" rel="noopener noreferrer" style="display: block; text-decoration: none; padding: 7px 12px; border-radius: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+              <span style="display: flex; align-items: center; gap: 7px; min-width: 0;">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ s.dot }}; flex: none;"></span>
+                <span style="font-size: 12.5px; font-weight: 700; color: {{ s.nameColor }};">{{ s.mfr }}{{ s.selfMark }}</span>
+              </span>
+              <span style="font-size: 10px; font-weight: 700; color: {{ s.badgeFg }}; background: {{ s.badgeBg }}; padding: 2px 6px; border-radius: 6px; white-space: nowrap; flex: none;">{{ s.freshLabel }}</span>
+            </div>
+            <div style="font-size: 10.5px; color: #9b9b9b; font-weight: 500; line-height: 1.4; margin-top: 2px; padding-left: 14px;">{{ s.yearLabel }} · {{ s.ageLabel }}</div>
+          </a>
+        </sc-for>
+      </div>
+
+      <div style="margin: 16px 12px 0; font-size: 10.5px; line-height: 1.6; color: #b0b0b0; font-weight: 500;">
+        공개 카탈로그/웹페이지 {{ sources }}건 · 신뢰도 {{ confidence }}<br>클릭 시 원본 출처로 이동
+      </div>
+    </aside>
+
+    <!-- ---------- MAIN ---------- -->
+    <main style="flex: 1; min-width: 0; background: #FAFAFA;">
+
+      <!-- =========================================================== -->
+      <!-- ===== KPI VIEW ===== -->
+      <!-- =========================================================== -->
+      <sc-if value="{{ isKpi }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <section style="padding: 40px 44px 32px; background: linear-gradient(180deg, #fff 0%, #FAFAFA 100%); border-bottom: 1px solid #EFEFEF;">
+          <div style="max-width: 1180px; margin: 0 auto;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px; border-radius: 20px; background: #FFF1F3; color: #C13515; font-size: 12px; font-weight: 700; margin-bottom: 18px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #C13515;"></span> PORTFOLIO HEALTH
+            </div>
+            <h1 style="font-size: 38px; font-weight: 800; letter-spacing: -0.03em; color: #222; margin: 0 0 12px; line-height: 1.1;">Samsung 압축기 포트폴리오 현황</h1>
+            <p style="font-size: 16px; color: #717171; font-weight: 500; margin: 0; max-width: 680px; line-height: 1.5;">Re·Ro·Sc 모델과 냉매 커버리지, 경쟁사 대비 포지션을 한눈에. 효율은 동일 측정조건 내에서만 비교합니다.</p>
+
+            <div class="dc-tiles" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 28px;">
+              <sc-for list="{{ kpiStats }}" as="s" hint-placeholder-count="5">
+                <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 16px; padding: 20px 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                  <div style="font-size: 11.5px; font-weight: 700; color: #9b9b9b; letter-spacing: 0.02em; min-height: 28px;">{{ s.label }}</div>
+                  <div style="display: flex; align-items: baseline; gap: 5px; margin-top: 8px;">
+                    <span style="font-size: 30px; font-weight: 800; letter-spacing: -0.03em; color: {{ s.color }};">{{ s.value }}</span>
+                    <span style="font-size: 13px; font-weight: 700; color: #b0b0b0;">{{ s.unit }}</span>
+                  </div>
+                  <div style="margin-top: 6px; font-size: 12px; font-weight: 600; color: {{ s.subColor }};">{{ s.sub }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding: 36px 44px 48px;">
+          <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
+
+            <!-- RE/RO/SC 경쟁 비교 요약 -->
+            <div>
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 4px;">유형별 경쟁 포지션 (Re · Ro · Sc)</h2>
+              <p style="font-size: 13.5px; color: #717171; margin: 0 0 18px; font-weight: 500;">당사 강도와 동일조건 핵심 비교 결과</p>
+              <div class="dc-cards3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <sc-for list="{{ typeCards }}" as="c" hint-placeholder-count="3">
+                  <div style="background: #fff; border: 1px solid #EBEBEB; border-top: 3px solid {{ c.color }}; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                      <span style="font-size: 16px; font-weight: 800; color: #222; display: flex; align-items: center; gap: 8px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: {{ c.color }};"></span>{{ c.label }}</span>
+                      <span style="font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: {{ c.strBg }}; color: {{ c.strFg }};">{{ c.strength }}</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 700; color: {{ c.headColor }}; line-height: 1.45;">{{ c.headline }}</div>
+                    <div style="font-size: 12.5px; color: #717171; font-weight: 500; line-height: 1.5; margin-top: 8px; min-height: 54px;">{{ c.sub }}</div>
+                    <div style="display: flex; gap: 14px; margin-top: 14px; padding-top: 13px; border-top: 1px solid #F2F2F2;">
+                      <div><div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0;">당사 모델</div><div style="font-size: 14px; font-weight: 800; color: #222;">{{ c.count }}</div></div>
+                      <div><div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0;">핵심 경쟁사</div><div style="font-size: 13px; font-weight: 700; color: #555;">{{ c.rival }}</div></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- COVERAGE MATRIX -->
+            <div class="dc-kpi-panel" style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px;">
+                <div>
+                  <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 5px;">냉매 커버리지 매트릭스</h2>
+                  <p style="font-size: 13.5px; color: #717171; margin: 0; font-weight: 500;">유형별 양산 · 개발중 · 공백을 GWP·트렌드와 함께</p>
+                </div>
+                <div style="display: flex; gap: 16px;">
+                  <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #717171;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #067647;"></span>양산</span>
+                  <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #717171;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #E8A100;"></span>개발중</span>
+                  <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #717171;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #DADADA;"></span>공백</span>
+                </div>
+              </div>
+
+              <div class="dc-scroll-x">
+              <div class="dc-matrix-grid" style="display: grid; grid-template-columns: 1.1fr 0.8fr 0.8fr repeat(3, 1fr) 1.3fr; gap: 0; font-size: 13px;">
+                <div style="padding: 0 12px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">냉매</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0; text-align: center;">GWP</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0; text-align: center;">트렌드</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #FF385C; text-align: center;">Re</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #00A699; text-align: center;">Ro</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #FC642D; text-align: center;">Sc</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0; text-align: center;">주요 경쟁사</div>
+
+                <sc-for list="{{ refrigerants }}" as="r" hint-placeholder-count="11">
+                  <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1.1fr 0.8fr 0.8fr repeat(3, 1fr) 1.3fr; align-items: center; border-top: 1px solid #F2F2F2; padding: 9px 0;">
+                    <div style="padding: 0 12px; display: flex; align-items: center; gap: 9px;">
+                      <span style="font-size: 14.5px; font-weight: 800; color: #222;">{{ r.ref }}</span>
+                      <span style="font-size: 10px; font-weight: 700; color: {{ r.flamColor }};">{{ r.flammability }}</span>
+                    </div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="font-size: 12.5px; font-weight: 700; color: {{ r.gwpColor }};">{{ r.gwp }}</span></div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; background: {{ r.trendBg }}; color: {{ r.trendFg }};">{{ r.trend }}</span></div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; font-size: 14px; font-weight: 800; background: {{ r.re.bg }}; color: {{ r.re.fg }};">{{ r.re.sym }}</span></div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; font-size: 14px; font-weight: 800; background: {{ r.ro.bg }}; color: {{ r.ro.fg }};">{{ r.ro.sym }}</span></div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; font-size: 14px; font-weight: 800; background: {{ r.sc.bg }}; color: {{ r.sc.fg }};">{{ r.sc.sym }}</span></div>
+                    <div style="padding: 0 8px; text-align: center;"><span style="font-size: 11.5px; font-weight: 600; color: #9b9b9b;">{{ r.rivals }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+              </div>
+            </div>
+
+            <!-- MANUFACTURER HEATMAP -->
+            <div class="dc-kpi-panel" style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 4px;">제조사 강도 히트맵</h2>
+              <p style="font-size: 13.5px; color: #717171; margin: 0 0 20px; font-weight: 500;">8개 경쟁사 + 당사의 Re/Ro/Sc 경쟁 강도 (당사 기준)</p>
+              <div class="dc-scroll-x">
+              <div class="dc-heatmap-grid" style="display: grid; grid-template-columns: 1fr 0.7fr 0.7fr 0.7fr 2.2fr; gap: 0; font-size: 13px;">
+                <div style="padding: 0 8px 10px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">제조사</div>
+                <div style="padding: 0 8px 10px; font-size: 11.5px; font-weight: 700; color: #FF385C; text-align: center;">Re</div>
+                <div style="padding: 0 8px 10px; font-size: 11.5px; font-weight: 700; color: #00A699; text-align: center;">Ro</div>
+                <div style="padding: 0 8px 10px; font-size: 11.5px; font-weight: 700; color: #FC642D; text-align: center;">Sc</div>
+                <div style="padding: 0 8px 10px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">전략 방향</div>
+                <sc-for list="{{ heatmap }}" as="m" hint-placeholder-count="9">
+                  <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 0.7fr 0.7fr 0.7fr 2.2fr; align-items: center; border-top: 1px solid #F2F2F2; padding: 8px 0;">
+                    <div style="padding: 0 8px; font-size: 14px; font-weight: 800; color: {{ m.nameColor }};">{{ m.id }}{{ m.usMark }}</div>
+                    <div style="padding: 0 6px; text-align: center;"><span style="display: inline-block; min-width: 52px; padding: 4px 6px; border-radius: 7px; font-size: 11px; font-weight: 700; background: {{ m.reBg }}; color: {{ m.reFg }};">{{ m.re }}</span></div>
+                    <div style="padding: 0 6px; text-align: center;"><span style="display: inline-block; min-width: 52px; padding: 4px 6px; border-radius: 7px; font-size: 11px; font-weight: 700; background: {{ m.roBg }}; color: {{ m.roFg }};">{{ m.ro }}</span></div>
+                    <div style="padding: 0 6px; text-align: center;"><span style="display: inline-block; min-width: 52px; padding: 4px 6px; border-radius: 7px; font-size: 11px; font-weight: 700; background: {{ m.scBg }}; color: {{ m.scFg }};">{{ m.sc }}</span></div>
+                    <div style="padding: 0 8px; font-size: 12px; font-weight: 600; color: #555; line-height: 1.45;">{{ m.strategy }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              </div>
+            </div>
+
+            <!-- TWO COLUMN: BENCHMARK GROUP + BLDC -->
+            <div class="dc-2col" style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 28px; align-items: start;">
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                  <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0;">동일조건 COP/EER 벤치마크</h2>
+                  <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: {{ kpiGroup.condBg }}; color: {{ kpiGroup.condColor }};">{{ kpiGroup.condLabel }}</span>
+                </div>
+                <p style="font-size: 13.5px; color: #717171; margin: 0 0 8px; font-weight: 500;">{{ kpiGroup.title }}</p>
+                <div style="font-size: 11.5px; color: #9b9b9b; font-weight: 600; margin-bottom: 18px; line-height: 1.5;">{{ kpiGroup.note }}</div>
+                <div style="display: flex; flex-direction: column; gap: 13px;">
+                  <sc-for list="{{ kpiGroup.rows }}" as="b" hint-placeholder-count="6">
+                    <div>
+                      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px;">
+                        <span style="font-size: 13px; font-weight: 700; color: #222; display: flex; align-items: center; gap: 8px;">
+                          <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ b.color }};"></span>{{ b.mfr }} {{ b.name }}
+                        </span>
+                        <span style="font-size: 13px; font-weight: 800; color: {{ b.nameColor }};">{{ b.val }} <span style="font-size:10px; color:#b0b0b0;">{{ b.metricLabel }}</span></span>
+                      </div>
+                      <div style="height: 9px; background: #F2F2F2; border-radius: 6px; overflow: hidden;">
+                        <div style="height: 100%; border-radius: 6px; width: {{ b.w }}; background: {{ b.color }};"></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #F2F2F2; font-size: 11.5px; color: #9b9b9b; font-weight: 500; line-height: 1.5;">* 같은 측정조건({{ kpiGroup.condLabel }}) 모델끼리만 비교합니다. 다른 조건은 Reporting 탭에서 군별로 확인하세요.</div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 28px;">
+                <div style="background: linear-gradient(140deg, #FF385C, #FF6B6B); border-radius: 20px; padding: 26px; box-shadow: 0 6px 20px rgba(255,56,92,0.22);">
+                  <div style="font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.03em;">BLDC 인버터 전환 효율 이점</div>
+                  <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 12px;">
+                    <span style="font-size: 44px; font-weight: 800; color: #fff; letter-spacing: -0.03em;">+159</span>
+                    <span style="font-size: 20px; font-weight: 800; color: #fff;">%</span>
+                  </div>
+                  <div style="font-size: 13px; color: rgba(255,255,255,0.92); font-weight: 600; margin-top: 2px;">냉장고 Re: Fixed 0.76 → BLDC 1.97</div>
+                  <div style="height: 1px; background: rgba(255,255,255,0.25); margin: 18px 0;"></div>
+                  <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">+15.9</span>
+                    <span style="font-size: 15px; font-weight: 800; color: #fff;">%</span>
+                  </div>
+                  <div style="font-size: 13px; color: rgba(255,255,255,0.92); font-weight: 600; margin-top: 2px;">에어컨 Ro: Fixed 2.96 → BLDC 3.43 (2024)</div>
+                </div>
+
+                <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                  <div style="font-size: 13px; font-weight: 800; color: #222; margin-bottom: 12px;">측정조건 환산계수 (→ ARI)</div>
+                  <sc-for list="{{ condLegend }}" as="c" hint-placeholder-count="5">
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-top: 1px solid #F5F5F5;">
+                      <span style="font-size: 12px; font-weight: 700; color: {{ c.color }};">{{ c.label }}</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #555;">{{ c.factor }}</span>
+                    </div>
+                  </sc-for>
+                  <div style="margin-top: 10px; font-size: 11px; color: #9b9b9b; line-height: 1.5;">EN12900(난방)은 냉방과 직접 비교·환산 불가.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      </sc-if>
+
+      <!-- =========================================================== -->
+      <!-- ===== DECISION VIEW ===== -->
+      <!-- =========================================================== -->
+      <sc-if value="{{ isDecision }}">
+      <div>
+        <section style="padding: 40px 44px 36px; background: linear-gradient(180deg, #1F1F1F 0%, #2c2c2c 100%);">
+          <div style="max-width: 1180px; margin: 0 auto;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px; border-radius: 20px; background: rgba(255,56,92,0.18); color: #FF9DAE; font-size: 12px; font-weight: 700; margin-bottom: 18px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #FF385C;"></span> STRATEGIC PRIORITIES
+            </div>
+            <h1 style="font-size: 38px; font-weight: 800; letter-spacing: -0.03em; color: #fff; margin: 0 0 12px; line-height: 1.1;">지금, 무엇을 결정해야 하는가</h1>
+            <p style="font-size: 16px; color: rgba(255,255,255,0.62); font-weight: 500; margin: 0 0 28px; max-width: 680px; line-height: 1.5;">냉매 전환 우선순위와 경쟁사 위협을 근거로 한 실행 로드맵. (R454B 스크롤은 양산 진입 — 공백 아님)</p>
+
+            <div class="dc-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <sc-for list="{{ spotlightGaps }}" as="g" hint-placeholder-count="2">
+                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 22px; backdrop-filter: blur(8px);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                    <span style="display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 8px; background: {{ g.prColor }}; color: #fff; font-size: 12px; font-weight: 800; white-space: nowrap;">{{ g.priority }} · {{ g.urgency }}</span>
+                    <span style="font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5);">{{ g.type }}</span>
+                  </div>
+                  <div style="font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">{{ g.title }}</div>
+                  <div style="font-size: 13.5px; color: rgba(255,255,255,0.7); font-weight: 500; margin-top: 8px; line-height: 1.5;">{{ g.detail }}</div>
+                  <div style="display: flex; align-items: center; gap: 7px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <span style="font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.45); white-space: nowrap;">경쟁사 양산</span>
+                    <span style="font-size: 12px; font-weight: 700; color: #FF9DAE;">{{ g.rivals }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding: 36px 44px 48px;">
+          <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
+
+            <!-- PRIORITY ROADMAP -->
+            <div>
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 4px;">냉매 전환 우선순위 로드맵</h2>
+              <p style="font-size: 13.5px; color: #717171; margin: 0 0 20px; font-weight: 500;">P1 → P6, 시급성 순</p>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <sc-for list="{{ priorities }}" as="p" hint-placeholder-count="6">
+                  <div style="background: #fff; border: 1px solid #EBEBEB; border-left: 4px solid {{ p.accent }}; border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 64px 1.5fr 1fr 1.3fr; gap: 20px; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                      <span style="font-size: 22px; font-weight: 800; color: {{ p.accent }}; letter-spacing: -0.02em;">{{ p.p }}</span>
+                      <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: {{ p.urgBg }}; color: {{ p.urgFg }};">{{ p.urgency }}</span>
+                    </div>
+                    <div>
+                      <div style="font-size: 16px; font-weight: 800; color: #222; letter-spacing: -0.01em;">{{ p.path }}</div>
+                      <div style="font-size: 12.5px; color: #9b9b9b; font-weight: 600; margin-top: 3px;">{{ p.type }} · 현황 {{ p.status }}</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 11px; font-weight: 700; color: #b0b0b0;">권고 액션</div>
+                      <div style="font-size: 13.5px; font-weight: 700; color: {{ p.accent }}; margin-top: 3px;">{{ p.action }}</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 11px; font-weight: 700; color: #b0b0b0;">드라이버</div>
+                      <div style="font-size: 12.5px; font-weight: 600; color: #555; margin-top: 3px; line-height: 1.45;">{{ p.driver }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- TWO COLUMN: ROADMAP TIMELINE + REGULATIONS -->
+            <div class="dc-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start;">
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <h2 style="font-size: 18px; font-weight: 800; color: #222; margin: 0 0 4px;">냉매 전환 타임라인</h2>
+                <p style="font-size: 12.5px; color: #717171; margin: 0 0 18px; font-weight: 500;">당사 관점 현재 → 단기 → 중기</p>
+                <div style="position: relative; padding-left: 20px;">
+                  <div style="position: absolute; left: 4px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, #FF385C 0%, #E8A100 50%, #067647 100%); border-radius: 2px;"></div>
+                  <sc-for list="{{ roadmap }}" as="r" hint-placeholder-count="3">
+                    <div style="padding: 14px 0; border-top: 1px solid #F2F2F2; position: relative;">
+                      <div style="position: absolute; left: -20px; top: 20px; width: 10px; height: 10px; border-radius: 50%; background: {{ r.dotColor }}; border: 2px solid #fff; box-shadow: 0 0 0 2px {{ r.dotColor }};"></div>
+                      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 9px;">
+                        <span style="font-size: 13px; font-weight: 800; color: #222;">{{ r.phase }}</span>
+                      </div>
+                      <div style="display: grid; grid-template-columns: 52px 1fr; gap: 5px 10px; font-size: 12.5px; line-height: 1.5;">
+                        <span style="font-weight: 700; color: #00A699;">에어컨</span><span style="color: #555; font-weight: 600;">{{ r.ac }}</span>
+                        <span style="font-weight: 700; color: #FF385C;">냉장고</span><span style="color: #555; font-weight: 600;">{{ r.re }}</span>
+                        <span style="font-weight: 700; color: #b0b0b0;">레거시</span><span style="color: #9b9b9b; font-weight: 600;">{{ r.legacy }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <h2 style="font-size: 18px; font-weight: 800; color: #222; margin: 0 0 4px;">규제 압력</h2>
+                <p style="font-size: 12.5px; color: #717171; margin: 0 0 18px; font-weight: 500;">저GWP 전환 핵심 드라이버</p>
+                <sc-for list="{{ regulations }}" as="g" hint-placeholder-count="5">
+                  <div style="padding: 11px 0; border-top: 1px solid #F2F2F2;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-size: 13px; font-weight: 800; color: #222;">{{ g.id }} <span style="font-size: 11px; font-weight: 600; color: #9b9b9b;">{{ g.region }} · {{ g.year }}</span></span>
+                      <span style="font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 7px; background: {{ g.stBg }}; color: {{ g.stFg }};">{{ g.status }}</span>
+                    </div>
+                    <div style="font-size: 12px; color: #555; font-weight: 500; line-height: 1.45; margin-top: 4px;">{{ g.impact }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- COMPETITOR MONITORING -->
+            <div class="dc-kpi-panel" style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 4px;">경쟁사 위협 모니터링</h2>
+              <p style="font-size: 13.5px; color: #717171; margin: 0 0 22px; font-weight: 500;">유형별 강도 · 위협 요인 · 위협 레벨</p>
+              <div class="dc-scroll-x">
+              <div class="dc-comp-grid" style="display: grid; grid-template-columns: 1fr 0.95fr 2.1fr; gap: 0; font-size: 13px;">
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">제조사</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">Re / Ro / Sc</div>
+                <div style="padding: 0 8px 12px; font-size: 11.5px; font-weight: 700; color: #b0b0b0;">핵심 위협 · 모니터링</div>
+                <sc-for list="{{ competitors }}" as="c" hint-placeholder-count="8">
+                  <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 0.95fr 2.1fr; align-items: center; border-top: 1px solid #F2F2F2; padding: 13px 0;">
+                    <div style="padding: 0 8px; display: flex; align-items: center; gap: 10px;">
+                      <span style="font-size: 15px; font-weight: 800; color: #222;">{{ c.maker }}</span>
+                      <span style="display: flex; gap: 2px;">
+                        <sc-for list="{{ c.dots }}" as="d" hint-placeholder-count="5">
+                          <span style="width: 6px; height: 6px; border-radius: 50%; background: {{ d.bg }};"></span>
+                        </sc-for>
+                      </span>
+                    </div>
+                    <div style="padding: 0 8px; display: flex; gap: 5px;">
+                      <span style="font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 7px; white-space: nowrap; background: {{ c.reBg }}; color: {{ c.reFg }};">{{ c.re }}</span>
+                      <span style="font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 7px; white-space: nowrap; background: {{ c.roBg }}; color: {{ c.roFg }};">{{ c.ro }}</span>
+                      <span style="font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 7px; white-space: nowrap; background: {{ c.scBg }}; color: {{ c.scFg }};">{{ c.sc }}</span>
+                    </div>
+                    <div style="padding: 0 8px; font-size: 12.5px; font-weight: 600; color: #555; line-height: 1.45;">{{ c.threat }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              </div>
+            </div>
+
+            <!-- GAP TO ACTION -->
+            <div>
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 20px;">Gap → Action</h2>
+              <div class="dc-gaps4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                <sc-for list="{{ gaps }}" as="g" hint-placeholder-count="4">
+                  <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                      <span style="font-size: 18px; font-weight: 800; color: #222;">{{ g.ref }}</span>
+                      <span style="font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 8px; background: {{ g.prBg }}; color: {{ g.prFg }};">{{ g.pr }}</span>
+                    </div>
+                    <div style="font-size: 12.5px; font-weight: 700; color: #C13515; margin-bottom: 8px;">{{ g.type }}</div>
+                    <div style="font-size: 12.5px; color: #717171; font-weight: 500; line-height: 1.5; min-height: 54px;">{{ g.detail }}</div>
+                    <div style="margin-top: 14px; padding-top: 13px; border-top: 1px solid #F2F2F2; font-size: 11.5px; color: #9b9b9b; font-weight: 600; line-height: 1.5;">{{ g.rivals }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- SAMSUNG MOVES -->
+            <div>
+              <h2 style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 4px;">Samsung 최신 동향</h2>
+              <p style="font-size: 13.5px; color: #717171; margin: 0 0 20px; font-weight: 500;">카탈로그 발행 기준 + 2024 이후 확인된 개발/양산 동향</p>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ samsungMoves }}" as="mv" hint-placeholder-count="5">
+                  <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 14px; padding: 18px 22px; display: flex; align-items: flex-start; gap: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                    <div style="flex: none; min-width: 64px;">
+                      <span style="font-size: 11px; font-weight: 800; color: #9b9b9b;">{{ mv.date }}</span>
+                    </div>
+                    <div style="flex: 1;">
+                      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
+                        <span style="font-size: 15px; font-weight: 800; color: #222; letter-spacing: -0.01em;">{{ mv.title }}</span>
+                        <span style="font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 7px; background: {{ mv.tagBg }}; color: {{ mv.tagFg }}; white-space: nowrap;">{{ mv.tag }}</span>
+                      </div>
+                      <div style="font-size: 13px; color: #555; font-weight: 500; line-height: 1.55;">{{ mv.detail }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      </sc-if>
+
+      <!-- =========================================================== -->
+      <!-- ===== REPORTING VIEW ===== -->
+      <!-- =========================================================== -->
+      <sc-if value="{{ isReporting }}">
+      <div>
+        <section style="padding: 40px 44px 28px; background: linear-gradient(180deg, #fff 0%, #FAFAFA 100%); border-bottom: 1px solid #EFEFEF;">
+          <div style="max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+            <div style="min-width: 0;">
+              <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px; border-radius: 20px; background: #EEF6FF; color: #1D6FB8; font-size: 12px; font-weight: 700; margin-bottom: 18px;">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: #1D6FB8;"></span> MODEL-LEVEL REPORTING
+              </div>
+              <h1 style="font-size: 34px; font-weight: 800; letter-spacing: -0.03em; color: #222; margin: 0 0 12px; line-height: 1.1;">모델별 경쟁 비교 리포트</h1>
+              <p style="font-size: 15px; color: #717171; font-weight: 500; margin: 0; max-width: 720px; line-height: 1.5;">동일 비교군(유형×냉매×조건×구동) 안에서 당사를 기준으로 경쟁 모델을 비교합니다. 조건이 다른 모델은 같은 순위표에 섞지 않습니다.</p>
+            </div>
+            <button onClick="{{ printPage }}" class="dc-noprint" style="flex: none; display: flex; align-items: center; gap: 7px; border: 1px solid #DDDDDD; background: #fff; border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 700; color: #222; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">🖨 인쇄 / PDF</button>
+          </div>
+        </section>
+
+        <section style="padding: 28px 44px 48px;">
+          <div class="dc-report" style="max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: start;">
+
+            <!-- GROUP SELECTOR -->
+            <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 18px; padding: 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); position: sticky; top: 92px;">
+              <div style="font-size: 12px; font-weight: 800; color: #222; padding: 4px 6px 12px;">비교군 선택</div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <sc-for list="{{ groupNav }}" as="g" hint-placeholder-count="8">
+                  <button onClick="{{ g.select }}" style="width: 100%; text-align: left; border: 1px solid {{ g.border }}; border-radius: 12px; padding: 12px 13px; cursor: pointer; background: {{ g.bg }};">
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;">
+                      <span style="font-size: 12.5px; font-weight: 800; color: {{ g.titleColor }}; line-height: 1.3;">{{ g.title }}</span>
+                      <span style="flex: none; font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; background: {{ g.posBg }}; color: {{ g.posFg }};">{{ g.posLabel }}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px; margin-top: 6px; flex-wrap: wrap;">
+                      <span style="font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: {{ g.condBg }}; color: {{ g.condColor }};">{{ g.condLabel }}</span>
+                      <span style="display: inline-flex; gap: 2px; align-items: center;">
+                        <sc-for list="{{ g.relBar }}" as="rb" hint-placeholder-count="5">
+                          <span style="width: 9px; height: 5px; border-radius: 2px; background: {{ rb.color }}; display: inline-block;"></span>
+                        </sc-for>
+                      </span>
+                      <sc-if value="{{ g.isLowRel }}"><span style="font-size: 9px; font-weight: 800; color: #C13515; background: #FDEEEA; padding: 1px 5px; border-radius: 4px;">⚠ 조건불일치</span></sc-if>
+                    </div>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- SELECTED GROUP DETAIL -->
+            <div style="display: flex; flex-direction: column; gap: 22px;">
+
+              <!-- MODEL DRILLDOWN REPORT CARD -->
+              <sc-if value="{{ modelReport }}">
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-left: 4px solid {{ modelReport.accent }}; border-radius: 20px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.04em;">모델 리포트</div>
+                    <div style="font-size: 20px; font-weight: 800; color: #222; margin-top: 2px;">{{ modelReport.mfr }} {{ modelReport.model }}</div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap;">
+                      <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 7px; background: {{ modelReport.condBg }}; color: {{ modelReport.condColor }};">{{ modelReport.condLabel }}</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #555;">{{ modelReport.type }} · {{ modelReport.refrigerant }} · {{ modelReport.drive }}</span>
+                      <sc-if value="{{ modelReport.post }}"><span style="font-size: 9.5px; font-weight: 700; color: #1D6FB8; background: #EEF6FF; padding: 2px 6px; border-radius: 6px;">2024+ 개발</span></sc-if>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px; flex: none;">
+                    <sc-if value="{{ modelReport.canAnalyze }}"><button onClick="{{ modelReport.goAnalyze }}" style="border: none; background: var(--accent, #FF385C); border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer; white-space: nowrap;">상세 분석 →</button></sc-if>
+                    <button onClick="{{ clearModel }}" style="border: 1px solid #EBEBEB; background: #fff; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; color: #717171; cursor: pointer;">✕ 닫기</button>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px;">
+                  <sc-for list="{{ modelReport.tiles }}" as="t" hint-placeholder-count="6">
+                    <div style="background: #FAFAFA; border: 1px solid #F0F0F0; border-radius: 12px; padding: 12px 14px;">
+                      <div style="font-size: 10.5px; font-weight: 700; color: #9b9b9b;">{{ t.label }}</div>
+                      <div style="font-size: 17px; font-weight: 800; color: {{ t.color }}; margin-top: 3px;">{{ t.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #F2F2F2;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-size: 12px; font-weight: 800; color: #222;">다차원 스펙 <span style="font-size: 10.5px; font-weight: 600; color: #9b9b9b;">(보완 중)</span></span>
+                    <span style="font-size: 10px; font-weight: 700; color: #1D6FB8; background: #EEF6FF; padding: 2px 8px; border-radius: 6px;">{{ modelReport.extLabel }}</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px;">
+                    <sc-for list="{{ modelReport.extSpecs }}" as="e" hint-placeholder-count="9">
+                      <div style="display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F7F7F7;">
+                        <span style="font-size: 11.5px; font-weight: 600; color: #9b9b9b; flex: none;">{{ e.label }}</span>
+                        <span style="font-size: 11.5px; font-weight: 700; color: {{ e.color }}; text-align: right;">{{ e.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="margin-top: 14px; padding-top: 13px; border-top: 1px solid #F2F2F2; font-size: 11.5px; color: #9b9b9b; font-weight: 500; line-height: 1.6;">
+                  용도 {{ modelReport.appLabel }} · 전원 {{ modelReport.voltage }}<br>
+                  소속 비교군: {{ modelReport.groups }}<br>
+                  출처: {{ modelReport.srcTxt }} · 신뢰도 {{ modelReport.confidence }}
+                  <sc-if value="{{ modelReport.hasNote }}"><br>비고: {{ modelReport.nameNote }}</sc-if>
+                </div>
+              </div>
+              </sc-if>
+
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 6px;">
+                  <div>
+                    <h2 style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #222; margin: 0 0 6px;">{{ selGroup.title }}</h2>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: {{ selGroup.condBg }}; color: {{ selGroup.condColor }};">조건: {{ selGroup.condLabel }}</span>
+                      <span style="font-size: 11px; font-weight: 700; color: #717171;">신뢰도 <span style="color:#E8A100;">{{ selGroup.stars }}</span></span>
+                    </div>
+                  </div>
+                  <div style="text-align: right; flex: none;">
+                    <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0;">당사 기준 모델</div>
+                    <div style="font-size: 14px; font-weight: 800; color: var(--accent, #FF385C);">{{ selGroup.refLabel }}</div>
+                  </div>
+                </div>
+                <sc-if value="{{ selGroup.isLowReliability }}">
+                <div style="background: #FDEEEA; border: 1px solid #F4A89A; border-radius: 10px; padding: 11px 15px; margin: 12px 0 8px; display: flex; gap: 10px; align-items: flex-start;">
+                  <span style="font-size: 16px; flex: none; line-height: 1.3;">⚠️</span>
+                  <div>
+                    <div style="font-size: 12.5px; font-weight: 800; color: #C13515;">신뢰도 낮음 — 직접 순위 비교 부적절</div>
+                    <div style="font-size: 11.5px; color: #9b2c2c; font-weight: 600; margin-top: 2px; line-height: 1.45;">측정조건 불일치 또는 데이터 부족. 아래 설명을 확인하고 참고 목적으로만 활용하세요.</div>
+                  </div>
+                </div>
+                </sc-if>
+                <div style="font-size: 12.5px; color: #717171; font-weight: 500; line-height: 1.5; padding: 12px 14px; background: #FAFAFA; border-radius: 12px; margin: 8px 0 20px;">{{ selGroup.note }}</div>
+
+                <!-- comparison table -->
+                <div class="dc-scroll-x">
+                <div class="dc-cmp-grid" style="display: grid; grid-template-columns: 1.6fr 0.8fr 0.8fr 0.9fr 0.9fr; gap: 0; font-size: 13px;">
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0;">제조사 · 모델</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: right;">{{ selGroup.metricLabel }} (원본)</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: right;">ARI 환산</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: right;">Δ vs 당사</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: center;">상태</div>
+                  <sc-for list="{{ selGroup.rows }}" as="r" hint-placeholder-count="6">
+                    <div onClick="{{ r.select }}" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1.6fr 0.8fr 0.8fr 0.9fr 0.9fr; align-items: center; border-top: 1px solid #F2F2F2; padding: 11px 0; background: {{ r.rowBg }}; cursor: pointer;">
+                      <div style="padding: 0 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ r.dot }}; flex: none;"></span>
+                        <span style="font-size: 12.5px; font-weight: 700; color: {{ r.nameColor }};">{{ r.mfr }} {{ r.name }}</span>
+                        <sc-if value="{{ r.flagShow }}"><span style="font-size: 9.5px; font-weight: 700; color: #1D6FB8; background: #EEF6FF; padding: 2px 6px; border-radius: 6px;">{{ r.flag }}</span></sc-if>
+                      </div>
+                      <div style="padding: 0 8px; text-align: right; font-size: 13px; font-weight: 800; color: #222;">{{ r.val }}</div>
+                      <div style="padding: 0 8px; text-align: right; font-size: 12.5px; font-weight: 600; color: #9b9b9b;">{{ r.ariVal }}</div>
+                      <div style="padding: 0 8px;">
+                        <div style="text-align: right; font-size: 12.5px; font-weight: 800; color: {{ r.deltaColor }};">{{ r.deltaTxt }}</div>
+                        <sc-if value="{{ r.barShow }}">
+                          <div style="position: relative; height: 4px; background: #F0F0F0; border-radius: 2px; margin-top: 4px;">
+                            <div style="position: absolute; left: 50%; top: -1px; width: 1px; height: 6px; background: #C4C4C4;"></div>
+                            <div style="position: absolute; left: {{ r.barLeft }}; width: {{ r.barW }}; height: 4px; background: {{ r.barColor }}; border-radius: 2px;"></div>
+                          </div>
+                        </sc-if>
+                      </div>
+                      <div style="padding: 0 8px; text-align: center;"><span style="font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 7px; background: {{ r.stBg }}; color: {{ r.stFg }};">{{ r.status }}</span></div>
+                    </div>
+                  </sc-for>
+                </div>
+                </div>
+                <div style="margin-top: 16px; font-size: 11px; color: #9b9b9b; line-height: 1.5;">{{ selGroup.foot }}</div>
+              </div>
+
+              <!-- AUTO REPORT SUMMARY -->
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 26px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="font-size: 13px; font-weight: 800; color: #222; margin-bottom: 10px;">리포트 요약 (당사 기준)</div>
+                <div style="font-size: 13px; color: #444; font-weight: 500; line-height: 1.65;">{{ selGroup.summary }}</div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      </sc-if>
+
+      <!-- =========================================================== -->
+      <!-- ===== MODEL ANALYSIS VIEW ===== -->
+      <!-- =========================================================== -->
+      <sc-if value="{{ isAnalysis }}">
+      <div>
+        <section style="padding: 40px 44px 28px; background: linear-gradient(180deg, #fff 0%, #FAFAFA 100%); border-bottom: 1px solid #EFEFEF;">
+          <div style="max-width: 1180px; margin: 0 auto;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px; border-radius: 20px; background: #F0F8F6; color: #067647; font-size: 12px; font-weight: 700; margin-bottom: 18px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #00A699;"></span> MODEL ANALYSIS
+            </div>
+            <h1 style="font-size: 34px; font-weight: 800; letter-spacing: -0.03em; color: #222; margin: 0 0 12px; line-height: 1.1;">모델 분석</h1>
+            <p style="font-size: 15px; color: #717171; font-weight: 500; margin: 0; max-width: 760px; line-height: 1.5;">당사 모델을 선택하면 같은 유형 안에서 냉매·측정조건·용량이 가까운 경쟁 모델 TOP 5를 자동으로 보여줍니다.</p>
+          </div>
+        </section>
+
+        <section style="padding: 28px 44px 48px;">
+          <div class="dc-analysis" style="max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 28px; align-items: start;">
+
+            <!-- ANALYSIS FILTER -->
+            <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 18px; padding: 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); position: sticky; top: 92px;">
+              <div style="font-size: 12px; font-weight: 800; color: #222; padding: 4px 6px 10px;">분석 필터</div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px;">
+                <sc-for list="{{ analysisTypes }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.select }}" style="border: 1px solid {{ t.border }}; border-radius: 10px; padding: 9px 8px; cursor: pointer; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 12px; font-weight: 800;">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.04em; padding: 4px 6px 6px;">측정조건</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px;">
+                <sc-for list="{{ analysisCondTabs }}" as="ct" hint-placeholder-count="4">
+                  <button onClick="{{ ct.select }}" style="border: 1px solid {{ ct.border }}; border-radius: 20px; padding: 4px 10px; cursor: pointer; background: {{ ct.bg }}; color: {{ ct.fg }}; font-size: 11px; font-weight: 800; white-space: nowrap;">{{ ct.label }}</button>
+                </sc-for>
+              </div>
+              <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.04em; padding: 4px 6px 8px;">당사 모델</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; max-height: 520px; overflow-y: auto; padding-right: 2px;">
+                <sc-for list="{{ analysisModels }}" as="m" hint-placeholder-count="8">
+                  <button onClick="{{ m.select }}" style="width: 100%; text-align: left; border: 1px solid {{ m.border }}; border-radius: 12px; padding: 11px 12px; cursor: pointer; background: {{ m.bg }};">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                      <span style="font-size: 12.5px; font-weight: 800; color: {{ m.nameColor }};">{{ m.model }}</span>
+                      <span style="font-size: 10px; font-weight: 800; color: {{ m.typeColor }};">{{ m.type }}</span>
+                    </div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #9b9b9b; margin-top: 4px;">{{ m.refrigerant }} · {{ m.condition }}</div>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- ANALYSIS DETAIL -->
+            <div style="display: flex; flex-direction: column; gap: 22px;">
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-left: 4px solid {{ analysis.selectedAccent }}; border-radius: 20px; padding: 26px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.04em;">선택 모델</div>
+                    <h2 style="font-size: 24px; font-weight: 800; color: #222; margin: 3px 0 8px;">{{ analysis.model }}</h2>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span style="font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: {{ analysis.condBg }}; color: {{ analysis.condColor }};">{{ analysis.condLabel }}</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #555;">{{ analysis.type }} · {{ analysis.refrigerant }} · {{ analysis.drive }}</span>
+                    </div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0;">추천 경쟁 모델</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #00A699;">{{ analysis.matchCount }}</div>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px;">
+                  <sc-for list="{{ analysis.tiles }}" as="t" hint-placeholder-count="5">
+                    <div style="background: #FAFAFA; border: 1px solid #F0F0F0; border-radius: 12px; padding: 12px 14px;">
+                      <div style="font-size: 10.5px; font-weight: 700; color: #9b9b9b;">{{ t.label }}</div>
+                      <div style="font-size: 16px; font-weight: 800; color: {{ t.color }}; margin-top: 3px;">{{ t.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="margin-top: 14px; padding-top: 13px; border-top: 1px solid #F2F2F2; font-size: 12px; color: #717171; font-weight: 500; line-height: 1.6;">{{ analysis.source }}</div>
+                <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #F2F2F2;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <span style="font-size: 12.5px; font-weight: 800; color: #444;">보완 스펙</span>
+                    <span style="font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #F5F7FA; color: #717171;">{{ analysis.extLabel }}</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px;">
+                    <sc-for list="{{ analysis.extSpecs }}" as="es" hint-placeholder-count="9">
+                      <div style="display: flex; flex-direction: column; gap: 1px;">
+                        <span style="font-size: 10.5px; color: #aaa; font-weight: 600;">{{ es.label }}</span>
+                        <span style="font-size: 12px; font-weight: 700; color: {{ es.color }};">{{ es.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px;">
+                  <div>
+                    <h2 style="font-size: 21px; font-weight: 800; color: #222; margin: 0 0 5px;">유사 경쟁 모델 TOP 5</h2>
+                    <p style="font-size: 12.5px; color: #717171; margin: 0; font-weight: 500;">유형·냉매·조건·용량 유사도 기준. 조건이 다르면 직접 우열 판단을 보류합니다.</p>
+                  </div>
+                  <span style="font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: #F0F8F6; color: #067647;">{{ analysis.metricLabel }}</span>
+                </div>
+                <div class="dc-scroll-x">
+                <div style="min-width: 780px; display: grid; grid-template-columns: 1.35fr 0.75fr 0.85fr 0.9fr 0.9fr 1fr; gap: 0; font-size: 13px;">
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0;">경쟁사 · 모델</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: center;">매칭</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: right;">용량 차이</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: right;">효율 차이</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0; text-align: center;">조건</div>
+                  <div style="padding: 0 8px 10px; font-size: 11px; font-weight: 700; color: #b0b0b0;">출처</div>
+                  <sc-for list="{{ analysisRows }}" as="r" hint-placeholder-count="5">
+                    <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1.35fr 0.75fr 0.85fr 0.9fr 0.9fr 1fr; align-items: center; border-top: 1px solid #F2F2F2; padding: 11px 0;">
+                      <div style="padding: 0 8px;">
+                        <div style="font-size: 12.5px; font-weight: 800; color: #222;">{{ r.mfr }} {{ r.model }}</div>
+                        <div style="font-size: 10.5px; font-weight: 700; color: #9b9b9b; margin-top: 2px;">{{ r.refrigerant }} · {{ r.drive }}</div>
+                      </div>
+                      <div style="padding: 0 8px; text-align: center;"><span style="font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 7px; background: {{ r.matchBg }}; color: {{ r.matchFg }};">{{ r.match }}</span></div>
+                      <div style="padding: 0 8px; text-align: right; font-size: 12px; font-weight: 800; color: #555;">{{ r.capacityDelta }}</div>
+                      <div style="padding: 0 8px; text-align: right; font-size: 12px; font-weight: 800; color: {{ r.deltaColor }};">{{ r.metricDelta }}</div>
+                      <div style="padding: 0 8px; text-align: center;"><span style="font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 7px; background: #F5F7FA; color: {{ r.condColor }};">{{ r.condLabel }}</span></div>
+                      <div style="padding: 0 8px; font-size: 10.8px; font-weight: 600; color: #9b9b9b; line-height: 1.4;">{{ r.src }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                </div>
+                <div style="margin-top: 16px; font-size: 11.5px; color: #9b9b9b; font-weight: 500; line-height: 1.5;">{{ analysis.foot }}</div>
+              </div>
+
+              <div style="background: #fff; border: 1px solid #EBEBEB; border-radius: 20px; padding: 26px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="font-size: 13px; font-weight: 800; color: #222; margin-bottom: 10px;">자동 분석 요약</div>
+                <div style="font-size: 13px; color: #444; font-weight: 500; line-height: 1.65;">{{ analysis.summary }}</div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+      </sc-if>
+
+      <!-- ===== BACKLOG VIEW ===== -->
+      <!-- =========================================================== -->
+      <sc-if value="{{ isBacklog }}">
+      <div>
+        <section style="padding: 40px 44px 32px; background: linear-gradient(180deg, #fff 0%, #FAFAFA 100%); border-bottom: 1px solid #EFEFEF;">
+          <div style="max-width: 1180px; margin: 0 auto;">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+              <div>
+                <div style="font-size: 11px; font-weight: 700; color: #B25E00; letter-spacing: 0.08em; margin-bottom: 10px; background: #FFF4E2; display: inline-block; padding: 4px 10px; border-radius: 6px;">● RESEARCH BACKLOG</div>
+                <h1 style="font-size: 32px; font-weight: 800; color: #222; margin: 0 0 8px; letter-spacing: -0.02em;">데이터 보완 과제</h1>
+                <p style="font-size: 14px; color: #717171; margin: 0; line-height: 1.6;">공개 데이터로 확보 불가하거나 조건 불일치로 반영이 보류된 항목입니다.<br>각 과제를 해소하면 비교군 신뢰도가 올라가고 드릴다운 스펙이 채워집니다.</p>
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <sc-for list="{{ blStats }}" as="bs" hint-placeholder-count="4">
+                  <div style="text-align: center; padding: 16px 20px; background: #fff; border: 1px solid #EBEBEB; border-radius: 14px; min-width: 90px;">
+                    <div style="font-size: 24px; font-weight: 800; color: {{ bs.color }};">{{ bs.value }}</div>
+                    <div style="font-size: 11px; font-weight: 600; color: #9b9b9b; margin-top: 4px;">{{ bs.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <!-- progress bar -->
+            <div style="margin-top: 28px; background: #F2F2F2; border-radius: 99px; height: 8px; max-width: 480px; overflow: hidden;">
+              <div style="height: 100%; background: linear-gradient(90deg, #E8A100, #B25E00); border-radius: 99px; width: {{ blPct }}%;"></div>
+            </div>
+            <div style="font-size: 12px; font-weight: 600; color: #9b9b9b; margin-top: 6px;">진행률 {{ blPct }}% ({{ blDone }}/{{ blTotal }} 부분 확인됨)</div>
+          </div>
+        </section>
+
+        <section style="padding: 32px 44px 48px;">
+          <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
+            <sc-for list="{{ backlogSections }}" as="sec" hint-placeholder-count="4">
+              <div>
+                <!-- category header -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid {{ sec.catColor }}22;">
+                  <span style="font-size: 16px; font-weight: 800; color: {{ sec.catColor }};">{{ sec.catLabel }}</span>
+                  <span style="font-size: 12px; font-weight: 700; color: {{ sec.catColor }}; background: {{ sec.catBg }}; padding: 3px 10px; border-radius: 20px;">{{ sec.count }}건</span>
+                </div>
+                <!-- item cards -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <sc-for list="{{ sec.items }}" as="bi" hint-placeholder-count="3">
+                    <div style="border: 1px solid #EBEBEB; border-radius: 16px; padding: 20px 24px; background: #fff; border-left: 4px solid {{ bi.catColor }};">
+                      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                          <span style="font-size: 11px; font-weight: 800; color: {{ bi.priorityColor }}; background: {{ bi.priorityBg }}; padding: 3px 9px; border-radius: 6px;">{{ bi.priority }}</span>
+                          <span style="font-size: 15px; font-weight: 700; color: #222;">{{ bi.title }}</span>
+                        </div>
+                        <span style="font-size: 12px; font-weight: 700; color: {{ bi.statusFg }}; background: {{ bi.statusBg }}; padding: 4px 12px; border-radius: 20px; white-space: nowrap; flex: none;">{{ bi.status }}</span>
+                      </div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px;">
+                        <div>
+                          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">필요 데이터</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #555; line-height: 1.5;">{{ bi.need }}</div>
+                        </div>
+                        <div>
+                          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">해소 시 효과</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #555; line-height: 1.5;">{{ bi.why }}</div>
+                        </div>
+                        <div>
+                          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">조치 방법</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #222; line-height: 1.5;">{{ bi.action }}</div>
+                        </div>
+                        <div>
+                          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">영향 비교군</div>
+                          <div style="font-size: 12px; font-weight: 700; color: #1D6FB8; background: #EEF6FF; padding: 4px 10px; border-radius: 8px; display: inline-block;">{{ bi.impactLabel }}</div>
+                        </div>
+                      </div>
+                      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #F5F5F5; font-size: 12px; color: #9b9b9b; font-weight: 500;">
+                        <a href="{{ bi.contactHref }}" target="_blank" rel="noopener" style="color: #1D6FB8; text-decoration: none; font-weight: 600; font-size: 12px;">🔗 {{ bi.contact }}</a>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+      </sc-if>
+
+      <!-- ============ FOOTER ============ -->
+      <footer style="border-top: 1px solid #EBEBEB; background: #fff; padding: 32px 44px;">
+        <div style="max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
+          <div style="max-width: 360px;">
+            <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 10px;">
+              <div style="width: 26px; height: 26px; border-radius: 7px; background: var(--accent, #FF385C); display: flex; align-items: center; justify-content: center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.3" stroke="#fff" stroke-width="2.4"/><circle cx="12" cy="12" r="2.2" fill="#fff"/></svg>
+              </div>
+              <span style="font-size: 14px; font-weight: 800; color: #222;">CompressorIQ</span>
+            </div>
+            <p style="font-size: 12px; color: #9b9b9b; font-weight: 500; line-height: 1.6; margin: 0;">Samsung 관점 압축기 경쟁 인텔리전스. 모든 데이터는 2024–2026 공개 카탈로그·웹페이지 기준이며 신뢰도 High–Medium입니다.</p>
+          </div>
+          <div style="display: flex; gap: 48px; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 10px;">데이터 소스</div>
+              <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; font-weight: 600; color: #555;">
+                <span>Samsung · LG · Copeland</span>
+                <span>GMCC · Danfoss · Embraco</span>
+                <span>Panasonic · Highly · Secop</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 10px;">리뷰 사이클</div>
+              <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; font-weight: 600; color: #555;">
+                <span>작성일 · {{ asOf }}</span>
+                <span>다음 리뷰 · {{ nextReview }}</span>
+                <span style="color: #067647;">✓ Samsung 카탈로그 2024 (최신 확보)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 1024}, &quot;startView&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;kpi&quot;, &quot;decision&quot;, &quot;analysis&quot;, &quot;reporting&quot;], &quot;default&quot;: &quot;kpi&quot;, &quot;tsType&quot;: &quot;string&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FF385C&quot;, &quot;tsType&quot;: &quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { view: null, type: 'All', groupId: null, query: '', analysisType: 'All', analysisModel: null, analysisCondFilter: 'All' };
+
+  renderVals() {
+    const self = this;
+    const D = window.COMPRESSOR_DATA || {};
+    const T = D.tokens || {};
+    const view = this.state.view || this.props.startView || 'kpi';
+    const type = this.state.type || 'All';
+    const isKpi = view === 'kpi', isDecision = view === 'decision', isAnalysis = view === 'analysis', isReporting = view === 'reporting', isBacklog = view === 'backlog';
+
+    // ---------- nav ----------
+    const navOn = (on) => ({ bg: on ? '#F7F7F7' : 'transparent', fg: on ? '#222' : '#717171', fw: on ? 700 : 600 });
+    const k = navOn(isKpi), d = navOn(isDecision), an = navOn(isAnalysis), rp = navOn(isReporting), bl = navOn(isBacklog);
+    const nav = { kpiBg:k.bg, kpiFg:k.fg, kpiFw:k.fw, decBg:d.bg, decFg:d.fg, decFw:d.fw, anaBg:an.bg, anaFg:an.fg, anaFw:an.fw, repBg:rp.bg, repFg:rp.fg, repFw:rp.fw,
+      blBg:bl.bg, blFg:bl.fg, blFw:bl.fw,
+      blBadgeBg: isBacklog ? '#FFF4E2' : '#F5F5F5',
+      blBadgeFg: isBacklog ? '#B25E00' : '#9b9b9b' };
+
+    // ---------- type filter ----------
+    const tfBtn = (key, color) => {
+      const on = type === key;
+      return { bg: on ? (color ? color + '14' : '#222') : 'transparent', fg: on ? (color || '#fff') : '#717171', fw: on ? 700 : 600 };
+    };
+    const tf = { all: tfBtn('All', null), re: tfBtn('Re', '#FF385C'), ro: tfBtn('Ro', '#00A699'), sc: tfBtn('Sc', '#FC642D') };
+    if (type === 'All') tf.all = { bg:'#222', fg:'#fff', fw:700 };
+
+    // ---------- shared maps & helpers ----------
+    const models = D.models || [];
+    const byName = {}; models.forEach(m => { byName[m.model] = m; });
+    const samsung = (D.manufacturers || []).filter(m => m.id === 'Samsung')[0] || {};
+    const conds = D.conditions || {};
+    const condOf = (key) => conds[key] || { label: key, color: '#C4C4C4', factor: null };
+
+    const cov = (code) => code === 'have' ? { sym:'●', bg:'#E7F5EE', fg:'#067647' }
+      : code === 'prog' ? { sym:'◐', bg:'#FFF4E2', fg:'#B25E00' }
+      : { sym:'○', bg:'#F5F5F5', fg:'#C4C4C4' };
+    const trendStyle = (t) => t === 'Growing' ? { trendBg:'#E7F5EE', trendFg:'#067647' }
+      : t === 'Declining' ? { trendBg:'#FDEEEA', trendFg:'#C13515' } : { trendBg:'#F2F2F2', trendFg:'#717171' };
+    const trendKo = { Growing:'성장', Declining:'감소', Stable:'안정' };
+    const gwpCol = (g) => g <= 10 ? '#067647' : g <= 700 ? '#E8A100' : '#C13515';
+    const flamCol = (f) => f === 'A3' ? '#C13515' : f === 'A2L' ? '#E8A100' : '#9b9b9b';
+    const strBadge = (s) => s === '매우강함' ? { bg:'#FDEEEA', fg:'#C13515' }
+      : s === '강함' ? { bg:'#FFF4E2', fg:'#B25E00' }
+      : s === '중간' ? { bg:'#F2F2F2', fg:'#717171' }
+      : s === '낮음' ? { bg:'#F7F7F7', fg:'#9b9b9b' } : { bg:'#FAFAFA', fg:'#C4C4C4' };
+    const stStyle = (s) => s === '양산' ? { bg:'#E7F5EE', fg:'#067647' }
+      : s === '개발중' ? { bg:'#FFF4E2', fg:'#B25E00' } : { bg:'#F2F2F2', fg:'#9b9b9b' };
+    const stars = (n) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
+    const round2 = (x) => Math.round(x * 100) / 100;
+    const typeColor = (t) => t === 'Re' ? '#FF385C' : t === 'Ro' ? '#00A699' : t === 'Sc' ? '#FC642D' : '#222';
+    const capWOf = (m) => m.capW != null ? m.capW : (m.capBtu != null ? m.capBtu * 0.293071 : null);
+
+    // ---------- counts ----------
+    const sCount = (t) => models.filter(m => m.mfr === 'Samsung' && (t === 'All' || m.type === t)).length;
+    const counts = { all: sCount('All'), re: sCount('Re'), ro: sCount('Ro'), sc: sCount('Sc') };
+
+    // ---------- build a benchmark group (members → rows + deltas) ----------
+    const buildGroup = (g) => {
+      const metric = g.metric || 'cop';
+      const cond = condOf(g.condition);
+      const ref = g.samsungRef ? byName[g.samsungRef] : null;
+      const refVal = ref ? (metric === 'eer' ? ref.eer : ref.cop) : null;
+      const mem = (g.members || []).map(n => byName[n]).filter(Boolean)
+        .map(m => ({ m, raw: metric === 'eer' ? m.eer : m.cop }))
+        .filter(x => x.raw != null);
+      const maxVal = mem.reduce((a, x) => Math.max(a, x.raw), 0) || 1;
+      const rows = mem.slice().sort((a, b) => b.raw - a.raw).map(x => {
+        const isS = x.m.mfr === 'Samsung';
+        const ari = cond.factor != null ? round2(x.raw * cond.factor) : null;
+        let deltaTxt = '—', deltaColor = '#b0b0b0';
+        let barShow = false, barLeft = '50%', barW = '0%', barColor = '#C4C4C4';
+        if (refVal != null) {
+          if (x.m === ref) { deltaTxt = '기준'; deltaColor = '#FF385C'; }
+          else {
+            const dlt = (refVal - x.raw) / x.raw * 100;
+            deltaTxt = (dlt >= 0 ? '+' : '') + dlt.toFixed(1) + '%';
+            deltaColor = dlt >= 0 ? '#067647' : '#C13515';
+            const half = Math.min(Math.abs(dlt), 15) / 15 * 48;
+            barShow = true;
+            if (dlt >= 0) { barLeft = '50%'; barW = half + '%'; barColor = '#067647'; }
+            else { barLeft = (50 - half) + '%'; barW = half + '%'; barColor = '#C13515'; }
+          }
+        }
+        const st = stStyle(x.m.status);
+        var post = x.m.postCatalog === true;
+        return {
+          mfr: x.m.mfr, name: x.m.model,
+          val: x.raw.toFixed(2), metricLabel: metric.toUpperCase(),
+          ariVal: ari != null ? ari.toFixed(2) : '—',
+          deltaTxt, deltaColor, barShow, barLeft, barW, barColor,
+          w: Math.round(x.raw / maxVal * 100) + '%',
+          color: isS ? '#FF385C' : '#C4C4C4',
+          dot: isS ? '#FF385C' : '#C4C4C4',
+          nameColor: isS ? '#FF385C' : '#555',
+          rowBg: isS ? '#FFF7F8' : 'transparent',
+          status: x.m.status, stBg: st.bg, stFg: st.fg,
+          flag: post ? '2024+ 개발' : '', flagShow: post,
+          select: (function (name) { return function () { self.setState({ modelId: name }); }; })(x.m.model),
+        };
+      });
+      return { g, cond, metric, ref, refVal, rows };
+    };
+
+    // ---------- KPI: stat tiles ----------
+    const kpi = D.kpi || {};
+    const kpiStats = [
+      { label:'추적 모델 (Samsung)', value: String(kpi.samsungModels || counts.all), unit:'개', sub:'+' + (kpi.competitorModels || 0) + ' 경쟁사 비교', color:'#222', subColor:'#9b9b9b' },
+      { label:'냉매 커버리지', value: String((kpi.refrigerantCoverage||{}).covered || 7), unit:'/' + ((kpi.refrigerantCoverage||{}).total || 11), sub:'Re·Ro·Sc 합산 지원', color:'#00A699', subColor:'#067647' },
+      { label:'최고 COP', value: String((kpi.topCop||{}).value || 3.43), unit:'', sub:(kpi.topCop||{}).note || '', color:'#FC642D', subColor:'#9b9b9b' },
+      { label:'P1 긴급 공백', value: String(kpi.p1Gaps || 1), unit:'건', sub:'R290 왕복동', color:'#C13515', subColor:'#C13515' },
+      { label:'카탈로그 신선도', value: String(kpi.catalogYear || 2018), unit:'', sub:'현행화 필요', color:'#E8A100', subColor:'#E8A100' },
+    ];
+
+    // ---------- KPI: Re/Ro/Sc 경쟁 포지션 카드 ----------
+    const grp = (id) => (D.benchmarkGroups || []).filter(x => x.id === id)[0];
+    const typeCards = [
+      { type:'Re', label:'Re 왕복동', color:T.Re || '#FF385C', strength: samsung.re || '중간',
+        headline:'R290 왕복동 = 공백 (P1)', headColor:'#C13515',
+        sub:'냉장고 R290 미진출. 경쟁사 COP 1.28~2.04 양산. BLDC 전환 0.76→1.97(+159%)는 당사 강점.',
+        count: counts.re + '종', rival:'Embraco·Secop·GMCC' },
+      { type:'Ro', label:'Ro 로터리', color:T.Ro || '#00A699', strength: samsung.ro || '강함',
+        headline:'R454B Unitary + R32 UB 양산', headColor:'#067647',
+        sub:'R454B 로터리 Unitary(UF, ARI 3.22~3.25 양산) · R32 로터리(UB) 양산. GMCC R32 3.65 대비 격차는 측정조건 차이 감안.',
+        count: counts.ro + '종', rival:'GMCC·LG·Highly' },
+      { type:'Sc', label:'Sc 스크롤', color:T.Sc || '#FC642D', strength: samsung.sc || '중간',
+        headline:'R290·R454B 스크롤 양산', headColor:'#067647',
+        sub:'R290(3.43)·R32·R410A 스크롤 양산. R454B 스크롤은 2024 카탈로그 이후 개발·양산(DS2LD5046F, ARI 3.37). GMCC Two-Stage는 중장기 위협.',
+        count: counts.sc + '종', rival:'GMCC·Danfoss·Copeland' },
+    ].map(c => { const sb = strBadge(c.strength); return Object.assign(c, { strBg: sb.bg, strFg: sb.fg }); });
+
+    // ---------- KPI: refrigerant matrix ----------
+    const refrigerants = (D.refrigerants || []).map(r => Object.assign({
+      ref: r.id, gwp: (r.gwp || 0).toLocaleString(), gwpColor: gwpCol(r.gwp),
+      flammability: r.flammability, flamColor: flamCol(r.flammability),
+      trend: trendKo[r.trend] || r.trend,
+      re: cov((r.samsung || {}).re), ro: cov((r.samsung || {}).ro), sc: cov((r.samsung || {}).sc),
+      rivals: r.rivals,
+    }, trendStyle(r.trend)));
+
+    // ---------- KPI: manufacturer heatmap ----------
+    const heatmap = (D.manufacturers || []).map(m => {
+      const re = strBadge(m.re), ro = strBadge(m.ro), sc = strBadge(m.sc);
+      const isS = m.id === 'Samsung';
+      return {
+        id: m.id, usMark: m.isUs ? ' 🇺🇸' : '', nameColor: isS ? '#FF385C' : '#222',
+        re: m.re, ro: m.ro, sc: m.sc, strategy: m.strategy,
+        reBg: re.bg, reFg: re.fg, roBg: ro.bg, roFg: ro.fg, scBg: sc.bg, scFg: sc.fg,
+      };
+    });
+
+    // ---------- KPI: headline benchmark group (type-aware) ----------
+    const kpiGroupId = type === 'Re' ? 're-bldc-uplift' : type === 'Ro' ? 'r32-ro-var' : type === 'Sc' ? 'r290-sc-ari' : 'r454b-ro-ari';
+    const kgRaw = grp(kpiGroupId) || (D.benchmarkGroups || [])[0];
+    const kg = buildGroup(kgRaw);
+    const kpiGroup = { title: kgRaw.title, note: kgRaw.note, condLabel: kg.cond.label, condColor: kg.cond.color, condBg: '#F5F7FA', rows: kg.rows };
+
+    // ---------- KPI: condition legend ----------
+    const condLegend = ['ARI', 'DOE-A', 'DOE-B', 'EN12900'].map(key => {
+      const c = condOf(key);
+      return { label: c.label, color: c.color, factor: c.factor != null ? '×' + c.factor.toFixed(2) : '환산 불가' };
+    });
+
+    // ---------- DECISION ----------
+    const prColor = (p) => p === 'P1' ? '#C13515' : p === 'P2' ? '#E8A100' : '#717171';
+    const urgFor = (u) => u === '매우 높음' ? { urgBg:'#FDEEEA', urgFg:'#C13515' }
+      : u === '높음' ? { urgBg:'#FFF4E2', urgFg:'#B25E00' }
+      : u === '중간' ? { urgBg:'#FFF8EC', urgFg:'#8a6400' } : { urgBg:'#F2F2F2', urgFg:'#717171' };
+
+    const spotlightGaps = (D.gaps || []).slice(0, 2).map(g => ({
+      priority: g.priority, prColor: prColor(g.priority), urgency: g.priority === 'P1' ? '매우 높음' : '높음',
+      type: g.type, title: g.title, detail: g.detail, rivals: g.rivals,
+    }));
+
+    const priorities = (D.priorities || []).map(p => Object.assign({}, p, urgFor(p.urgency)));
+
+    const regSt = (s) => s === '적용 중' ? { stBg:'#FDEEEA', stFg:'#C13515' }
+      : s === '예정' ? { stBg:'#FFF4E2', stFg:'#B25E00' } : { stBg:'#F2F2F2', stFg:'#717171' };
+    const regulations = (D.regulations || []).map(g => Object.assign({}, g, regSt(g.status)));
+
+    const roadmap = (D.roadmap || []).map(function(r, i){
+      var colors = ['#FF385C','#E8A100','#067647'];
+      return Object.assign({}, r, { dotColor: colors[i] || '#b0b0b0' });
+    });
+
+    const moveTagColor = function(tag){
+      if(tag === '양산') return { bg:'#E8F7EF', fg:'#067647' };
+      if(tag === '발표') return { bg:'#E8F0FA', fg:'#1D6FB8' };
+      return { bg:'#F2F2F2', fg:'#717171' };
+    };
+    const samsungMoves = (D.samsungMoves || []).map(function(m){
+      var tc = moveTagColor(m.tag);
+      return { date: m.date, title: m.title, detail: m.detail, tag: m.tag, tagBg: tc.bg, tagFg: tc.fg };
+    });
+
+    const competitors = (D.manufacturers || []).filter(m => m.id !== 'Samsung').map(c => {
+      const re = strBadge(c.re), ro = strBadge(c.ro), sc = strBadge(c.sc);
+      const lvl = c.threatLevel || 0;
+      const dots = [0,1,2,3,4].map(i => ({ bg: i < lvl ? '#FF385C' : '#EBEBEB' }));
+      return { maker: c.id, re: c.re, ro: c.ro, sc: c.sc, threat: c.monitor, dots,
+        reBg: re.bg, reFg: re.fg, roBg: ro.bg, roFg: ro.fg, scBg: sc.bg, scFg: sc.fg };
+    });
+
+    const gapPr = (p) => p === 'P1' ? { prBg:'#FDEEEA', prFg:'#C13515' } : p === 'P2' ? { prBg:'#FFF4E2', prFg:'#B25E00' } : { prBg:'#F2F2F2', prFg:'#717171' };
+    const gaps = (D.gaps || []).map(g => Object.assign({ ref: g.refrigerant, type: g.type, detail: g.detail, rivals: g.rivals, pr: g.priority }, gapPr(g.priority)));
+
+    // ---------- REPORTING ----------
+    const allGroups = (D.benchmarkGroups || []).filter(g => type === 'All' || g.type === type);
+    const fallback = (D.benchmarkGroups || [])[0] || {};
+    let curId = this.state.groupId;
+    if (!curId || !allGroups.some(g => g.id === curId)) curId = (allGroups[0] || fallback).id;
+
+    const groupNav = allGroups.map(g => {
+      const c = condOf(g.condition);
+      const active = g.id === curId;
+      const gid = g.id;
+      const gb = buildGroup(g);
+      let posLabel, posBg, posFg;
+      if (!gb.ref) {
+        if (g.condition === 'ASHRAE-LBP' || g.condition === 'ASHRAE-MBP') { posLabel = '공백'; posBg = '#FDEEEA'; posFg = '#C13515'; }
+        else { posLabel = '비교보류'; posBg = '#F2F2F2'; posFg = '#717171'; }
+      } else {
+        const comp = gb.rows.filter(r => r.mfr !== 'Samsung');
+        const wins = comp.filter(r => (r.deltaTxt || '').indexOf('+') === 0).length;
+        if (comp.length === 0) { posLabel = '단독'; posBg = '#EEF6FF'; posFg = '#1D6FB8'; }
+        else if (wins === comp.length) { posLabel = '우위'; posBg = '#E7F5EE'; posFg = '#067647'; }
+        else if (wins === 0) { posLabel = '열위'; posBg = '#FDEEEA'; posFg = '#C13515'; }
+        else { posLabel = '혼재'; posBg = '#FFF4E2'; posFg = '#B25E00'; }
+      }
+      const rel = g.reliability || 0;
+      const relBarColor = rel >= 4 ? '#067647' : rel >= 3 ? '#1D6FB8' : rel >= 2 ? '#E8A100' : '#C13515';
+      return {
+        title: g.title, condLabel: c.label, condColor: c.color, condBg: '#F5F7FA',
+        stars: stars(rel),
+        isLowRel: rel <= 1,
+        relBar: Array.from({length: 5}, function(_, i){ return { color: i < rel ? relBarColor : '#E4E4E4' }; }),
+        bg: active ? '#FFF1F3' : '#fff', border: active ? '#FFD9DF' : '#EBEBEB',
+        titleColor: active ? '#C13515' : '#222',
+        posLabel: posLabel, posBg: posBg, posFg: posFg,
+        select: () => this.setState({ groupId: gid }),
+      };
+    });
+
+    const selRaw = (D.benchmarkGroups || []).filter(g => g.id === curId)[0] || fallback;
+    const sb = buildGroup(selRaw);
+    const refModel = sb.ref;
+    let summary;
+    if (refModel) {
+      const comp = sb.rows.filter(r => r.mfr !== 'Samsung');
+      const wins = comp.filter(r => (r.deltaTxt || '').indexOf('+') === 0).length;
+      summary = '당사 기준 모델 ' + selRaw.samsungRef + '(' + sb.cond.label + ' ' + (sb.metric.toUpperCase()) + ' ' +
+        (refModel[sb.metric] != null ? refModel[sb.metric] : '—') + ')은 동일조건 경쟁 ' + comp.length + '개 모델 중 ' + wins + '개 대비 우위입니다. ' + (selRaw.note || '');
+    } else {
+      summary = (selRaw.condition === 'ASHRAE-LBP' || selRaw.condition === 'ASHRAE-MBP')
+        ? '당사는 본 비교군에 해당 제품이 없습니다(공백). 경쟁사 ' + sb.rows.length + '개 모델이 양산 중이며, 진입 여부 판단의 근거 데이터로 활용합니다. ' + (selRaw.note || '')
+        : '본 비교군은 측정조건 차이로 당사와 직접 비교를 보류합니다. ' + (selRaw.note || '');
+    }
+    const selGroup = {
+      title: selRaw.title, note: selRaw.note, condLabel: sb.cond.label, condColor: sb.cond.color, condBg: '#F5F7FA',
+      stars: stars(selRaw.reliability || 0), metricLabel: (selRaw.metric || 'cop').toUpperCase(),
+      isLowReliability: (selRaw.reliability || 0) <= 1,
+      refLabel: selRaw.samsungRef || '없음 (공백)', rows: sb.rows,
+      foot: sb.cond.note + (refModel ? '' : ' · 당사 기준 모델 없음 — Δ 비교 생략.') + ' · 💡 표의 모델 행을 클릭하면 상세 리포트가 열립니다.',
+      summary,
+    };
+
+    // ---------- model drilldown (Reporting) ----------
+    const curModelId = this.state.modelId;
+    let modelReport = null;
+    if (curModelId && byName[curModelId]) {
+      const mm = byName[curModelId];
+      const mc = condOf(mm.condition);
+      const capTxt = mm.capW != null ? mm.capW.toLocaleString() + ' W' : (mm.capBtu != null ? mm.capBtu.toLocaleString() + ' Btu/h' : '—');
+      const inGroups = (D.benchmarkGroups || []).filter(g => (g.members || []).indexOf(curModelId) >= 0).map(g => g.title);
+      const extDefs = [
+        { label: '계절효율', value: mm.seer2 ? ('SEER2 ' + mm.seer2) : (mm.scop ? ('SCOP ' + mm.scop) : (mm.iplv ? ('IPLV ' + mm.iplv) : null)) },
+        { label: '운전영역', value: mm.tempEnvelope || (mm.maxDischarge ? ('최고토출 ' + mm.maxDischarge + '°C') : null) },
+        { label: '소음', value: mm.noiseDb ? (mm.noiseDb + ' dB(A)') : null },
+        { label: '오일', value: mm.oilType ? (mm.oilType + (mm.oilCharge ? (' · ' + mm.oilCharge) : '')) : null },
+        { label: '냉매 충전', value: mm.refrigerantCharge || null },
+        { label: '중량', value: mm.weightKg ? (mm.weightKg + ' kg') : null },
+        { label: '규제 승인', value: (mm.approvals && mm.approvals.length) ? mm.approvals.join(' · ') : null },
+        { label: '기술', value: (mm.tech && mm.tech.length) ? mm.tech.join(' · ') : null },
+        { label: 'OEM 채택', value: (mm.oemWins && mm.oemWins.length) ? mm.oemWins.join(' · ') : null },
+      ];
+      const extSpecs = extDefs.map(d => ({ label: d.label, value: d.value || '미확인', color: d.value ? '#222' : '#c4c4c4' }));
+      const extLabel = '보완 ' + extDefs.filter(d => !!d.value).length + '/' + extDefs.length;
+      modelReport = {
+        mfr: mm.mfr, model: mm.model, accent: mm.mfr === 'Samsung' ? '#FF385C' : '#717171',
+        type: mm.type, refrigerant: mm.refrigerant, drive: mm.drive || '—',
+        condLabel: mc.label, condColor: mc.color, condBg: '#F5F7FA', post: mm.postCatalog === true,
+        tiles: [
+          { label: 'COP', value: mm.cop != null ? mm.cop.toFixed(2) : '—', color: '#FC642D' },
+          { label: 'EER', value: mm.eer != null ? mm.eer.toFixed(2) : '—', color: '#00A699' },
+          { label: '배제량', value: mm.cc != null ? (mm.cc + ' cc') : '—', color: '#222' },
+          { label: '냉방용량', value: capTxt, color: '#222' },
+          { label: '입력전력', value: mm.inputW != null ? (mm.inputW.toLocaleString() + ' W') : '—', color: '#222' },
+          { label: '상태', value: mm.status || '—', color: '#222' },
+        ],
+        appLabel: mm.app || '—',
+        voltage: (mm.voltage || '—') + ' · ' + (mm.phase || '—') + ' · ' + (mm.freq || '—'),
+        confidence: mm.confidence || '—', srcTxt: mm.src || '—',
+        groups: inGroups.length ? inGroups.join(' · ') : '—',
+        nameNote: mm.nameNote || '', hasNote: !!mm.nameNote,
+        canAnalyze: mm.mfr === 'Samsung',
+        goAnalyze: (mm.mfr === 'Samsung')
+          ? (function (name) { return function () { self.setState({ view: 'analysis', analysisModel: name, analysisType: 'All', modelId: null }); }; })(mm.model)
+          : null,
+        extSpecs: extSpecs, extLabel: extLabel,
+      };
+    }
+    const clearModel = () => this.setState({ modelId: null });
+
+    // ---------- MODEL ANALYSIS ----------
+    const analysisType = this.state.analysisType || 'All';
+    const analysisCondFilter = this.state.analysisCondFilter || 'All';
+    const samsungByType = models.filter(m => m.mfr === 'Samsung' && (analysisType === 'All' || m.type === analysisType));
+    // Condition filter badges — unique conditions from current type filter
+    const condKeys = ['All'].concat(samsungByType.reduce(function(acc, m){
+      if(m.condition && acc.indexOf(m.condition) < 0) acc.push(m.condition);
+      return acc;
+    }, []));
+    const analysisCondTabs = condKeys.map(function(ck){
+      const active = analysisCondFilter === ck;
+      const label = ck === 'All' ? '전체' : condOf(ck).label;
+      const color = ck === 'All' ? '#717171' : condOf(ck).color;
+      return { key: ck, label: label, color: color,
+        bg: active ? '#222' : '#fff', fg: active ? '#fff' : color, border: active ? '#222' : '#EBEBEB',
+        select: (function(k){ return function(){ self.setState({ analysisCondFilter: k, analysisModel: null }); }; })(ck) };
+    });
+    const samsungModels = samsungByType.filter(m => analysisCondFilter === 'All' || m.condition === analysisCondFilter);
+    let analysisId = this.state.analysisModel;
+    if (!analysisId || !samsungModels.some(m => m.model === analysisId)) {
+      analysisId = (samsungModels[0] || models.filter(m => m.mfr === 'Samsung')[0] || {}).model;
+    }
+    const selectedAnalysisModel = byName[analysisId] || {};
+    const analysisCond = condOf(selectedAnalysisModel.condition);
+    const selectedCap = capWOf(selectedAnalysisModel);
+    const metricKey = selectedAnalysisModel.cop != null ? 'cop' : 'eer';
+    const selectedMetric = selectedAnalysisModel[metricKey];
+    const metricLabel = metricKey.toUpperCase();
+    const fmtNum = (x) => x != null ? x.toLocaleString(undefined, { maximumFractionDigits: 1 }) : '—';
+    const fmtEff = (x) => x != null ? x.toFixed(2) : '—';
+    const analysisTypeTabs = [
+      { key:'All', label:'전체' }, { key:'Re', label:'Re' }, { key:'Ro', label:'Ro' }, { key:'Sc', label:'Sc' },
+    ].map(t => {
+      const active = analysisType === t.key;
+      return { label:t.label, bg: active ? '#222' : '#fff', fg: active ? '#fff' : '#717171', border: active ? '#222' : '#EBEBEB',
+        select: () => this.setState({ analysisType: t.key, analysisModel: null }) };
+    });
+    const analysisModels = samsungModels.map(m => {
+      const active = m.model === analysisId;
+      return {
+        model: m.model, type: m.type, refrigerant: m.refrigerant, condition: condOf(m.condition).label,
+        bg: active ? '#FFF1F3' : '#fff', border: active ? '#FFD9DF' : '#EBEBEB',
+        nameColor: active ? '#C13515' : '#222', typeColor: typeColor(m.type),
+        select: (function (name) { return function () { self.setState({ analysisModel: name }); }; })(m.model),
+      };
+    });
+    const matchStyle = (tier) => tier === 0 ? { bg:'#E7F5EE', fg:'#067647', label:'동일 조건' }
+      : tier === 1 ? { bg:'#EEF6FF', fg:'#1D6FB8', label:'동일 냉매' }
+      : { bg:'#F2F2F2', fg:'#717171', label:'동일 유형' };
+    const competitorCandidates = models.filter(m => m.mfr !== 'Samsung' && m.type === selectedAnalysisModel.type)
+      .map(m => {
+        const cap = capWOf(m);
+        const tier = (m.refrigerant === selectedAnalysisModel.refrigerant && m.condition === selectedAnalysisModel.condition) ? 0
+          : (m.refrigerant === selectedAnalysisModel.refrigerant ? 1 : 2);
+        const capPct = selectedCap != null && cap != null ? Math.abs(cap - selectedCap) / selectedCap * 100 : 999;
+        const rawMetric = m[metricKey];
+        const direct = tier === 0 && selectedMetric != null && rawMetric != null;
+        let metricDelta = direct ? ((selectedMetric - rawMetric) / rawMetric * 100) : null;
+        const ms = matchStyle(tier);
+        return { m, cap, tier, capPct, score: tier * 100000 + capPct, rawMetric, direct, metricDelta, ms };
+      })
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 5);
+    const analysisRows = competitorCandidates.map(x => {
+      const c = condOf(x.m.condition);
+      const capDelta = selectedCap != null && x.cap != null ? ((x.cap - selectedCap) / selectedCap * 100) : null;
+      const d = x.metricDelta;
+      return {
+        mfr: x.m.mfr, model: x.m.model, refrigerant: x.m.refrigerant, drive: x.m.drive || '—',
+        match: x.ms.label, matchBg: x.ms.bg, matchFg: x.ms.fg,
+        capacityDelta: capDelta != null ? (capDelta >= 0 ? '+' : '') + capDelta.toFixed(1) + '%' : '용량 미공개',
+        metricDelta: x.direct ? ((d >= 0 ? '+' : '') + d.toFixed(1) + '%') : '직접 비교 보류',
+        deltaColor: x.direct ? (d >= 0 ? '#067647' : '#C13515') : '#9b9b9b',
+        condLabel: c.label, condColor: c.color,
+        src: x.m.src || '—',
+      };
+    });
+    const best = competitorCandidates[0];
+    const am = selectedAnalysisModel;
+    const aExtDefs = [
+      { label:'계절효율', value: am.seer2 ? ('SEER2 ' + am.seer2) : (am.scop ? ('SCOP ' + am.scop) : (am.iplv ? ('IPLV ' + am.iplv) : null)) },
+      { label:'운전영역', value: am.tempEnvelope || (am.maxDischarge ? ('최고토출 ' + am.maxDischarge + '°C') : null) },
+      { label:'소음', value: am.noiseDb ? (am.noiseDb + ' dB(A)') : null },
+      { label:'오일', value: am.oilType ? (am.oilType + (am.oilCharge ? (' · ' + am.oilCharge) : '')) : null },
+      { label:'냉매 충전', value: am.refrigerantCharge || null },
+      { label:'중량', value: am.weightKg ? (am.weightKg + ' kg') : null },
+      { label:'규제 승인', value: (am.approvals && am.approvals.length) ? am.approvals.join(' · ') : null },
+      { label:'기술', value: (am.tech && am.tech.length) ? am.tech.join(' · ') : null },
+      { label:'OEM 채택', value: (am.oemWins && am.oemWins.length) ? am.oemWins.join(' · ') : null },
+    ];
+    const aExtSpecs = aExtDefs.map(function(d){ return { label: d.label, value: d.value || '미확인', color: d.value ? '#222' : '#c4c4c4' }; });
+    const aExtLabel = '보완 ' + aExtDefs.filter(function(d){ return !!d.value; }).length + '/' + aExtDefs.length;
+
+    const analysis = {
+      model: am.model || '—',
+      type: am.type || '—',
+      refrigerant: am.refrigerant || '—',
+      drive: am.drive || '—',
+      selectedAccent: typeColor(am.type),
+      condLabel: analysisCond.label, condColor: analysisCond.color, condBg: '#F5F7FA',
+      matchCount: String(analysisRows.length),
+      metricLabel,
+      source: '출처: ' + (am.src || '—') + ' · 신뢰도 ' + (am.confidence || '—'),
+      extSpecs: aExtSpecs, extLabel: aExtLabel,
+      tiles: [
+        { label:'COP', value: fmtEff(am.cop), color:'#FC642D' },
+        { label:'EER', value: fmtEff(am.eer), color:'#00A699' },
+        { label:'용량', value: selectedCap != null ? fmtNum(selectedCap) + ' W' : '—', color:'#222' },
+        { label:'배제량', value: am.cc != null ? am.cc + ' cc' : '—', color:'#222' },
+        { label:'상태', value: am.status || '—', color:'#222' },
+      ],
+      foot: 'TOP 5는 같은 유형 안에서 냉매·측정조건·용량 유사도 순으로 정렬했습니다. 조건이 다른 행은 효율 우열을 보류합니다.',
+      summary: best
+        ? '선택한 ' + (selectedAnalysisModel.model || '모델') + '은 ' + (selectedAnalysisModel.type || '-') + ' / ' + (selectedAnalysisModel.refrigerant || '-') + ' / ' + analysisCond.label + ' 기준입니다. 가장 가까운 공개 경쟁 모델은 ' + best.m.mfr + ' ' + best.m.model + '이며, 매칭 수준은 "' + best.ms.label + '"입니다. 같은 조건일 때만 ' + metricLabel + ' 차이를 직접 해석하고, 조건이 다르면 참고 비교로만 사용하세요.'
+        : '같은 유형의 공개 경쟁 모델이 없어 자동 비교를 만들 수 없습니다. 데이터 추가가 필요합니다.',
+    };
+
+    // ---------- research backlog ----------
+    const BL_ITEMS = [
+      // ── 제조사 직접 문의 ──
+      { cat:'제조사 직접 문의', catColor:'#C13515', catBg:'#FDEEEA', catIcon:'✉',
+        priority:'P1', priorityColor:'#C13515', priorityBg:'#FDEEEA',
+        title:'LG UniRotary R454B 로터리 (KJA/KVA 고정속 · KJT/KPT 가변속)',
+        need:'ARI 조건 COP · 배기량(cc) · 정확한 모델명',
+        why:'R454B 로터리 Unitary 비교군 경쟁사 0개 → 직접 비교 가능하게 됨',
+        action:'LG 압축기 한국/글로벌 OEM 영업채널에 기술 사양서 직접 요청',
+        contact:'lg.com/global/business/compressor-motor',
+        impactGroup:'r454b-ro-ari', impactLabel:'R454B 로터리 · ARI',
+        status:'미확보', statusBg:'#FDEEEA', statusFg:'#C13515' },
+      { cat:'제조사 직접 문의', catColor:'#C13515', catBg:'#FDEEEA', catIcon:'✉',
+        priority:'P2', priorityColor:'#E8A100', priorityBg:'#FFF4E2',
+        title:'Panasonic R290 스크롤 — 냉방 ARI COP 단품 스펙',
+        need:'ARI 냉방 COP 정확한 수치 · 모델명 · 배기량(cc) (공개 단품 데이터 없음)',
+        why:'R290 스크롤 ARI 비교군 경쟁사 0개 → Samsung DS4HD(3.43)와 직접 비교 가능. 시스템 수준 COP >3.5(ARI)는 확인됨',
+        action:'Panasonic Appliances Compressor Corporation(PACC) 한국/일본 지사 문의. 단품 압축기 스펙시트 요청',
+        contact:'na.industrial.panasonic.com/products/hvacr-appliance-devices/compressors',
+        impactGroup:'r290-sc-ari', impactLabel:'R290 스크롤 · ARI',
+        status:'부분확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
+      { cat:'제조사 직접 문의', catColor:'#C13515', catBg:'#FDEEEA', catIcon:'✉',
+        priority:'P2', priorityColor:'#E8A100', priorityBg:'#FFF4E2',
+        title:'Highly R454B 로터리 전용 ARI COP · 모델명',
+        need:'R454B 전용 ARI COP (Multi-ref 22.6cc 존재 확인됨, R454B 단독 값 미확보)',
+        why:'R454B 로터리 Unitary 비교군 경쟁사 확대',
+        action:'Shanghai Electric/Highly 한국 대리점 또는 MCE 전시회 문의',
+        contact:'highly.com.cn',
+        impactGroup:'r454b-ro-ari', impactLabel:'R454B 로터리 · ARI',
+        status:'부분확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
+      // ── 온라인 즉시 조회 ──
+      { cat:'온라인 즉시 조회', catColor:'#1D6FB8', catBg:'#EEF6FF', catIcon:'🔍',
+        priority:'P1', priorityColor:'#C13515', priorityBg:'#FDEEEA',
+        title:'Samsung UF·DS2LD 시리즈 SEER2 — AHRI 디렉토리 조회',
+        need:'SEER2 · EER2 · HSPF2 인증값 (현재 전 모델 "미확인")',
+        why:'계절효율 비교 extSpecs 0/60 → 핵심 모델 채움. 실사용 효율 근거 확보',
+        action:'ahridirectory.org → 프로그램 210/240 → Brand: Samsung → UF/DS2LD 부분 검색',
+        contact:'ahridirectory.org',
+        impactGroup:'seer2-field', impactLabel:'extSpecs 계절효율 필드',
+        status:'미확보', statusBg:'#FDEEEA', statusFg:'#C13515' },
+      { cat:'온라인 즉시 조회', catColor:'#1D6FB8', catBg:'#EEF6FF', catIcon:'🔍',
+        priority:'P3', priorityColor:'#717171', priorityBg:'#F5F5F5',
+        title:'Copeland YHV0382P — oilType·maxDischarge 공식 확정',
+        need:'oilType 직접 확정(현재 POE 추정) · maxDischarge 직접값(현재 150°C 간접)',
+        why:'드릴다운 extSpecs 신뢰도 Medium→High 상향',
+        action:'Copeland CoolSelector² Portal에서 YHV0382P 단품 데이터시트 열람',
+        contact:'coolselector.danfoss.com',
+        impactGroup:'yhv0382p', impactLabel:'Copeland YHV0382P 드릴다운',
+        status:'간접확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
+      // ── ARI 조건 재확인 ──
+      { cat:'ARI 조건 재확인', catColor:'#FC642D', catBg:'#FFF3EE', catIcon:'⚖',
+        priority:'P2', priorityColor:'#E8A100', priorityBg:'#FFF4E2',
+        title:'GMCC ATF/ATQ R32 로터리 — ARI 조건 별도 데이터 확보',
+        need:'ARI 조건 COP (현재 SEER60: 3.65~3.72만 확보 — Samsung UB ARI 3.31과 직접 비교 불가)',
+        why:'R32 로터리 비교군 신뢰도 1→4 상향. 실제 격차 정량화 가능',
+        action:'GMCC 카탈로그 R32 ARI 조건 라인업(KSN/KSM 계열) 재검색 또는 GMCC 직접 문의',
+        contact:'gmcc-welling.com/en',
+        impactGroup:'r32-ro-var', impactLabel:'R32 로터리 · Variable',
+        status:'조건불일치', statusBg:'#FDEEEA', statusFg:'#C13515' },
+      { cat:'ARI 조건 재확인', catColor:'#FC642D', catBg:'#FFF3EE', catIcon:'⚖',
+        priority:'P2', priorityColor:'#E8A100', priorityBg:'#FFF4E2',
+        title:'LG YPH/YBH R454B — DOE-A→ARI 실측값 확보',
+        need:'ARI 실측 COP (현재 DOE-A 4.88~4.92, ARI 환산 시 ×0.84 불확실 ±5%)',
+        why:'r454b-sc-var-ari 비교군에 LG 통합 → 당사 DS2LD(3.37) 대비 ARI 실질 포지션 확인',
+        action:'LG 카탈로그 ARI 조건 표 또는 AHRI 인증 디렉토리에서 LG YPH/YBH 검색',
+        contact:'lg.com/global/business/compressor-motor',
+        impactGroup:'r454b-sc-var-ari', impactLabel:'R454B 스크롤 Variable · ARI',
+        status:'조건불일치', statusBg:'#FDEEEA', statusFg:'#C13515' },
+      // ── 검증 보류 ──
+      { cat:'검증 보류', catColor:'#717171', catBg:'#F5F5F5', catIcon:'⏸',
+        priority:'P3', priorityColor:'#717171', priorityBg:'#F5F5F5',
+        title:'Danfoss VZH 인버터 스크롤 — R454B 단독 지원 확인',
+        need:'VZH 단독 R454B 인증 모델명·스펙 (2019년 로드맵 발표, 단독 출시 미확인)',
+        why:'r454b-sc-var-ari 비교군 고속 인버터 경쟁 모델 확대. VZH+DSH 하이브리드 조합은 R454B 지원 확인됨',
+        action:'Danfoss Coolselector2에서 R454B 필터링 → VZH 단독 모델 검색. danfoss.com/en/products/dcs/compressors',
+        contact:'coolselector.danfoss.com',
+        impactGroup:'r454b-sc-var-ari', impactLabel:'R454B 스크롤 Variable · ARI',
+        status:'부분확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
+      { cat:'검증 보류', catColor:'#717171', catBg:'#F5F5F5', catIcon:'⏸',
+        priority:'P3', priorityColor:'#717171', priorityBg:'#F5F5F5',
+        title:'LG YRH/YGH R454B Fixed 스크롤 — ARI 조건 실측값',
+        need:'ARI 조건(54.4/7.2°C) COP (DOE-A 46.1°C 공식 확인됨: COP 4.74~5.00)',
+        why:'r454b-sc-fix-doea 그룹에 Samsung 비교 가능. 현재 DOE-A만 있어 Samsung DS8LC(ARI)와 직접 비교 불가',
+        action:'LG에 ARI 조건 COP 별도 요청 또는 AHRI 디렉토리에서 LG YRH/YGH 검색',
+        contact:'lg.com/global/business/compressor-motor',
+        impactGroup:'r454b-sc-fix-doea', impactLabel:'R454B 스크롤 Fixed · DOE-A',
+        status:'부분확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
+    ];
+    BL_ITEMS.forEach(function(x){ x.contactHref = 'https://' + x.contact; });
+    const blTotal = BL_ITEMS.length;
+    const blDone = BL_ITEMS.filter(function(x){ return x.status === '부분확인' || x.status === '간접확인'; }).length;
+    const blPct = Math.round(blDone / blTotal * 100);
+    const backlogBadge = (blTotal - blDone) + '건';
+    const blCats = ['제조사 직접 문의','온라인 즉시 조회','ARI 조건 재확인','검증 보류'];
+    const backlogSections = blCats.map(function(cat){
+      const items = BL_ITEMS.filter(function(x){ return x.cat === cat; });
+      if (!items.length) return null;
+      return { catLabel: cat, catColor: items[0].catColor, catBg: items[0].catBg, catIcon: items[0].catIcon, items: items, count: items.length };
+    }).filter(function(x){ return x !== null; });
+    const blStats = [
+      { label:'전체 과제', value: String(blTotal), color:'#222' },
+      { label:'미확보', value: String(BL_ITEMS.filter(function(x){ return x.status==='미확보'; }).length), color:'#C13515' },
+      { label:'부분/간접 확인', value: String(blDone), color:'#B25E00' },
+      { label:'조건 불일치', value: String(BL_ITEMS.filter(function(x){ return x.status==='조건불일치'; }).length), color:'#FC642D' },
+    ];
+
+    // ---------- search (header) ----------
+    const q = (this.state.query || '').trim().toLowerCase();
+    const matched = q ? models.filter(m => (m.model + ' ' + m.mfr + ' ' + m.refrigerant + ' ' + m.type).toLowerCase().indexOf(q) >= 0) : [];
+    const searchCount = q ? String(matched.length) + '건' : '⌘K';
+    const searchOpen = q.length > 0;
+    const searchEmpty = q.length > 0 && matched.length === 0;
+    const searchResultLabel = q ? (matched.length + '개 결과 — 클릭하면 리포트가 열립니다') : '';
+    const searchResults = matched.slice(0, 8).map(m => ({
+      mfr: m.mfr, model: m.model,
+      sub: m.type + ' · ' + m.refrigerant + ' · ' + condOf(m.condition).label + (m.mfr === 'Samsung' ? ' · 당사' : ''),
+      metric: m.cop != null ? ('COP ' + m.cop) : (m.eer != null ? ('EER ' + m.eer) : '—'),
+      metricColor: m.mfr === 'Samsung' ? '#FF385C' : '#717171',
+      dot: T[m.type] || '#C4C4C4',
+      nameColor: m.mfr === 'Samsung' ? '#FF385C' : '#222',
+      select: (function (name) { return function () { self.setState({ view: 'reporting', modelId: name, query: '' }); }; })(m.model),
+    }));
+
+    // ---------- catalog sources & freshness (sidebar) ----------
+    const curYear = (D.meta || {}).currentYear || 2026;
+    const freshOf = (age) => age >= 4 ? { c:'#C13515', bg:'#FDEEEA', lbl:'현행화 필요' }
+      : age >= 2 ? { c:'#B25E00', bg:'#FFF4E2', lbl:'점검 권장' }
+      : { c:'#067647', bg:'#E7F5EE', lbl:'최신' };
+    const catalogSources = (D.catalogSources || []).map(s => {
+      const age = curYear - s.year, f = freshOf(age);
+      return { mfr: s.mfr, yearLabel: s.yearLabel, doc: s.doc, url: s.url,
+        ageLabel: age <= 0 ? '최신' : age + '년 경과',
+        dot: f.c, badgeBg: f.bg, badgeFg: f.c, freshLabel: f.lbl,
+        nameColor: s.self ? '#FF385C' : '#222', selfMark: s.self ? ' · 당사' : '',
+        ageSort: age };
+    }).sort((a, b) => b.ageSort - a.ageSort);
+    const staleN = catalogSources.filter(s => s.ageSort >= 4).length;
+    const watchN = catalogSources.filter(s => s.ageSort >= 2 && s.ageSort < 4).length;
+    const catalogSummary = '현행화 필요 ' + staleN + ' · 점검 ' + watchN + ' · 최신 ' + (catalogSources.length - staleN - watchN);
+
+    return {
+      accent: this.props.accent || '#FF385C',
+      isKpi, isDecision, isAnalysis, isReporting, isBacklog, nav, tf, counts,
+      backlogBadge, backlogSections, blStats, blTotal, blDone, blPct,
+      viewBacklog: () => this.setState({ view: 'backlog' }),
+      asOf: (D.meta || {}).asOf || '', nextReview: (D.meta || {}).nextReview || '',
+      sources: (D.meta || {}).sources || '', confidence: (D.meta || {}).confidence || '',
+      query: this.state.query, searchCount, searchResults, searchOpen, searchEmpty, searchResultLabel,
+      p1Summary: 'R290 왕복동 — 경쟁사 이미 양산 중',
+      viewKpi: () => this.setState({ view: 'kpi' }),
+      viewDecision: () => this.setState({ view: 'decision' }),
+      viewAnalysis: () => this.setState({ view: 'analysis' }),
+      viewReporting: () => this.setState({ view: 'reporting' }),
+      printPage: () => window.print(),
+      typeAll: () => this.setState({ type: 'All' }),
+      typeRe: () => this.setState({ type: 'Re' }),
+      typeRo: () => this.setState({ type: 'Ro' }),
+      typeSc: () => this.setState({ type: 'Sc' }),
+      onSearch: (e) => this.setState({ query: e && e.target ? e.target.value : '' }),
+      kpiStats, typeCards, refrigerants, heatmap, kpiGroup, condLegend,
+      spotlightGaps, priorities, regulations, roadmap, competitors, gaps, samsungMoves,
+      analysisTypes: analysisTypeTabs, analysisCondTabs, analysisModels, analysis, analysisRows,
+      groupNav, selGroup, modelReport, clearModel,
+      catalogSources, catalogSummary,
+    };
+  }
+}
+</script>
+</body>
+</html>
