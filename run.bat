@@ -14,5 +14,5 @@ echo.
 echo  종료하려면 이 창에서 Ctrl+C 를 누르세요.
 echo.
 
-start "" "http://localhost:8000/Compressor%%20Dashboard.dc.html"
+start "" "http://localhost:8000/"
 python -m http.server 8000
