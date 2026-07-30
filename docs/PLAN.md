@@ -7,7 +7,7 @@
 
 - `frontend/compressor-data.js` → `window.COMPRESSOR_DATA`. data/*.md를 Samsung 기준으로 구조화.
 - 모든 탭은 이 객체만 읽는다. 수치 변경은 여기서만.
-- 최종 스키마: `meta` · `tokens` · `conditions` · `refrigerants` · `manufacturers` · `models`(68개) · `benchmarkGroups`(12개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `catalogSources` · `kpi`
+- 최종 스키마: `meta` · `tokens` · `conditions` · `refrigerants` · `manufacturers` · `models`(76개) · `benchmarkGroups`(13개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `catalogSources` · `kpi`
 
 ## 2. 확정된 핵심 결정 (사용자 승인)
 

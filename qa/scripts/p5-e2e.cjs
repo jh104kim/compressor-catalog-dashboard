@@ -31,7 +31,7 @@ const MODELS = {
 };
 
 const EXPECTED = {
-  releaseId: "release:2026-07-30:004",
+  releaseId: "release:2026-07-30:005",
   sourcePath: "data/Samsung-Compressor-Catalogue_2024.pdf",
   authorityCop: "3.25",
   authorityPage: "PDF p.92",

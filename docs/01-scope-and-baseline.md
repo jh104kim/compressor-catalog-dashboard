@@ -112,7 +112,7 @@
 
 - `config/p0_catalog_rules.json`과 `qa/baseline/current_snapshot.json`이 유효한 JSON이며 계약 테스트를 통과한다.
 - 스냅샷 SSOT SHA-256이 실제 파일과 일치한다.
-- 68/27/41/12 수량과 핵심 권위값이 자동 테스트로 고정된다.
+- 76/27/49/13 수량과 핵심 권위값이 자동 테스트로 고정된다.
 - 5개 탭의 Characterization E2E가 로컬 2회 연속 및 GitHub Actions 1회 PASS한다.
 - 데스크톱·모바일 기준 캡처 10장과 실행 증거가 저장된다.
 - Critical 0건, Major 0건이다.

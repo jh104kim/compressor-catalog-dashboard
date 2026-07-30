@@ -1,19 +1,19 @@
 {
   "snapshotVersion": 1,
-  "capturedAt": "2026-07-30T19:05:00+09:00",
+  "capturedAt": "2026-07-30T19:00:10+09:00",
   "timezone": "Asia/Seoul",
   "repository": {
     "name": "jh104kim/compressor-catalog-dashboard",
     "url": "https://github.com/jh104kim/compressor-catalog-dashboard",
-    "commit": "f142bcaba987408a766fcb6b3e20f8d431719e13",
-    "snapshotBranch": "codex/catalog-audit-snapshot-20260730",
+    "commit": "2f490beee2acec6d8cc024dd65b13cdab4cf7bd4",
+    "snapshotBranch": "codex/catalog-audit-p0-p1",
     "pullRequest": {
-      "number": 1,
-      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/pull/1",
+      "number": 2,
+      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/pull/2",
       "state": "OPEN",
       "draft": true,
-      "base": "main",
-      "head": "codex/catalog-audit-snapshot-20260730"
+      "base": "codex/catalog-audit-snapshot-20260730",
+      "head": "codex/catalog-audit-p0-p1"
     }
   },
   "source": {

@@ -88,13 +88,13 @@ jobs:
           from backend.catalog_audit.validation import canonical_json_sha256
 
           root = Path("catalog/published")
-          expected_release_id = "release:2026-07-30:004"
+          expected_release_id = "release:2026-07-30:005"
           active = json.loads(
               (root / "active-release.json").read_text(encoding="utf-8")
           )
           assert active["releaseId"] == expected_release_id
 
-          release_dir = root / "releases" / "release_2026-07-30_004"
+          release_dir = root / "releases" / "release_2026-07-30_005"
           metadata = json.loads(
               (release_dir / "release.json").read_text(encoding="utf-8")
           )
@@ -110,11 +110,11 @@ jobs:
           assert summary["status"] == "VALIDATED"
           assert summary["criticalCount"] == 0
           assert summary["majorCount"] == 0
-          assert summary["modelCount"] == 68
+          assert summary["modelCount"] == 76
           assert bundle["counts"] == {
-              "models": 68,
+              "models": 76,
               "samsungModels": 27,
-              "competitorModels": 41,
+              "competitorModels": 49,
           }
           assert metadata["approvedBy"].strip()
           assert metadata["approvedAt"].strip()
@@ -244,7 +244,7 @@ jobs:
             echo "sha=${GITHUB_SHA}"
             echo "run_id=${GITHUB_RUN_ID}"
             echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
-            echo "release_id=release:2026-07-30:001"
+            echo "release_id=release:2026-07-30:005"
             echo "retries=${P5_RETRIES}"
             python --version
             node --version

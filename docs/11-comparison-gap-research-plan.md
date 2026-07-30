@@ -2,15 +2,16 @@
 
 ## 1. 현재 기준
 
-활성 Release `release:2026-07-30:004`의 Samsung 27모델 중 현재 데이터로
-직접 비교 가능한 모델은 Sc `DS8LC5040IN` 1개다.
+활성 Release `release:2026-07-30:005`의 Samsung 27모델 중 현재 데이터로
+직접 비교 가능한 모델은 8개다. 기존 Sc 1개에 Panasonic 공식 Re 1개와
+Ro 6개가 추가됐다.
 
 | 유형 | Samsung | 직접 비교 가능 | 리서치 대상 |
 |---|---:|---:|---:|
-| Re | 4 | 0 | 4 |
-| Ro | 12 | 0 | 12 |
+| Re | 4 | 1 | 3 |
+| Ro | 12 | 6 | 6 |
 | Sc | 11 | 1 | 10 |
-| 합계 | 27 | 1 | 26 |
+| 합계 | 27 | 8 | 19 |
 
 Compare Lab은 이 상태를 숨기지 않는다.
 
@@ -22,8 +23,8 @@ Compare Lab은 이 상태를 숨기지 않는다.
 
 | 우선순위 | 조사군 | 목표 |
 |---|---|---|
-| P1 | Ro Variable · ARI · R32/R410A/R454B | LG 공식 카탈로그 후보를 검토해 Ro 8모델 직접 비교 가능성 확인 |
-| P1 | Re Variable · ASHRAE-LBP · R600a | LG BSA 계열을 검토해 `ENV4A5DL2B` 직접 비교 가능성 확인 |
+| 완료 | Ro Variable · ARI · R32/R410A/R454B | Panasonic 공식 6모델 반영, Samsung Ro 6모델 직접 비교 가능 |
+| 완료 | Re Variable · ASHRAE-LBP · R600a | Panasonic `TKF76E25DCH-52RPS` 반영, `ENV4A5DL2B` 직접 비교 가능 |
 | P1 | Sc Fixed · DOE-B · R454B | `DS8LC5049IN` 용량 13,345~18,055 W 경쟁 모델 확보 |
 | P1 | Sc Variable · ARI · R454B | `DS2LD5046F` 용량 12,750~17,250 W 경쟁 모델 확보 |
 | P2 | Sc Variable · ARI · R32/R410A/R290 | LG·Danfoss·Copeland 공식 성능표 확보 |
@@ -81,35 +82,35 @@ Published Release를 발행한다.
 
 ## 4. 이번 조사 결과
 
-공식 LG 자료에서 다음 후보를 찾았다. 아직 Published에는 넣지 않았다.
+비-LG 공식 자료를 조사해 다음을 Release 005에 반영했다.
 
-- Ro: R32 ARI Variable 4모델, R410A 2모델, R454B 2모델의 용량 근접
-  가능성을 확인했다.
-- Re: R600a ASHRAE-LBP Variable `BSA057...` 147 W 계열이 Samsung
-  `ENV4A5DL2B` 148 W와 근접한다.
-- Sc: 제품군 범위는 확인했지만 Samsung과 동일 조건·구동·용량을 모두
-  만족하는 모델별 행은 아직 미확보다.
+- Panasonic: Re 1개, Ro 6개 신규 등록
+- Secop: R134a Re 1개 유사 모델 신규 등록
+- Danfoss: DSH090/184/240을 공식 60Hz ARI·Fixed 값으로 정정
+- Embraco·GMCC·Highly·Copeland: 제품군은 확인했지만 동일조건 모델별
+  공식 수치가 부족해 신규 행은 등록 보류
 
-상세 근거와 후보 계산은
-`data/20260730-lg-direct-comparison-candidates.md`에 기록한다.
+상세 근거와 보류 사유는
+`data/20260730-non-lg-competitor-official-research.md`에 기록한다.
 
 ## 5. 다음 조사 순서
 
-1. LG PDF 원문 표에서 R32/R410A/R454B 냉매별 모델 소속을 2인 검토한다.
-2. Sc R454B의 DOE-B Fixed와 ARI Variable 모델을 Copeland·Danfoss·LG에서
+1. Sc R454B의 DOE-B Fixed와 ARI Variable 모델을 Copeland·Danfoss에서
    우선 탐색한다.
-3. 검토 완료 후보만 별도 Staging batch로 만들고 Release 전 비교 Gate를
-   자동 실행한다.
+2. Embraco Product Selector에서 R134a Fixed Re 모델별 export를 확보한다.
+3. GMCC·Highly에는 공식 시험조건 표를 요청하고, 회신값만 Staging에 넣는다.
+4. 공식 URL 해시 변경을 월 1회 확인하고 변경분만 Release 후보로 만든다.
 
 ## 6. 구현·검증 스냅샷
 
-- 앱 구현 SHA: `5f61d1df7358c5c1873a1779a80b1770b9fd3370`
-- 활성 Release: `release:2026-07-30:004`
-- Published 데이터: 기존 검증 Bundle 68개 유지
+- 앱·데이터 입력 SHA: `2f490beee2acec6d8cc024dd65b13cdab4cf7bd4`
+- 활성 Release: `release:2026-07-30:005`
+- Published 데이터: 76개(Samsung 27, 경쟁사 49)
+- 직접 비교 가능 Samsung: 8개
 - Vitest: 27/27 PASS
-- Python: 49/49 PASS
+- Python: 69/69 PASS
 - Studio build: PASS
-- Playwright: desktop/mobile 14/14 PASS, 2회 연속
+- Playwright: Release 005 desktop/mobile 14/14 PASS, 2회 연속
 - Evidence:
-  - `qa/evidence/p10/local-run-6/p5-e2e.json`
-  - `qa/evidence/p10/local-run-7/p5-e2e.json`
+  - `qa/evidence/p11/local-run-1/p5-e2e.json`
+  - `qa/evidence/p11/local-run-2/p5-e2e.json`

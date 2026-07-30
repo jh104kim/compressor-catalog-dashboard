@@ -84,7 +84,7 @@ SPA fallback은 `/studio/*`에만 적용한다. `/api/*`와 `/legacy/*` 요청�
 목적은 “현재 어떤 데이터가 발행되어 있고, 점검 결과가 안전한가?”를 10초 안에 파악하는 것이다.
 
 - 활성 Release 카드: ID, 승인자, 승인시각, 기준일, Git SHA
-- 모델 카드: 전체 68, Samsung 27, 경쟁사 41
+- 모델 카드: 전체 76, Samsung 27, 경쟁사 49
 - Validation 카드: Critical, Major, Warning
 - 포트폴리오 주의 카드: R290 Re GAP 등 확정 공백
 - 빠른 이동: Warning 보기, 비교 시작, Evidence 찾기

@@ -18,7 +18,7 @@
 
 | 항목 | 값 |
 |---|---|
-| Release | `release:2026-07-30:004` |
+| Release | `release:2026-07-30:005` |
 | 전체 모델 | 68 |
 | Samsung / 경쟁사 | 27 / 41 |
 | 상태 | `PUBLISHED` |
@@ -71,7 +71,7 @@ Pop-Location
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$sourceCommit = "2f490beee2acec6d8cc024dd65b13cdab4cf7bd4"
 $appGitSha = (git rev-parse HEAD).Trim()
 $approvedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
 $releaseDate = (Get-Date).ToString("yyyy-MM-dd")
@@ -170,7 +170,7 @@ python scripts/publish_catalog.py `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:004"
+  --release-id "release:2026-07-30:005"
 
 if ($LASTEXITCODE -ne 0) {
   throw "운영 발행 실패"

@@ -48,13 +48,13 @@ UI는 직접 비교 후보 목록을 만들기 위해 백엔드의 DIRECT 조건
 
 | 목적 | 고정값 |
 |---|---|
-| 활성 Release | `release:2026-07-30:004`, `status=PUBLISHED` |
+| 활성 Release | `release:2026-07-30:005`, `status=PUBLISHED` |
 | G1 Samsung | `model:samsung:DS8LC5040IN`, Sc/R454B/DOE-B/Fixed |
 | G1 경쟁사 | `model:gmcc:STDA031N1ULB`, 같은 비교키, 용량차 `6.21%` |
 | G1 판정 | EER 기준 `DIRECT`, `DIRECT_OK`, `rankingAllowed=true`, `deltaPct` 숫자 |
-| G2 Samsung | R32 Ro/ARI/Variable |
-| G2 경쟁사 | GMCC R32 Ro/SEER60/Variable |
-| G2 선택 Gate | 조건 불일치 경쟁 모델은 후보에서 제외, 비교 실행 비활성 |
+| G2 Samsung | 직접 후보 있음: `UB9TK2150F`; 리서치 큐: `UB8TN8300F` |
+| G2 경쟁사 | 직접 후보 Panasonic `9RL160Z`; 제외 후보 GMCC R32 Ro/SEER60 |
+| G2 선택 Gate | 직접 후보가 있는 Samsung만 선택하고, 조건 불일치 경쟁 모델은 후보에서 제외 |
 | G3 포트폴리오 | `Re/R290=GAP`, Samsung 모델 `[]`, 경쟁 모델 `>=1` |
 | G4 권위 모델 | `model:samsung:DS4BC7066FVT`, COP `3.25` |
 | G6 Evidence | Release ID, Samsung 모델 ID, `data/Samsung-Compressor-Catalogue_2024.pdf`, `pdf-page`, page `92` |

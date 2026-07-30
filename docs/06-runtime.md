@@ -28,14 +28,14 @@ Runtime은 다음 두 대상만 읽는다.
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$sourceCommit = "2f490beee2acec6d8cc024dd65b13cdab4cf7bd4"
 $appGitSha = (git rev-parse HEAD).Trim()
 python scripts/publish_catalog.py `
   --approved-by "catalog-owner" `
-  --approved-at "2026-07-30T18:00:00+09:00" `
+  --approved-at "2026-07-30T19:00:10+09:00" `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:004"
+  --release-id "release:2026-07-30:005"
 ```
 
 기본 입력은 `catalog/staging/catalog-bundle.json`, 기본 출력은 `catalog/published`이다. 테스트에서는 `--bundle`, `--output-root`, `--schema`, `--rules`로 임시 경로를 사용한다.
@@ -83,7 +83,7 @@ python -m pytest -q
 
 완료기준:
 
-- 실제 68개 Staging Bundle을 임시 경로에 발행 가능
+- 실제 76개 Staging Bundle을 임시 경로에 발행 가능
 - 잘못된 Samsung 권위값은 발행 거절, 활성 포인터 미생성
 - API·Studio·정적 asset이 한 origin에서 응답
 - API/asset 404가 SPA fallback에 가려지지 않음

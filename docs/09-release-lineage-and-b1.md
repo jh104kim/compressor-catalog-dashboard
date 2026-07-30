@@ -2,7 +2,7 @@
 
 ## 적용 결과
 
-- `sourceCommit`: 68개 Published 데이터가 생성된 입력 커밋
+- `sourceCommit`: Published 데이터가 생성된 입력 커밋
 - `appGitSha`: API·Studio·검증 코드의 구현 커밋
 - 두 SHA는 Release metadata, 활성 포인터, API, Release / Evidence 화면,
   CI Gate에서 각각 확인한다.

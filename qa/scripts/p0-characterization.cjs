@@ -126,12 +126,12 @@ async function kpiAssertions(page) {
   };
 
   return [
-    await runAssertion("KPI Samsung 27 / 경쟁사 41", async () => {
+    await runAssertion("KPI Samsung 27 / 경쟁사 49", async () => {
       const text = await cardText("추적 모델 (Samsung)");
       invariant(/\b27\s*개/.test(text), `Samsung 27개가 아닙니다: ${text}`);
       invariant(
-        text.includes("+41 경쟁사 비교"),
-        `경쟁사 41개가 아닙니다: ${text}`,
+        text.includes("+49 경쟁사 비교"),
+        `경쟁사 49개가 아닙니다: ${text}`,
       );
       return { renderedText: text };
     }),
@@ -323,27 +323,39 @@ async function reportingAssertions(page) {
   );
 
   assertions.push(
-    await runAssertion("Reporting R32 Ro 저신뢰 경고", async () => {
+    await runAssertion("Reporting R32 Ro ARI 직접 비교군", async () => {
       const groupButton = main.getByRole("button", {
-        name: /R32 로터리 · Variable/,
+        name: /R32 로터리 · Variable · ARI/,
       });
-      await requireVisible(groupButton, "R32 Ro Variable 비교군");
+      await requireVisible(groupButton, "R32 Ro Variable ARI 비교군");
       await groupButton.click();
       await requireVisible(
         main.getByRole("heading", {
-          name: "R32 로터리 · Variable",
+          name: "R32 로터리 · Variable · ARI",
           exact: true,
         }),
         "R32 Ro 선택 결과",
       );
-      await requireVisible(lowReliabilityWarning, "R32 Ro 저신뢰 경고");
       await requireVisible(
-        main.getByText(/조건 불일치: Samsung UB\(ARI/),
-        "R32 Ro 조건 불일치 설명",
+        main.getByText("9RL160Z", { exact: true }),
+        "Panasonic R32 ARI 경쟁 모델",
+      );
+      invariant(
+        !(await anyVisible(main.getByText("ATQ360D1UMU", { exact: true }))),
+        "SEER60 모델이 ARI 직접 비교군에 포함되었습니다.",
+      );
+      invariant(
+        !(await anyVisible(lowReliabilityWarning)),
+        "동일조건 R32 ARI 군에 저신뢰 경고가 표시됩니다.",
+      );
+      await requireVisible(
+        main.getByText(/Samsung UB와 Panasonic 9RL 공식 ARI 비교군/),
+        "R32 Ro 동일조건 설명",
       );
       return {
         group: "r32-ro-var",
-        warning: "신뢰도 낮음 — 직접 순위 비교 부적절",
+        condition: "ARI",
+        competitor: "9RL160Z",
       };
     }),
   );

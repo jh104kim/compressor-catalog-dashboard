@@ -4,7 +4,18 @@
 
 ---
 
-## 2026-06-23 (최신)
+## 2026-07-30 — Phase P11 공식 경쟁사 카탈로그 확장 ✅
+
+- **공식 자료 우선 조사**: LG 외 Embraco·Secop·Panasonic·GMCC·Highly·Danfoss·Copeland의 Re/Ro/Sc 후보를 재점검.
+- **DB 반영**: Panasonic 7개(Re 1, Ro 6)와 Secop Re 1개를 직접 비교 가능 모델로 승인. 전체 76개(Samsung 27 + 경쟁사 49).
+- **조건 정합성 보정**: Danfoss DSH090/184/240을 공식 60 Hz ARI·Fixed-speed 값으로 정정. 동일 조건이 확인되지 않은 후보는 DB에 억지로 넣지 않고 Research Queue에 유지.
+- **Release 005 발행**: `release:2026-07-30:005`, 데이터 SHA-256 `9f6ff238e0ee7c2869fe3c5073fd829de568c0f3a330be24ae1599586d17e8b7`.
+- **검증**: Validator `VALIDATED`(Critical 0/Major 0) · Python 69 passed · Vitest 27 passed · build 통과 · Studio E2E 14/14를 2회 연속 통과 · 기존 대시보드 P0 탭 10/10 및 워크플로 2/2 통과.
+- **증거**: `qa/evidence/p11/local-run-1/p5-e2e.json`, `qa/evidence/p11/local-run-2/p5-e2e.json`, `qa/evidence/p11/p0-local/browser-characterization.json`.
+
+---
+
+## 2026-06-23
 
 ### 단계 B+C Phase 1~4 — UI/UX 개선 완료 ✅
 

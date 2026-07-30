@@ -156,8 +156,8 @@ describe("Catalog Audit Studio", () => {
             dataSha256: "abc123",
             sourceCommit: "f142bca",
             appGitSha: "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834",
-            asOf: "2026-06-23",
-            counts: { models: 68, samsungModels: 27, competitorModels: 41 },
+            asOf: "2026-07-30",
+            counts: { models: 76, samsungModels: 27, competitorModels: 49 },
             validationSummary: {
               criticalCount: 0,
               majorCount: 0,
@@ -242,7 +242,7 @@ describe("Catalog Audit Studio", () => {
     vi.unstubAllGlobals();
   });
 
-  it("P5-UT-G5-001 활성 Release와 68/27/41을 보여준다", async () => {
+  it("P5-UT-G5-001 활성 Release와 76/27/49를 보여준다", async () => {
     render(<App />);
 
     expect(
@@ -253,9 +253,9 @@ describe("Catalog Audit Studio", () => {
     expect(
       screen.getAllByText("release:2026-07-30:001").length,
     ).toBeGreaterThan(0);
-    expect(screen.getByText("68")).toBeInTheDocument();
+    expect(screen.getByText("76")).toBeInTheDocument();
     expect(screen.getByText("27")).toBeInTheDocument();
-    expect(screen.getByText("41")).toBeInTheDocument();
+    expect(screen.getByText("49")).toBeInTheDocument();
     expect(screen.getByText("View-only")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /발행|편집/ })).not.toBeInTheDocument();
   });
