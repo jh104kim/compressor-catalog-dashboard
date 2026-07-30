@@ -24,7 +24,9 @@ const MODELS = {
   g1Baseline: "model:samsung:DS8LC5040IN",
   g1Candidate: "model:gmcc:STDA031N1ULB",
   g2Baseline: "model:samsung:UB8TN8300F",
+  g2DirectBaseline: "model:samsung:UB9TK2150F",
   g2Candidate: "model:gmcc:ATQ360D1UMU",
+  g2DirectCandidate: "model:panasonic:9RL160Z",
   authority: "model:samsung:DS4BC7066FVT",
 };
 
@@ -398,15 +400,28 @@ const SCENARIOS = [
     run: async (page, log) => {
       const baseline = page.getByLabel("Samsung 기준 모델");
       const candidate = page.getByLabel("경쟁 모델");
-      await assertion(log, "G2 Ro 직접 비교 가능 모델 없음", async () => {
+      await assertion(log, "G2 Ro 직접 비교 가능 모델만 선택 허용", async () => {
         await page.getByRole("tab", { name: "Ro 로터리" }).click();
         await page.getByLabel("비교 지표").selectOption("cop");
+        const baselineValues = await baseline.locator("option").evaluateAll(
+          (options) => options.map((option) => option.value),
+        );
         invariant(
-          await baseline.isDisabled(),
-          "G2 직접 비교 가능 Samsung 모델이 없는데 기준 모델 선택이 활성화되었습니다.",
+          !(await baseline.isDisabled()),
+          "G2 직접 비교 가능한 Samsung 모델이 있는데 기준 모델 선택이 비활성화되었습니다.",
+        );
+        invariant(
+          baselineValues.includes(MODELS.g2DirectBaseline),
+          "G2 Panasonic 직접 후보가 있는 UB9TK2150F가 선택 목록에 없습니다.",
+        );
+        invariant(
+          !baselineValues.includes(MODELS.g2Baseline),
+          "G2 직접 후보가 없는 UB8TN8300F가 Samsung 선택 목록에 노출되었습니다.",
         );
         return {
-          directBaselineSelectable: false,
+          directBaselineSelectable: true,
+          directBaseline: MODELS.g2DirectBaseline,
+          researchOnlyBaselineHidden: MODELS.g2Baseline,
           metric: "cop",
         };
       });
@@ -420,7 +435,7 @@ const SCENARIOS = [
         );
         invariant(
           await candidate.isDisabled(),
-          "G2 직접 비교 후보가 없는데 경쟁 모델 선택이 활성화되었습니다.",
+          "G2 Samsung 기준 모델 선택 전 경쟁 모델 선택이 활성화되었습니다.",
         );
         const queue = page.getByTestId("comparison-research-queue");
         await requireVisible(queue, "G2 공식 자료 리서치 큐");
@@ -444,6 +459,29 @@ const SCENARIOS = [
           comparisonDisabled: true,
           rankingVisible: false,
           deltaVisible: false,
+        };
+      });
+      await assertion(log, "G2 직접 후보 선택 시 Panasonic만 노출", async () => {
+        await baseline.selectOption(MODELS.g2DirectBaseline);
+        invariant(
+          !(await candidate.isDisabled()),
+          "G2 직접 후보가 있는데 경쟁 모델 선택이 비활성화되었습니다.",
+        );
+        const optionValues = await candidate.locator("option").evaluateAll(
+          (options) => options.map((option) => option.value),
+        );
+        invariant(
+          optionValues.includes(MODELS.g2DirectCandidate),
+          "G2 Panasonic 9RL160Z 직접 후보가 없습니다.",
+        );
+        invariant(
+          !optionValues.includes(MODELS.g2Candidate),
+          "G2 SEER60 GMCC 모델이 ARI 직접 후보에 섞였습니다.",
+        );
+        return {
+          baseline: MODELS.g2DirectBaseline,
+          directCandidate: MODELS.g2DirectCandidate,
+          incompatibleCandidateHidden: MODELS.g2Candidate,
         };
       });
     },

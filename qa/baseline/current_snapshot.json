@@ -1,6 +1,6 @@
 {
   "snapshotVersion": 1,
-  "capturedAt": "2026-07-30T15:17:37+09:00",
+  "capturedAt": "2026-07-30T19:05:00+09:00",
   "timezone": "Asia/Seoul",
   "repository": {
     "name": "jh104kim/compressor-catalog-dashboard",
@@ -18,9 +18,9 @@
   },
   "source": {
     "path": "frontend/compressor-data.js",
-    "sha256": "16cfc74dce4eeebdf243996a83aa143d99dd90c256828fc4d5fbc589ef4de6b0",
-    "asOf": "2026-06-23",
-    "sourceCount": 29
+    "sha256": "75a25fd84cae000b5f84bffc07581263a2bb4b29035fbffd283624575de5ec7d",
+    "asOf": "2026-07-30",
+    "sourceCount": 30
   },
   "authority": {
     "manufacturer": "Samsung",
@@ -28,10 +28,10 @@
     "source": "data/Samsung-Compressor-Catalogue_2024.pdf"
   },
   "counts": {
-    "models": 68,
+    "models": 76,
     "samsungModels": 27,
-    "competitorModels": 41,
-    "benchmarkGroups": 12
+    "competitorModels": 49,
+    "benchmarkGroups": 13
   },
   "inventory": {
     "samsungByType": {
@@ -40,8 +40,8 @@
       "Sc": 11
     },
     "allModelsByType": {
-      "Re": 14,
-      "Ro": 18,
+      "Re": 16,
+      "Ro": 24,
       "Sc": 36
     },
     "manufacturers": 9,
@@ -128,10 +128,10 @@
       "p0Handling": "characterize"
     },
     {
-      "id": "r32-ro-mixed-condition-group",
-      "description": "r32-ro-var 비교군은 ARI와 SEER60을 함께 보유하고 reliability 1 경고를 표시한다.",
-      "p0Handling": "warning-characterization",
-      "p1Target": "BLOCKED"
+      "id": "non-public-competitor-model-tables",
+      "description": "GMCC와 Highly 공식 공개 페이지에는 모델별 측정조건·용량·효율 표가 없어 신규 공식 행을 보류했다.",
+      "p0Handling": "research-queue",
+      "p1Target": "OFFICIAL_SOURCE_REQUIRED"
     }
   ],
   "characterizationE2E": {

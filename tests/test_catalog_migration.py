@@ -80,12 +80,12 @@ def test_p2_preserves_current_model_counts(
     bundle, _ = migrated_bundle
     assert bundle["stage"] == "STAGING"
     assert bundle["counts"] == {
-        "models": 68,
+        "models": 76,
         "samsungModels": 27,
-        "competitorModels": 41,
+        "competitorModels": 49,
     }
-    assert len(bundle["models"]) == 68
-    assert len(bundle["sourceRecords"]) == 68
+    assert len(bundle["models"]) == 76
+    assert len(bundle["sourceRecords"]) == 76
 
 
 def test_p2_model_ids_are_unique_and_sorted(

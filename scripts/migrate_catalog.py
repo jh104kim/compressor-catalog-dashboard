@@ -89,6 +89,8 @@ def _drive_class(drive: str) -> str:
 
 def _source_path(segment: str) -> str:
     lowered = segment.casefold()
+    if lowered.startswith("non-lg-official"):
+        return "data/20260730-non-lg-competitor-official-research.md"
     if "2024 catalogue" in lowered:
         if re.search(r"\bp\.\s*\d+", segment, re.IGNORECASE):
             return "data/Samsung-Compressor-Catalogue_2024.pdf"
@@ -120,6 +122,8 @@ def _authority(
     if source_layer == "samsung_legacy_research":
         return "secondary"
     lowered = segment.casefold()
+    if lowered.startswith("non-lg-official"):
+        return "official"
     if "catalog" in lowered or "dsc167-en" in lowered:
         return "official"
     if "report" in lowered or "보완보고서" in lowered:
@@ -253,6 +257,8 @@ def _canonical_model(raw: dict[str, Any]) -> dict[str, Any]:
         result["supportingEvidence"] = evidence_items[1:]
     if raw.get("nameNote") is not None:
         result["nameNote"] = raw["nameNote"]
+    if raw.get("aliases") is not None:
+        result["aliases"] = raw["aliases"]
     return result
 
 

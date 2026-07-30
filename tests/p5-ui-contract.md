@@ -147,7 +147,7 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 | 기본 테스트 ID | 실제 사용자 흐름 | 합격 기준 |
 |---|---|---|
 | `P5-E2E-G1-001` | `Sc` 탭 → EER → DS8LC5040IN → STDA031N1ULB 비교 | 후보가 직접 비교 모델로 제한되고 `DIRECT_OK`, 순위와 Δ 모두 보임 |
-| `P5-E2E-G2-001` | `Ro` 탭 → COP → R32 Samsung ARI 선택 | GMCC SEER60이 후보에 없고 실행 비활성, 순위·Δ 없음 |
+| `P5-E2E-G2-001` | `Ro` 탭 → COP | Panasonic ARI 직접 후보가 있는 Samsung만 선택 가능하고, UB8TN8300F는 리서치 큐에 남으며 GMCC SEER60은 후보에서 제외 |
 | `P5-E2E-G3-001` | 포트폴리오에서 `Re/R290` 선택 | GAP 표시, 경쟁 모델 `>=1`, Samsung 모델·가짜 0·순위 없음 |
 | `P5-E2E-G4-001` | 검색으로 DS4BC7066FVT 선택 | 모델 상세 COP 3.25, 공식 배지, 화면 전체에 3.34 없음 |
 | `P5-E2E-G5-001` | 앱 진입 → 여러 화면 이동 → 새로고침 | Release ID·해시 불변, PUBLISHED만 표시, 편집·발행 control 없음 |

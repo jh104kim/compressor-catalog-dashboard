@@ -1,9 +1,9 @@
 {
-  "asOf": "2026-06-23",
-  "bundleId": "catalog-staging:2026-06-23:16cfc74dce4e",
+  "asOf": "2026-07-30",
+  "bundleId": "catalog-staging:2026-07-30:75a25fd84cae",
   "counts": {
-    "competitorModels": 41,
-    "models": 68,
+    "competitorModels": 49,
+    "models": 76,
     "samsungModels": 27
   },
   "models": [
@@ -420,11 +420,11 @@
       "application": "HVAC",
       "condition": "ARI",
       "confidence": "High",
-      "driveClass": "Variable",
-      "driveDetail": "Variable",
+      "driveClass": "Fixed",
+      "driveDetail": "Fixed(AC)",
       "evidence": {
-        "authority": "research",
-        "evidenceId": "evidence:model-danfoss-dsh090:c8e7e37cb2fd",
+        "authority": "official",
+        "evidenceId": "evidence:model-danfoss-dsh090:82665fda1153",
         "fieldPaths": [
           "model",
           "manufacturer",
@@ -437,10 +437,10 @@
         ],
         "locator": {
           "kind": "markdown-section",
-          "section": "normalization §2.3"
+          "section": "non-lg-official §2.4 Danfoss DSH 공식값 정정"
         },
-        "note": "normalization §2.3 / 보완보고서 §6",
-        "sourcePath": "data/20260617-perplexity-r454b-scroll-normalization.md"
+        "note": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
       },
       "lifecycleStatus": "MASS_PRODUCT",
       "manufacturer": "Danfoss",
@@ -450,46 +450,24 @@
       "refrigerant": "R454B",
       "sourceLayer": "competitor_research",
       "specs": {
-        "capacityBtuH": null,
-        "capacityW": 8900,
-        "cop": 3.03,
-        "displacementCc": null,
-        "eer": null,
-        "inputW": null
+        "capacityBtuH": 89804,
+        "capacityW": 26320,
+        "cop": 3.22,
+        "displacementCc": 88.4,
+        "eer": 10.98,
+        "inputW": 8180
       },
-      "supportingEvidence": [
-        {
-          "authority": "secondary",
-          "evidenceId": "evidence:model-danfoss-dsh090:a0b677db7f87",
-          "fieldPaths": [
-            "model",
-            "manufacturer",
-            "type",
-            "refrigerant",
-            "condition",
-            "driveClass",
-            "lifecycleStatus",
-            "specs"
-          ],
-          "locator": {
-            "kind": "markdown-section",
-            "section": "보완보고서 §6"
-          },
-          "note": "보완보고서 §6",
-          "sourcePath": "data/압축기 SSOT 보완 조사 결과 보고서.md"
-        }
-      ],
       "type": "Sc"
     },
     {
       "application": "HVAC",
       "condition": "ARI",
       "confidence": "High",
-      "driveClass": "Variable",
-      "driveDetail": "Variable",
+      "driveClass": "Fixed",
+      "driveDetail": "Fixed(AC)",
       "evidence": {
-        "authority": "research",
-        "evidenceId": "evidence:model-danfoss-dsh184:f1fc1e56b8da",
+        "authority": "official",
+        "evidenceId": "evidence:model-danfoss-dsh184:5cfe0427bfca",
         "fieldPaths": [
           "model",
           "manufacturer",
@@ -502,60 +480,38 @@
         ],
         "locator": {
           "kind": "markdown-section",
-          "section": "normalization §2.3"
+          "section": "non-lg-official §2.4 Danfoss DSH 공식값 정정"
         },
-        "note": "normalization §2.3 / 보완보고서 §6",
-        "sourcePath": "data/20260617-perplexity-r454b-scroll-normalization.md"
+        "note": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
       },
       "lifecycleStatus": "MASS_PRODUCT",
       "manufacturer": "Danfoss",
       "model": "DSH184",
       "modelId": "model:danfoss:DSH184",
-      "nameNote": "Danfoss 단일 최근접 모델 DSH184(3.6L POE). DSH180E는 DSH090×2 탠덤 어셈블리. COP는 normalization §2.3 DSH180 기준값 유지",
+      "nameNote": "Danfoss 단일 DSH184. DSH180E는 DSH090×2 탠덤 어셈블리",
       "postCatalog": false,
       "refrigerant": "R454B",
       "sourceLayer": "competitor_research",
       "specs": {
-        "capacityBtuH": null,
-        "capacityW": 17500,
-        "cop": 3.1,
-        "displacementCc": null,
-        "eer": null,
-        "inputW": null
+        "capacityBtuH": 174922,
+        "capacityW": 51267,
+        "cop": 3.34,
+        "displacementCc": 170.3,
+        "eer": 11.39,
+        "inputW": 15360
       },
-      "supportingEvidence": [
-        {
-          "authority": "secondary",
-          "evidenceId": "evidence:model-danfoss-dsh184:239f81bed1b6",
-          "fieldPaths": [
-            "model",
-            "manufacturer",
-            "type",
-            "refrigerant",
-            "condition",
-            "driveClass",
-            "lifecycleStatus",
-            "specs"
-          ],
-          "locator": {
-            "kind": "markdown-section",
-            "section": "보완보고서 §6"
-          },
-          "note": "보완보고서 §6",
-          "sourcePath": "data/압축기 SSOT 보완 조사 결과 보고서.md"
-        }
-      ],
       "type": "Sc"
     },
     {
       "application": "HVAC",
       "condition": "ARI",
       "confidence": "High",
-      "driveClass": "Variable",
-      "driveDetail": "Variable",
+      "driveClass": "Fixed",
+      "driveDetail": "Fixed(AC)",
       "evidence": {
-        "authority": "research",
-        "evidenceId": "evidence:model-danfoss-dsh240:1bf9a87b6c1b",
+        "authority": "official",
+        "evidenceId": "evidence:model-danfoss-dsh240:88aaa5997700",
         "fieldPaths": [
           "model",
           "manufacturer",
@@ -568,10 +524,10 @@
         ],
         "locator": {
           "kind": "markdown-section",
-          "section": "normalization §2.3"
+          "section": "non-lg-official §2.4 Danfoss DSH 공식값 정정"
         },
-        "note": "normalization §2.3 / deepresearch-r454b-scroll-tier1 §1.3",
-        "sourcePath": "data/20260617-perplexity-r454b-scroll-normalization.md"
+        "note": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
       },
       "lifecycleStatus": "MASS_PRODUCT",
       "manufacturer": "Danfoss",
@@ -581,35 +537,13 @@
       "refrigerant": "R454B",
       "sourceLayer": "competitor_research",
       "specs": {
-        "capacityBtuH": null,
-        "capacityW": 23000,
-        "cop": 3.18,
+        "capacityBtuH": 232478,
+        "capacityW": 68133,
+        "cop": 3.27,
         "displacementCc": 227.6,
-        "eer": null,
-        "inputW": null
+        "eer": 11.17,
+        "inputW": 20810
       },
-      "supportingEvidence": [
-        {
-          "authority": "research",
-          "evidenceId": "evidence:model-danfoss-dsh240:d2964255ce7d",
-          "fieldPaths": [
-            "model",
-            "manufacturer",
-            "type",
-            "refrigerant",
-            "condition",
-            "driveClass",
-            "lifecycleStatus",
-            "specs"
-          ],
-          "locator": {
-            "kind": "markdown-section",
-            "section": "deepresearch-r454b-scroll-tier1 §1.3"
-          },
-          "note": "deepresearch-r454b-scroll-tier1 §1.3",
-          "sourcePath": "data/20260619-deepresearch-r454b-scroll-tier1.md"
-        }
-      ],
       "type": "Sc"
     },
     {
@@ -1909,6 +1843,186 @@
       "type": "Sc"
     },
     {
+      "application": "에어컨",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-5kd184xaa21:33bcc3f044df",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "5KD184XAA21",
+      "modelId": "model:panasonic:5KD184XAA21",
+      "postCatalog": false,
+      "refrigerant": "R410A",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 18560,
+        "capacityW": 5440,
+        "cop": 3.01,
+        "displacementCc": 18.4,
+        "eer": 10.27,
+        "inputW": null
+      },
+      "type": "Ro"
+    },
+    {
+      "application": "에어컨",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-5kd240xaa21:b2898c6ad273",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "5KD240XAA21",
+      "modelId": "model:panasonic:5KD240XAA21",
+      "postCatalog": false,
+      "refrigerant": "R410A",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 24840,
+        "capacityW": 7280,
+        "cop": 3.03,
+        "displacementCc": 24,
+        "eer": 10.35,
+        "inputW": 2400
+      },
+      "type": "Ro"
+    },
+    {
+      "aliases": [
+        "5VD550ZD-"
+      ],
+      "application": "에어컨",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-5vd550zd:ed185c3c2803",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "5VD550ZD",
+      "modelId": "model:panasonic:5VD550ZD",
+      "nameNote": "공식 표기 5VD550ZD-, ARI 57.5Hz",
+      "postCatalog": false,
+      "refrigerant": "R410A",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 58857,
+        "capacityW": 17250,
+        "cop": 3.17,
+        "displacementCc": 55,
+        "eer": 10.82,
+        "inputW": 5442
+      },
+      "type": "Ro"
+    },
+    {
+      "aliases": [
+        "9RL160Z-"
+      ],
+      "application": "에어컨",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-9rl160z:8a243d415975",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "9RL160Z",
+      "modelId": "model:panasonic:9RL160Z",
+      "nameNote": "공식 표기 9RL160Z-, ARI 57.5Hz",
+      "postCatalog": false,
+      "refrigerant": "R32",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 15061,
+        "capacityW": 4414,
+        "cop": 2.56,
+        "displacementCc": 16,
+        "eer": 8.73,
+        "inputW": 1746
+      },
+      "type": "Ro"
+    },
+    {
       "application": "냉장고(인버터)",
       "condition": "ASHRAE-LBP",
       "confidence": "Medium",
@@ -1946,6 +2060,147 @@
         "capacityW": 360,
         "cop": null,
         "displacementCc": 5.7,
+        "eer": null,
+        "inputW": null
+      },
+      "type": "Re"
+    },
+    {
+      "aliases": [
+        "KKD420Z-"
+      ],
+      "application": "Unitary AC",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-kkd420z:d58149f0d626",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "KKD420Z",
+      "modelId": "model:panasonic:KKD420Z",
+      "nameNote": "공식 표기 KKD420Z-, ARI 57.5Hz",
+      "postCatalog": false,
+      "refrigerant": "R454B",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 55223,
+        "capacityW": 16185,
+        "cop": 4.36,
+        "displacementCc": 42,
+        "eer": 14.88,
+        "inputW": 3710
+      },
+      "type": "Ro"
+    },
+    {
+      "aliases": [
+        "KRD220Z-"
+      ],
+      "application": "Unitary AC",
+      "condition": "ARI",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(DC inverter)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-krd220z:432d2f7c99f6",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.2 Panasonic Ro"
+        },
+        "note": "non-lg-official §2.2 Panasonic Ro",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "KRD220Z",
+      "modelId": "model:panasonic:KRD220Z",
+      "nameNote": "공식 표기 KRD220Z-, ARI 57.5Hz",
+      "postCatalog": false,
+      "refrigerant": "R454B",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": 27535,
+        "capacityW": 8070,
+        "cop": 4.25,
+        "displacementCc": 22,
+        "eer": 14.49,
+        "inputW": 1900
+      },
+      "type": "Ro"
+    },
+    {
+      "aliases": [
+        "TKF76E25DCH(52RPS)"
+      ],
+      "application": "냉장고(인버터)",
+      "condition": "ASHRAE-LBP",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(인버터)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-panasonic-tkf76e25dch-52rps:ef78db3f0d58",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.1 Panasonic Re"
+        },
+        "note": "non-lg-official §2.1 Panasonic Re",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Panasonic",
+      "model": "TKF76E25DCH-52RPS",
+      "modelId": "model:panasonic:TKF76E25DCH-52RPS",
+      "nameNote": "공식 표기 TKF76E25DCH(52RPS)",
+      "postCatalog": false,
+      "refrigerant": "R600a",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": null,
+        "capacityW": 149,
+        "cop": 2.06,
+        "displacementCc": 7.6,
         "eer": null,
         "inputW": null
       },
@@ -3167,6 +3422,50 @@
       "type": "Ro"
     },
     {
+      "application": "모바일 냉장 LBP",
+      "condition": "ASHRAE-LBP",
+      "confidence": "High",
+      "driveClass": "Variable",
+      "driveDetail": "Variable(2000-3500rpm)",
+      "evidence": {
+        "authority": "official",
+        "evidenceId": "evidence:model-secop-bd35f:832ee9a82fe8",
+        "fieldPaths": [
+          "model",
+          "manufacturer",
+          "type",
+          "refrigerant",
+          "condition",
+          "driveClass",
+          "lifecycleStatus",
+          "specs"
+        ],
+        "locator": {
+          "kind": "markdown-section",
+          "section": "non-lg-official §2.3 Secop Re"
+        },
+        "note": "non-lg-official §2.3 Secop Re",
+        "sourcePath": "data/20260730-non-lg-competitor-official-research.md"
+      },
+      "lifecycleStatus": "MASS_PRODUCT",
+      "manufacturer": "Secop",
+      "model": "BD35F",
+      "modelId": "model:secop:BD35F",
+      "nameNote": "공식 BD Nano 비교표, 최대 속도 ASHRAE LBP",
+      "postCatalog": false,
+      "refrigerant": "R134a",
+      "sourceLayer": "competitor_research",
+      "specs": {
+        "capacityBtuH": null,
+        "capacityW": 50.5,
+        "cop": 1.15,
+        "displacementCc": 2,
+        "eer": null,
+        "inputW": null
+      },
+      "type": "Re"
+    },
+    {
       "application": "상업냉장 MBP",
       "condition": "ASHRAE-MBP",
       "confidence": "High",
@@ -3256,7 +3555,7 @@
   "schemaVersion": "1.0.0",
   "source": {
     "path": "frontend/compressor-data.js",
-    "sha256": "16cfc74dce4eeebdf243996a83aa143d99dd90c256828fc4d5fbc589ef4de6b0"
+    "sha256": "75a25fd84cae000b5f84bffc07581263a2bb4b29035fbffd283624575de5ec7d"
   },
   "sourceRecords": [
     {
@@ -3420,21 +3719,22 @@
       "modelId": "model:danfoss:DSH090",
       "raw": {
         "app": "HVAC",
-        "capW": 8900,
-        "cc": null,
+        "capBtu": 89804,
+        "capW": 26320,
+        "cc": 88.4,
         "condition": "ARI",
         "confidence": "High",
-        "cop": 3.03,
-        "drive": "Variable",
-        "eer": null,
+        "cop": 3.22,
+        "drive": "Fixed(AC)",
+        "eer": 10.98,
         "gap": "have",
-        "inputW": null,
+        "inputW": 8180,
         "mfr": "Danfoss",
         "model": "DSH090",
         "oilCharge": "3.0L",
         "oilType": "POE",
         "refrigerant": "R454B",
-        "src": "normalization §2.3 / 보완보고서 §6",
+        "src": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
         "status": "양산",
         "type": "Sc",
         "weightKg": 58
@@ -3444,22 +3744,23 @@
       "modelId": "model:danfoss:DSH184",
       "raw": {
         "app": "HVAC",
-        "capW": 17500,
-        "cc": null,
+        "capBtu": 174922,
+        "capW": 51267,
+        "cc": 170.3,
         "condition": "ARI",
         "confidence": "High",
-        "cop": 3.1,
-        "drive": "Variable",
-        "eer": null,
+        "cop": 3.34,
+        "drive": "Fixed(AC)",
+        "eer": 11.39,
         "gap": "have",
-        "inputW": null,
+        "inputW": 15360,
         "mfr": "Danfoss",
         "model": "DSH184",
-        "nameNote": "Danfoss 단일 최근접 모델 DSH184(3.6L POE). DSH180E는 DSH090×2 탠덤 어셈블리. COP는 normalization §2.3 DSH180 기준값 유지",
+        "nameNote": "Danfoss 단일 DSH184. DSH180E는 DSH090×2 탠덤 어셈블리",
         "oilCharge": "3.6L",
         "oilType": "POE",
         "refrigerant": "R454B",
-        "src": "normalization §2.3 / 보완보고서 §6",
+        "src": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
         "status": "양산",
         "type": "Sc",
         "weightKg": 71.5
@@ -3469,21 +3770,22 @@
       "modelId": "model:danfoss:DSH240",
       "raw": {
         "app": "HVAC",
-        "capW": 23000,
+        "capBtu": 232478,
+        "capW": 68133,
         "cc": 227.6,
         "condition": "ARI",
         "confidence": "High",
-        "cop": 3.18,
-        "drive": "Variable",
-        "eer": null,
+        "cop": 3.27,
+        "drive": "Fixed(AC)",
+        "eer": 11.17,
         "gap": "have",
-        "inputW": null,
+        "inputW": 20810,
         "mfr": "Danfoss",
         "model": "DSH240",
         "oilCharge": "6.1L",
         "oilType": "POE",
         "refrigerant": "R454B",
-        "src": "normalization §2.3 / deepresearch-r454b-scroll-tier1 §1.3",
+        "src": "non-lg-official §2.4 Danfoss DSH 공식값 정정",
         "status": "양산",
         "type": "Sc"
       }
@@ -4137,6 +4439,102 @@
       }
     },
     {
+      "modelId": "model:panasonic:5KD184XAA21",
+      "raw": {
+        "app": "에어컨",
+        "capBtu": 18560,
+        "capW": 5440,
+        "cc": 18.4,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 3.01,
+        "drive": "Variable(DC inverter)",
+        "eer": 10.27,
+        "gap": "have",
+        "inputW": null,
+        "mfr": "Panasonic",
+        "model": "5KD184XAA21",
+        "refrigerant": "R410A",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
+      "modelId": "model:panasonic:5KD240XAA21",
+      "raw": {
+        "app": "에어컨",
+        "capBtu": 24840,
+        "capW": 7280,
+        "cc": 24,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 3.03,
+        "drive": "Variable(DC inverter)",
+        "eer": 10.35,
+        "gap": "have",
+        "inputW": 2400,
+        "mfr": "Panasonic",
+        "model": "5KD240XAA21",
+        "refrigerant": "R410A",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
+      "modelId": "model:panasonic:5VD550ZD",
+      "raw": {
+        "aliases": [
+          "5VD550ZD-"
+        ],
+        "app": "에어컨",
+        "capBtu": 58857,
+        "capW": 17250,
+        "cc": 55,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 3.17,
+        "drive": "Variable(DC inverter)",
+        "eer": 10.82,
+        "gap": "have",
+        "inputW": 5442,
+        "mfr": "Panasonic",
+        "model": "5VD550ZD",
+        "nameNote": "공식 표기 5VD550ZD-, ARI 57.5Hz",
+        "refrigerant": "R410A",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
+      "modelId": "model:panasonic:9RL160Z",
+      "raw": {
+        "aliases": [
+          "9RL160Z-"
+        ],
+        "app": "에어컨",
+        "capBtu": 15061,
+        "capW": 4414,
+        "cc": 16,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 2.56,
+        "drive": "Variable(DC inverter)",
+        "eer": 8.73,
+        "gap": "have",
+        "inputW": 1746,
+        "mfr": "Panasonic",
+        "model": "9RL160Z",
+        "nameNote": "공식 표기 9RL160Z-, ARI 57.5Hz",
+        "refrigerant": "R32",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
       "modelId": "model:panasonic:EEI57T13DMH",
       "raw": {
         "app": "냉장고(인버터)",
@@ -4157,6 +4555,83 @@
         "status": "양산",
         "type": "Re",
         "voltage": "220-240V"
+      }
+    },
+    {
+      "modelId": "model:panasonic:KKD420Z",
+      "raw": {
+        "aliases": [
+          "KKD420Z-"
+        ],
+        "app": "Unitary AC",
+        "capBtu": 55223,
+        "capW": 16185,
+        "cc": 42,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 4.36,
+        "drive": "Variable(DC inverter)",
+        "eer": 14.88,
+        "gap": "have",
+        "inputW": 3710,
+        "mfr": "Panasonic",
+        "model": "KKD420Z",
+        "nameNote": "공식 표기 KKD420Z-, ARI 57.5Hz",
+        "refrigerant": "R454B",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
+      "modelId": "model:panasonic:KRD220Z",
+      "raw": {
+        "aliases": [
+          "KRD220Z-"
+        ],
+        "app": "Unitary AC",
+        "capBtu": 27535,
+        "capW": 8070,
+        "cc": 22,
+        "condition": "ARI",
+        "confidence": "High",
+        "cop": 4.25,
+        "drive": "Variable(DC inverter)",
+        "eer": 14.49,
+        "gap": "have",
+        "inputW": 1900,
+        "mfr": "Panasonic",
+        "model": "KRD220Z",
+        "nameNote": "공식 표기 KRD220Z-, ARI 57.5Hz",
+        "refrigerant": "R454B",
+        "src": "non-lg-official §2.2 Panasonic Ro",
+        "status": "양산",
+        "type": "Ro"
+      }
+    },
+    {
+      "modelId": "model:panasonic:TKF76E25DCH-52RPS",
+      "raw": {
+        "aliases": [
+          "TKF76E25DCH(52RPS)"
+        ],
+        "app": "냉장고(인버터)",
+        "capW": 149,
+        "cc": 7.6,
+        "condition": "ASHRAE-LBP",
+        "confidence": "High",
+        "cop": 2.06,
+        "drive": "Variable(인버터)",
+        "eer": null,
+        "gap": "have",
+        "inputW": null,
+        "mfr": "Panasonic",
+        "model": "TKF76E25DCH-52RPS",
+        "nameNote": "공식 표기 TKF76E25DCH(52RPS)",
+        "refrigerant": "R600a",
+        "src": "non-lg-official §2.1 Panasonic Re",
+        "status": "양산",
+        "type": "Re"
       }
     },
     {
@@ -4796,6 +5271,28 @@
         "status": "양산",
         "type": "Ro",
         "voltage": "115V"
+      }
+    },
+    {
+      "modelId": "model:secop:BD35F",
+      "raw": {
+        "app": "모바일 냉장 LBP",
+        "capW": 50.5,
+        "cc": 2,
+        "condition": "ASHRAE-LBP",
+        "confidence": "High",
+        "cop": 1.15,
+        "drive": "Variable(2000-3500rpm)",
+        "eer": null,
+        "gap": "have",
+        "inputW": null,
+        "mfr": "Secop",
+        "model": "BD35F",
+        "nameNote": "공식 BD Nano 비교표, 최대 속도 ASHRAE LBP",
+        "refrigerant": "R134a",
+        "src": "non-lg-official §2.3 Secop Re",
+        "status": "양산",
+        "type": "Re"
       }
     },
     {

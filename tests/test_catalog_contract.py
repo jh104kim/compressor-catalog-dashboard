@@ -108,15 +108,15 @@ def test_p0_rules_lock_comparison_e2e_and_view_first_mvp() -> None:
 
 
 def test_p0_snapshot_is_hash_pinned_and_preserves_current_counts() -> None:
-    """현재 68개 데이터가 이관 중 손실되지 않도록 기준선과 원본 해시를 고정한다."""
+    """현재 76개 데이터가 이관 중 손실되지 않도록 기준선과 원본 해시를 고정한다."""
     snapshot = _load_json(SNAPSHOT_PATH)
 
     assert _nested(snapshot, "snapshotVersion") == 1
     assert _nested(snapshot, "counts") == {
-        "models": 68,
+        "models": 76,
         "samsungModels": 27,
-        "competitorModels": 41,
-        "benchmarkGroups": 12,
+        "competitorModels": 49,
+        "benchmarkGroups": 13,
     }
 
     assert _nested(snapshot, "source", "path") == "frontend/compressor-data.js"
@@ -192,10 +192,10 @@ def test_scope_document_records_frozen_baseline_and_operating_boundary() -> None
         [
             "View-first",
             "Samsung-Compressor-Catalogue_2024.pdf",
-            "68",
+            "76",
             "27",
-            "41",
-            "12",
+            "49",
+            "13",
             "로컬 E2E 2회",
             "GitHub Actions 1회",
             "승인자 기록",

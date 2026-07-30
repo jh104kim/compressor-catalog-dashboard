@@ -107,8 +107,8 @@ Compressor Dashboard.dc.html (renderVals → 템플릿 바인딩)
 | 키 | 내용 |
 |---|---|
 | `meta` | 기준일·버전·소스 수 |
-| `models` | 68개 모델 (Samsung 27 + 경쟁사 41) |
-| `benchmarkGroups` | 12개 비교군 (유형×냉매×조건×구동) |
+| `models` | 76개 모델 (Samsung 27 + 경쟁사 49) |
+| `benchmarkGroups` | 13개 비교군 (유형×냉매×조건×구동) |
 | `priorities` | P1~P6 냉매 전환 우선순위 |
 | `regulations` | 규제 5건 (AIM Act / EU F-Gas 등) |
 | `samsungMoves` | Samsung 최신 동향 5건 |

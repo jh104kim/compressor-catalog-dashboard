@@ -2,7 +2,7 @@
 
 ## 목표
 
-현재 정적 대시보드를 바로 교체하지 않고, GitHub 스냅샷과 데이터 계약 및 화면 동작을 재현 가능한 기준선으로 고정한다. 이후 Phase에서 조사 데이터를 검증하고 발행하는 Catalog Audit Studio로 확장해도 기존 68개 모델과 Samsung 권위값이 조용히 바뀌지 않게 하는 것이 P0의 목적이다.
+현재 정적 대시보드를 바로 교체하지 않고, GitHub 스냅샷과 데이터 계약 및 화면 동작을 재현 가능한 기준선으로 고정한다. 이후 Phase에서 조사 데이터를 검증하고 발행하는 Catalog Audit Studio로 확장해도 현재 76개 모델과 Samsung 권위값이 조용히 바뀌지 않게 하는 것이 목적이다.
 
 ## 고정 스냅샷
 
@@ -11,10 +11,10 @@
 - 브랜치: `codex/catalog-audit-snapshot-20260730`
 - Draft PR: [#1 chore: snapshot current catalog dashboard](https://github.com/jh104kim/compressor-catalog-dashboard/pull/1)
 - SSOT: `frontend/compressor-data.js`
-- SSOT SHA-256: `16cfc74dce4eeebdf243996a83aa143d99dd90c256828fc4d5fbc589ef4de6b0`
+- SSOT SHA-256: `75a25fd84cae000b5f84bffc07581263a2bb4b29035fbffd283624575de5ec7d`
 - 권위 소스: `data/Samsung-Compressor-Catalogue_2024.pdf`
 
-현재 기준 수량은 전체 모델 **68개**, Samsung **27개**, 경쟁사 **41개**, 비교군 **12개**다. Samsung 27개는 Re 4개, Ro 12개, Sc 11개다.
+현재 기준 수량은 전체 모델 **76개**, Samsung **27개**, 경쟁사 **49개**, 비교군 **13개**다. Samsung 27개는 Re 4개, Ro 12개, Sc 11개다. 최초 P0 스냅샷의 68개에서 비-LG 공식 모델 8개를 추가했다.
 
 ## 확정 운영 경계
 
@@ -49,15 +49,15 @@
 
 | ID | 탭 | 필수 화면 기준점 |
 |---|---|---|
-| `kpi` | KPI 현황 | Samsung 포트폴리오 제목, 27/41 모델, 냉매 커버리지 |
+| `kpi` | KPI 현황 | Samsung 포트폴리오 제목, 27/49 모델, 냉매 커버리지 |
 | `decision` | Decision 전략 | R290 Re P1 공백, P1~P6, Samsung 최신 동향 |
 | `analysis` | 모델 분석 | 유형·조건 필터, Samsung 모델 선택, 유사 경쟁 모델 TOP 5 |
-| `reporting` | Reporting | 12개 비교군, 조건·신뢰도 배지, 모델 드릴다운 |
+| `reporting` | Reporting | 13개 비교군, 조건·신뢰도 배지, 모델 드릴다운 |
 | `backlog` | 보완 과제 | 보완 티켓, 진행률, 원본 연락처 링크 |
 
 `backlog`은 실제 내비게이션의 5번째 탭이지만 현재 `startView` enum에는 없다. P0에서는 내비게이션 접근을 Characterization하고, props 정리는 후속 개선으로 남긴다.
 
-현재 `r32-ro-var`는 Samsung ARI와 GMCC SEER60을 포함한 신뢰도 1 레거시 비교군이다. P0는 저신뢰 경고가 보이는 현재 동작만 기록한다. P1부터는 `CONDITION_MISMATCH` 및 `BLOCKED`로 판정해 순위와 차이를 만들지 않는 것이 목표다.
+현재 `r32-ro-var` 직접 비교군은 Samsung과 Panasonic의 ARI 모델만 포함한다. GMCC SEER60과 Highly 조건 미확인 값은 리서치 참고로 남기고 직접 순위에서는 제외한다.
 
 ## P0 Characterization E2E
 
@@ -79,7 +79,7 @@
 ### 필수 시나리오
 
 1. `/`가 `Compressor Dashboard.dc.html`로 이동하고 대시보드·SSOT·런타임 요청이 성공한다.
-2. KPI 현황이 기본 탭으로 열리고 27개 Samsung, 41개 경쟁사, TOP COP 3.43, P1 공백 1건을 표시한다.
+2. KPI 현황이 기본 탭으로 열리고 27개 Samsung, 49개 경쟁사, TOP COP 3.43, P1 공백 1건을 표시한다.
 3. Decision 전략에서 R290 왕복동 공백과 P1~P6 및 Samsung 최신 동향을 표시한다.
 4. 모델 분석에서 유형과 측정조건 필터가 동작하고 Samsung 모델 선택 후 TOP 5 영역이 갱신된다.
 5. Reporting에서 동일조건 R454B Sc Fixed DOE-B 비교군과 저신뢰 R32 Ro 경고를 각각 확인한다.

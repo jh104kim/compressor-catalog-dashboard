@@ -157,7 +157,7 @@ def test_runtime_serves_api_and_studio_from_same_origin(
     assert health.status_code == 200
     assert health.json()["activeReleaseId"] == "release:2026-07-30:901"
     assert active.status_code == 200
-    assert active.json()["counts"]["models"] == 68
+    assert active.json()["counts"]["models"] == 76
     assert source_pdf.status_code == 200
     assert source_pdf.headers["content-type"].startswith("application/pdf")
     assert source_pdf.content.startswith(b"%PDF")
