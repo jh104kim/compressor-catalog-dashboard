@@ -135,8 +135,8 @@
     }
   ],
   "characterizationE2E": {
-    "status": "local-pass-ci-pending",
-    "reason": "390x844 및 1440x1024 로컬 2회 연속 PASS를 확보했고 GitHub Actions 1회 PASS를 대기한다.",
+    "status": "PASS",
+    "reason": "390x844 및 1440x1024 로컬 2회 연속과 GitHub Actions 1회가 모두 PASS했다.",
     "requiredLocalConsecutivePasses": 2,
     "requiredGithubActionsRuns": 1,
     "requiredScreenshotCount": 10,
@@ -166,6 +166,15 @@
         "screenshotCount": 10,
         "result": "qa/evidence/p0/local-run-3/browser-characterization.json"
       }
-    ]
+    ],
+    "githubActionsRun": {
+      "runId": 30522200310,
+      "runAttempt": 1,
+      "headSha": "632954df1c1448b1c1f4de0001c007bd1b69c3f2",
+      "status": "PASS",
+      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30522200310",
+      "artifact": "p0-catalog-audit-30522200310-1",
+      "artifactSizeBytes": 3523674
+    }
   }
 }

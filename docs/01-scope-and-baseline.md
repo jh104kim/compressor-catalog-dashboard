@@ -61,7 +61,7 @@
 
 ## P0 Characterization E2E
 
-상태: **LOCAL PASS / CI PENDING**
+상태: **COMPLETE**
 
 기존 문서의 500px/1280px 수동 확인은 참고자료일 뿐, 새 완료기준인 390px/1440px 자동 검증을 대체하지 않는다.
 
@@ -96,6 +96,8 @@
 - `local-run-3`: 새 서버에서 10/10 탭, 2/2 워크플로, 오류 0, 캡처 10장 PASS
 - 두 실행은 2026-07-30 16:09 KST에 연속 통과했다.
 - React 18.3.1 UMD를 SRI와 같은 로컬 파일로 고정하고 Google Font 외부 요청을 제거해, P0 실행의 외부 네트워크 요청은 0건이다.
+- GitHub Actions [run 30522200310](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30522200310): SHA `632954d`, Python 39 passed, Schema PASS, Chromium Characterization PASS
+- Artifact: `p0-catalog-audit-30522200310-1` (3,523,674 bytes)
 
 ## P0 범위 밖
 
@@ -116,4 +118,4 @@
 - Critical 0건, Major 0건이다.
 - P0 평가점수는 5점 만점 중 4.0 이상이다.
 
-로컬 Characterization은 완료했다. GitHub Actions 1회 PASS 증거가 생성되기 전에는 P0를 완료로 표시하지 않는다.
+로컬 2회 연속과 GitHub Actions 1회 증거가 모두 생성되어 P0를 완료한다.

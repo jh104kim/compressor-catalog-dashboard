@@ -82,7 +82,7 @@
     }
   },
   "e2e": {
-    "status": "local-pass-ci-pending",
+    "status": "passed",
     "browser": "chromium",
     "localConsecutivePasses": 2,
     "githubActionsRuns": 1,
@@ -121,7 +121,15 @@
     "localEvidence": [
       "qa/evidence/p0/local-run-2/browser-characterization.json",
       "qa/evidence/p0/local-run-3/browser-characterization.json"
-    ]
+    ],
+    "githubActionsEvidence": {
+      "runId": 30522200310,
+      "runAttempt": 1,
+      "headSha": "632954df1c1448b1c1f4de0001c007bd1b69c3f2",
+      "status": "PASS",
+      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30522200310",
+      "artifact": "p0-catalog-audit-30522200310-1"
+    }
   },
   "mvp": {
     "mode": "view-first",
