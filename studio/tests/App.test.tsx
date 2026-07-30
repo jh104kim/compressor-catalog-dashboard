@@ -298,6 +298,9 @@ describe("Catalog Audit Studio", () => {
     await renderReady();
     const user = await openView(/Compare Lab/);
 
+    expect(
+      screen.getByRole("link", { name: /전체 비교 보고서 보기/ }),
+    ).toHaveAttribute("href", "/compare-lab-output.html");
     expect(screen.getByTestId("type-first-callout")).toHaveTextContent(
       "Re · Ro · Sc 유형을 먼저 선택하세요",
     );

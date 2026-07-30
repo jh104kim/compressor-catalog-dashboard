@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   p0-catalog-audit:
-    name: Contract, schema, Studio, and P5 Chromium
+    name: Contract, Studio, P5, and report Chromium
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -229,6 +229,9 @@ jobs:
         working-directory: studio
         run: npm test
 
+      - name: Generate Compare Lab report
+        run: python scripts/build_compare_lab_report.py
+
       - name: Build Studio
         working-directory: studio
         run: npm run build
@@ -295,6 +298,11 @@ jobs:
           OUTPUT_DIR="$evidence_dir" \
           npm --prefix qa run test:p5 \
             2>&1 | tee "$evidence_dir/playwright.log"
+
+          REPORT_BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir/compare-report" \
+          npm --prefix qa run test:report \
+            2>&1 | tee "$evidence_dir/compare-report-playwright.log"
 
       - name: Upload P0 GitHub Actions evidence
         if: always()

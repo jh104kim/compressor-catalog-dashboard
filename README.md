@@ -8,6 +8,7 @@ Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 현재 
 
 ```powershell
 # 1. React production build
+python scripts/build_compare_lab_report.py
 Push-Location studio
 npm ci
 npm test
@@ -19,6 +20,7 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
   --factory --host 127.0.0.1 --port 8000
 
 # 브라우저: http://127.0.0.1:8000/
+# 전체 비교 보고서: http://127.0.0.1:8000/compare-lab-output.html
 ```
 
 현재 활성 데이터는 `catalog/published/active-release.json`이 가리키는 Release다. Studio는 조회 전용이며 편집·발행 기능을 제공하지 않는다. 발행·롤백 절차는 `docs/07-operations-and-362-expansion.md`를 따른다.
@@ -26,6 +28,21 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 화면 검증은 왼쪽 **Release / Evidence**에서 확인한다. 이 화면은 데이터
 입력 SHA와 앱 구현 SHA를 분리해 보여주며, B1 Scroll p.92의 16행이
 `NOT_PUBLISHED`·조건 `UNKNOWN` 상태로 비교에서 차단됐는지도 함께 표시한다.
+
+### Compare Lab 전체 보고서
+
+`scripts/build_compare_lab_report.py`는 활성 Published Release와 백엔드 비교
+엔진을 사용해 `studio/public/compare-lab-output.html`을 생성한다. 보고서는
+Samsung 27개 전 모델의 COP/EER 직접 후보, `DIRECT_OK` 결과, 직접 비교가
+없는 모델의 조사 사유와 목표조건을 함께 보여준다.
+
+```powershell
+python scripts/build_compare_lab_report.py
+npm --prefix studio run build
+npm --prefix qa run test:report
+```
+
+Release를 갱신하면 위 명령으로 보고서를 다시 생성한 뒤 Studio를 빌드한다.
 
 기존 DC 화면은 아래처럼 별도 실행한다.
 

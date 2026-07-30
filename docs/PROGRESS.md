@@ -4,6 +4,17 @@
 
 ---
 
+## 2026-07-30 — Phase P13 Compare Lab 전 모델 HTML 보고서 ✅
+
+- **전체 범위**: 활성 Release 005의 Samsung 27개(Re 4, Ro 12, Sc 11)와 경쟁사 49개를 백엔드 비교 엔진으로 전수 판정.
+- **직접 비교 결과**: Samsung 직접 비교 가능 8개, 고유 모델쌍 9개, COP/EER `DIRECT_OK` 15건. 직접 후보가 없는 19개 모델은 사유·용량 목표·우선 조사사를 함께 표시.
+- **보고서 UI**: `compare-lab-output.html`에 KPI, 유형별 준비도, 안전 비교 규칙, 27개 전체 매트릭스, 모델별 상세 표, Compare Lab 딥링크, 인쇄/PDF 기능 반영.
+- **재생성**: `python scripts/build_compare_lab_report.py` 실행 후 `npm --prefix studio run build`.
+- **검증**: 보고서 pytest 3 passed · 비교 엔진 포함 15 passed · Chromium 데스크톱/모바일 2/2 PASS · 모델 27/27 · 직접 판정 15/15 · 가로 overflow/콘솔/페이지/네트워크/외부 요청 0.
+- **증거**: `qa/evidence/p13/report-e2e/compare-report-e2e.json`, `qa/evidence/p13/report-e2e/screenshots/`.
+
+---
+
 ## 2026-07-30 — Phase P12 Compare Lab 로딩 복구·선택 UX 개선 ✅
 
 - **고착 원인 수정**: 비교 딥링크 복원 효과가 자체 상태 변경으로 정리(cleanup)되어 느린 `/compare` 응답을 무시하던 문제를 일회성 `useRef` 가드로 교체.

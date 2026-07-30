@@ -856,6 +856,15 @@ function CompareLab({
         title="같은 조건일 때만 직접 비교합니다"
         description="유형·냉매·측정조건·구동 분류와 용량 ±15%를 자동 점검합니다."
       />
+      <div className="compare-report-entry" data-testid="compare-report-entry">
+        <div>
+          <strong>Samsung Re · Ro · Sc 전 모델 보고서</strong>
+          <span>27개 모델의 직접 비교 결과와 공식자료 보완 대상을 한 번에 확인합니다.</span>
+        </div>
+        <a href="/compare-lab-output.html" target="_blank" rel="noreferrer">
+          전체 비교 보고서 보기 ↗
+        </a>
+      </div>
       <section className="panel compare-setup">
         <div className="compare-setup-head">
           <div>
