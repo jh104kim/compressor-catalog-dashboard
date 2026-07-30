@@ -60,6 +60,48 @@ function metric(value: number | null | undefined, suffix = "") {
   return value == null ? "미확인" : `${value.toLocaleString("ko-KR")}${suffix}`;
 }
 
+function capacityW(model: CatalogModel) {
+  const watts = model.specs?.capacityW;
+  if (typeof watts === "number" && watts > 0) return watts;
+  const btuPerHour = model.specs?.capacityBtuH;
+  if (typeof btuPerHour === "number" && btuPerHour > 0) {
+    return btuPerHour / 3.412;
+  }
+  return null;
+}
+
+function isDirectComparisonCandidate(
+  baseline: CatalogModel,
+  candidate: CatalogModel,
+  comparisonMetric: "cop" | "eer",
+) {
+  const baselineMetric = baseline.specs?.[comparisonMetric];
+  const candidateMetric = candidate.specs?.[comparisonMetric];
+  const baselineCapacity = capacityW(baseline);
+  const candidateCapacity = capacityW(candidate);
+
+  if (
+    baseline.type !== candidate.type ||
+    baseline.refrigerant !== candidate.refrigerant ||
+    baseline.condition === "UNKNOWN" ||
+    baseline.condition !== candidate.condition ||
+    baseline.driveClass !== candidate.driveClass ||
+    typeof baselineMetric !== "number" ||
+    baselineMetric <= 0 ||
+    typeof candidateMetric !== "number" ||
+    candidateMetric <= 0 ||
+    baselineCapacity == null ||
+    candidateCapacity == null
+  ) {
+    return false;
+  }
+
+  return (
+    (Math.abs(candidateCapacity - baselineCapacity) / baselineCapacity) * 100 <=
+    15 + Number.EPSILON
+  );
+}
+
 function StatusPill({
   tone,
   children,
@@ -531,31 +573,72 @@ function CompareLab({
 }) {
   const samsung = useMemo(() => models.filter((item) => item.manufacturer === "Samsung"), [models]);
   const competitors = useMemo(() => models.filter((item) => item.manufacturer !== "Samsung"), [models]);
-  const [baselineId, setBaselineId] = useState(
-    initialBaselineId ?? samsung[0]?.modelId ?? "",
+  const initialBaseline = samsung.find((item) => item.modelId === initialBaselineId);
+  const initialCandidate = competitors.find((item) => item.modelId === initialCandidateId);
+  const [selectedType, setSelectedType] = useState<CompressorType | null>(
+    initialBaseline?.type ?? null,
   );
-  const [candidateId, setCandidateId] = useState(
-    initialCandidateId ?? competitors[0]?.modelId ?? "",
-  );
+  const [baselineId, setBaselineId] = useState(initialBaseline?.modelId ?? "");
+  const [candidateId, setCandidateId] = useState(initialCandidate?.modelId ?? "");
   const [comparisonMetric, setComparisonMetric] = useState<"cop" | "eer">(
     initialMetric ?? "cop",
+  );
+  const [initialPairPending, setInitialPairPending] = useState(
+    Boolean(initialBaselineId && initialCandidateId),
   );
   const [result, setResult] = useState<ComparisonResult | null>(null);
   const [error, setError] = useState("");
   const [running, setRunning] = useState(false);
 
-  useEffect(() => {
-    if (!baselineId && samsung[0]) setBaselineId(samsung[0].modelId);
-    if (!candidateId && competitors[0]) setCandidateId(competitors[0].modelId);
-  }, [baselineId, candidateId, competitors, samsung]);
+  const samsungByType = useMemo(
+    () => selectedType ? samsung.filter((item) => item.type === selectedType) : [],
+    [samsung, selectedType],
+  );
+  const baseline = samsungByType.find((item) => item.modelId === baselineId);
+  const eligibleCandidates = useMemo(
+    () => baseline
+      ? competitors.filter((item) =>
+          isDirectComparisonCandidate(baseline, item, comparisonMetric),
+        )
+      : [],
+    [baseline, comparisonMetric, competitors],
+  );
+  const candidate = eligibleCandidates.find((item) => item.modelId === candidateId);
+  const readiness = useMemo(() => {
+    if (!selectedType) {
+      return { samsungCount: 0, competitorCount: 0, readySamsungCount: 0, pairCount: 0 };
+    }
+    const typeSamsung = samsung.filter((item) => item.type === selectedType);
+    const typeCompetitors = competitors.filter((item) => item.type === selectedType);
+    const pairCounts = typeSamsung.map(
+      (item) =>
+        typeCompetitors.filter((competitorModel) =>
+          isDirectComparisonCandidate(item, competitorModel, comparisonMetric),
+        ).length,
+    );
+    return {
+      samsungCount: typeSamsung.length,
+      competitorCount: typeCompetitors.length,
+      readySamsungCount: pairCounts.filter((count) => count > 0).length,
+      pairCount: pairCounts.reduce((sum, count) => sum + count, 0),
+    };
+  }, [comparisonMetric, competitors, samsung, selectedType]);
 
   useEffect(() => {
-    if (!initialBaselineId || !initialCandidateId) return;
+    if (!initialPairPending) return;
+    setInitialPairPending(false);
+    const canRestorePair =
+      Boolean(initialBaselineId && initialCandidateId) &&
+      eligibleCandidates.some((item) => item.modelId === initialCandidateId);
+    if (!canRestorePair) {
+      setCandidateId("");
+      return;
+    }
     let active = true;
     setRunning(true);
     compareCatalogModels(
-      initialBaselineId,
-      initialCandidateId,
+      initialBaselineId!,
+      initialCandidateId!,
       initialMetric ?? "cop",
     )
       .then((nextResult) => {
@@ -574,10 +657,36 @@ function CompareLab({
     return () => {
       active = false;
     };
-  }, [initialBaselineId, initialCandidateId, initialMetric]);
+  }, [
+    eligibleCandidates,
+    initialBaselineId,
+    initialCandidateId,
+    initialMetric,
+    initialPairPending,
+  ]);
 
-  const baseline = samsung.find((item) => item.modelId === baselineId);
-  const candidate = competitors.find((item) => item.modelId === candidateId);
+  function chooseType(type: CompressorType) {
+    setSelectedType(type);
+    setBaselineId("");
+    setCandidateId("");
+    setResult(null);
+    setError("");
+    writeQuery({ view: "compare" });
+  }
+
+  function chooseBaseline(modelId: string) {
+    setBaselineId(modelId);
+    setCandidateId("");
+    setResult(null);
+    setError("");
+  }
+
+  function chooseMetric(nextMetric: "cop" | "eer") {
+    setComparisonMetric(nextMetric);
+    setCandidateId("");
+    setResult(null);
+    setError("");
+  }
 
   async function runComparison() {
     if (!baselineId || !candidateId) return;
@@ -606,36 +715,121 @@ function CompareLab({
         title="같은 조건일 때만 직접 비교합니다"
         description="유형·냉매·측정조건·구동 분류와 용량 ±15%를 자동 점검합니다."
       />
-      <section className="compare-grid" data-testid="comparison-panel">
-        <article className="panel selection-card">
-          <div className="number-tag">01</div>
-          <label>
-            <span>Samsung 기준 모델</span>
-            <select aria-label="Samsung 기준 모델" value={baselineId} onChange={(event) => { setBaselineId(event.target.value); setResult(null); }}>
-              {samsung.map((item) => <option key={item.modelId} value={item.modelId}>{item.model} · {item.refrigerant} · {item.condition}</option>)}
+      <section className="panel compare-setup">
+        <div className="compare-setup-head">
+          <div>
+            <p className="section-kicker">STEP 01 · TYPE FIRST</p>
+            <h3>먼저 압축기 유형을 선택하세요</h3>
+          </div>
+          <label className="metric-select">
+            <span>비교 지표</span>
+            <select
+              aria-label="비교 지표"
+              value={comparisonMetric}
+              onChange={(event) => chooseMetric(event.target.value as "cop" | "eer")}
+            >
+              <option value="cop">COP</option>
+              <option value="eer">EER</option>
             </select>
           </label>
-          {baseline && <ModelMiniCard model={baseline} />}
-        </article>
-        <div className="compare-connector"><span>VS</span></div>
+        </div>
+        <div
+          className="type-tabs"
+          role="tablist"
+          aria-label="압축기 유형 선택"
+          data-testid="compare-type-tabs"
+        >
+          {(["Re", "Ro", "Sc"] as CompressorType[]).map((type) => {
+            const count = samsung.filter((item) => item.type === type).length;
+            return (
+              <button
+                key={type}
+                type="button"
+                role="tab"
+                aria-label={`${type} ${TYPE_LABEL[type]}`}
+                aria-selected={selectedType === type}
+                className={selectedType === type ? `active type-${type}` : ""}
+                onClick={() => chooseType(type)}
+              >
+                <strong>{type}</strong>
+                <span>{TYPE_LABEL[type]}</span>
+                <small>Samsung {count}개</small>
+              </button>
+            );
+          })}
+        </div>
+        <div className="readiness-grid" data-testid="comparison-readiness">
+          <div><span>선택 유형 Samsung</span><strong>{readiness.samsungCount}</strong></div>
+          <div><span>선택 유형 경쟁 모델</span><strong>{readiness.competitorCount}</strong></div>
+          <div><span>{comparisonMetric.toUpperCase()} 비교 가능 Samsung</span><strong>{readiness.readySamsungCount}</strong></div>
+          <div><span>직접 비교 조합</span><strong>{readiness.pairCount}</strong></div>
+        </div>
+        <div className="criteria-chips" aria-label="직접 비교 기준">
+          <span>동일 유형</span><span>동일 냉매</span><span>동일 측정조건</span>
+          <span>동일 구동</span><span>용량 ±15%</span><span>{comparisonMetric.toUpperCase()} 보유</span>
+        </div>
+      </section>
+      <section className="compare-grid" data-testid="comparison-panel">
         <article className="panel selection-card">
           <div className="number-tag">02</div>
           <label>
-            <span>경쟁 모델</span>
-            <select aria-label="경쟁 모델" value={candidateId} onChange={(event) => { setCandidateId(event.target.value); setResult(null); }}>
-              {competitors.map((item) => <option key={item.modelId} value={item.modelId} data-candidate-id={item.modelId}>{item.manufacturer} · {item.model} · {item.condition}</option>)}
+            <span>Samsung 기준 모델</span>
+            <select
+              aria-label="Samsung 기준 모델"
+              value={baselineId}
+              disabled={!selectedType}
+              onChange={(event) => chooseBaseline(event.target.value)}
+            >
+              <option value="">
+                {selectedType ? `${TYPE_LABEL[selectedType]} Samsung 모델을 선택하세요` : "먼저 Re/Ro/Sc를 선택하세요"}
+              </option>
+              {samsungByType.map((item) => <option key={item.modelId} value={item.modelId}>{item.model} · {item.refrigerant} · {item.condition}</option>)}
+            </select>
+          </label>
+          {baseline ? (
+            <ModelMiniCard model={baseline} />
+          ) : (
+            <p className="selection-hint">
+              {selectedType ? "기준 모델을 선택하면 직접 비교 가능한 후보를 계산합니다." : "유형 탭을 먼저 선택하세요."}
+            </p>
+          )}
+        </article>
+        <div className="compare-connector"><span>VS</span></div>
+        <article className="panel selection-card">
+          <div className="number-tag">03</div>
+          <label>
+            <span>
+              경쟁 모델 · <b data-testid="eligible-candidate-count">{eligibleCandidates.length}개</b>
+            </span>
+            <select
+              aria-label="경쟁 모델"
+              value={candidateId}
+              disabled={!baseline || eligibleCandidates.length === 0}
+              onChange={(event) => {
+                setCandidateId(event.target.value);
+                setResult(null);
+                setError("");
+              }}
+            >
+              <option value="">
+                {!baseline
+                  ? "먼저 Samsung 모델을 선택하세요"
+                  : eligibleCandidates.length === 0
+                    ? "직접 비교 가능 경쟁 모델 없음"
+                    : "경쟁 모델을 선택하세요"}
+              </option>
+              {eligibleCandidates.map((item) => <option key={item.modelId} value={item.modelId} data-candidate-id={item.modelId}>{item.manufacturer} · {item.model} · {item.condition}</option>)}
             </select>
           </label>
           {candidate && <ModelMiniCard model={candidate} />}
+          {baseline && eligibleCandidates.length === 0 && (
+            <div className="candidate-empty" data-testid="no-direct-candidate">
+              <strong>직접 비교 가능한 경쟁 모델이 없습니다.</strong>
+              <span>조건이 다른 모델은 숨겼습니다. 이 상태는 다음 조사 대상을 알려주는 데이터 공백입니다.</span>
+            </div>
+          )}
         </article>
       </section>
-      <label className="metric-select">
-        <span>비교 지표</span>
-        <select aria-label="비교 지표" value={comparisonMetric} onChange={(event) => { setComparisonMetric(event.target.value as "cop" | "eer"); setResult(null); }}>
-          <option value="cop">COP</option>
-          <option value="eer">EER</option>
-        </select>
-      </label>
       <button className="primary-button compare-button" disabled={!baselineId || !candidateId || running} onClick={runComparison}>
         {running ? "비교 규칙 확인 중…" : "안전 비교 실행"}
       </button>

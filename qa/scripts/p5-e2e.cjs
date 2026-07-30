@@ -29,7 +29,7 @@ const MODELS = {
 };
 
 const EXPECTED = {
-  releaseId: "release:2026-07-30:002",
+  releaseId: "release:2026-07-30:003",
   sourcePath: "data/Samsung-Compressor-Catalogue_2024.pdf",
   authorityCop: "3.25",
   authorityPage: "PDF p.92",
@@ -343,10 +343,11 @@ const SCENARIOS = [
       const baseline = page.getByLabel("Samsung 기준 모델");
       const candidate = page.getByLabel("경쟁 모델");
       const metric = page.getByLabel("비교 지표");
-      await assertion(log, "G1 모델과 EER 선택", async () => {
+      await assertion(log, "G1 Sc 유형과 EER 선택", async () => {
+        await page.getByRole("tab", { name: "Sc 스크롤" }).click();
+        await metric.selectOption("eer");
         await baseline.selectOption(MODELS.g1Baseline);
         await candidate.selectOption(MODELS.g1Candidate);
-        await metric.selectOption("eer");
         invariant(
           (await baseline.inputValue()) === MODELS.g1Baseline,
           "G1 Samsung 기준 모델 선택 실패",
@@ -391,41 +392,43 @@ const SCENARIOS = [
     },
   },
   {
-    id: "G2-CONDITION-MISMATCH",
-    title: "R32 Ro ARI 대 GMCC SEER60 비교 차단",
+    id: "G2-INCOMPATIBLE-HIDDEN",
+    title: "R32 Ro ARI 기준에서 GMCC SEER60 후보 숨김",
     query: "/?view=compare",
     run: async (page, log) => {
       const baseline = page.getByLabel("Samsung 기준 모델");
       const candidate = page.getByLabel("경쟁 모델");
-      await assertion(log, "G2 ARI/SEER60 모델 선택", async () => {
-        await baseline.selectOption(MODELS.g2Baseline);
-        await candidate.selectOption(MODELS.g2Candidate);
+      await assertion(log, "G2 Ro와 Samsung ARI 모델 선택", async () => {
+        await page.getByRole("tab", { name: "Ro 로터리" }).click();
         await page.getByLabel("비교 지표").selectOption("cop");
+        await baseline.selectOption(MODELS.g2Baseline);
         return {
           baseline: MODELS.g2Baseline,
-          candidate: MODELS.g2Candidate,
+          metric: "cop",
         };
       });
-      await assertion(log, "G2 비교 실행", async () => {
-        await page.getByRole("button", { name: "안전 비교 실행" }).click();
-        await requireVisible(page.getByTestId("comparison-result"), "G2 비교 결과");
-      });
-      await assertion(log, "G2 BLOCKED와 순위·Delta 숨김", async () => {
-        const result = page.getByTestId("comparison-result");
-        invariant(
-          (await result.getAttribute("data-verdict")) === "BLOCKED",
-          "G2 verdict가 BLOCKED가 아닙니다.",
+      await assertion(log, "G2 조건 불일치 후보 숨김", async () => {
+        const optionValues = await candidate.locator("option").evaluateAll(
+          (options) => options.map((option) => option.value),
         );
         invariant(
-          (await result.getAttribute("data-code")) ===
-            "BLOCKED_CONDITION_MISMATCH",
-          "G2 code가 BLOCKED_CONDITION_MISMATCH가 아닙니다.",
+          !optionValues.includes(MODELS.g2Candidate),
+          "G2 조건 불일치 경쟁 모델이 선택 목록에 노출되었습니다.",
+        );
+        invariant(
+          await candidate.isDisabled(),
+          "G2 직접 비교 후보가 없는데 경쟁 모델 선택이 활성화되었습니다.",
+        );
+        await requireVisible(page.getByTestId("no-direct-candidate"), "G2 후보 없음 안내");
+        invariant(
+          await page.getByRole("button", { name: "안전 비교 실행" }).isDisabled(),
+          "G2 비교 실행 버튼이 활성화되었습니다.",
         );
         await requireHidden(page.getByTestId("comparison-ranking"), "G2 순위");
         await requireHidden(page.getByTestId("comparison-delta"), "G2 Delta");
         return {
-          verdict: "BLOCKED",
-          code: "BLOCKED_CONDITION_MISMATCH",
+          incompatibleCandidateHidden: true,
+          comparisonDisabled: true,
           rankingVisible: false,
           deltaVisible: false,
         };

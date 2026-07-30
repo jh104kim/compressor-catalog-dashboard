@@ -62,6 +62,17 @@ const directCompetitor = {
   specs: { capacityW: 12380, cop: null, eer: 6.86 },
 };
 
+const samsungRe = {
+  ...samsung,
+  modelId: "model:samsung:MKV190C-L2J",
+  model: "MKV190C-L2J",
+  type: "Re",
+  refrigerant: "R600a",
+  condition: "ASHRAE",
+  driveClass: "Fixed",
+  specs: { capacityW: 210, cop: 1.75, eer: 5.97 },
+};
+
 const directComparison = {
   releaseId: "release:2026-07-30:001",
   verdict: "DIRECT",
@@ -97,6 +108,19 @@ async function openView(name: RegExp) {
   const user = userEvent.setup();
   await user.click(screen.getByRole("button", { name }));
   return user;
+}
+
+async function chooseDirectPair(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole("tab", { name: "Sc 스크롤" }));
+  await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
+  await user.selectOptions(
+    screen.getByLabelText("Samsung 기준 모델"),
+    directSamsung.modelId,
+  );
+  await user.selectOptions(
+    screen.getByLabelText("경쟁 모델"),
+    directCompetitor.modelId,
+  );
 }
 
 describe("Catalog Audit Studio", () => {
@@ -254,22 +278,54 @@ describe("Catalog Audit Studio", () => {
     );
   });
 
-  it("P5-UT-G2-002 조건 불일치 비교에서는 순위와 Delta를 숨긴다", async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await screen.findAllByText("release:2026-07-30:001");
+  it("P9-UT-G1-001 유형을 먼저 선택하면 해당 Samsung 모델만 표시한다", async () => {
+    modelItems = [samsungRe, directSamsung, directCompetitor];
+    await renderReady();
+    const user = await openView(/Compare Lab/);
 
-    await user.click(
-      screen.getByRole("button", { name: /Compare Lab/ }),
+    expect(screen.getByLabelText("Samsung 기준 모델")).toBeDisabled();
+    await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
+
+    const baselineSelect = screen.getByLabelText("Samsung 기준 모델");
+    expect(baselineSelect).toBeEnabled();
+    expect(within(baselineSelect).getByRole("option", { name: /DS8LC5040IN/ })).toBeInTheDocument();
+    expect(within(baselineSelect).queryByRole("option", { name: /MKV190C-L2J/ })).not.toBeInTheDocument();
+  });
+
+  it("P9-UT-G1-002 Samsung 모델 기준 직접 비교 가능한 경쟁 모델만 표시한다", async () => {
+    modelItems = [directSamsung, directCompetitor, competitor];
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+
+    await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
+    await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
+    await user.selectOptions(screen.getByLabelText("Samsung 기준 모델"), directSamsung.modelId);
+
+    const candidateSelect = screen.getByLabelText("경쟁 모델");
+    expect(within(candidateSelect).getByRole("option", { name: /STDA031N1ULB/ })).toBeInTheDocument();
+    expect(within(candidateSelect).queryByRole("option", { name: /ATQ360D1UMU/ })).not.toBeInTheDocument();
+    expect(screen.getByTestId("eligible-candidate-count")).toHaveTextContent("1");
+  });
+
+  it("P9-UT-G2-001 직접 비교 후보가 없으면 사유를 알리고 실행을 막는다", async () => {
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+
+    await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
+    await user.selectOptions(screen.getByLabelText("Samsung 기준 모델"), samsung.modelId);
+
+    expect(screen.getByLabelText("경쟁 모델")).toBeDisabled();
+    expect(screen.getByTestId("no-direct-candidate")).toHaveTextContent(
+      "직접 비교 가능한 경쟁 모델이 없습니다",
     );
-    await user.selectOptions(
-      screen.getByLabelText("Samsung 기준 모델"),
-      samsung.modelId,
-    );
-    await user.selectOptions(
-      screen.getByLabelText("경쟁 모델"),
-      competitor.modelId,
-    );
+    expect(screen.getByRole("button", { name: "안전 비교 실행" })).toBeDisabled();
+  });
+
+  it("P5-UT-G2-002 BLOCKED 응답에서는 순위와 Delta를 숨긴다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
     await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
 
     const result = await screen.findByRole("status");
@@ -307,7 +363,7 @@ describe("Catalog Audit Studio", () => {
     comparePayload = directComparison;
     await renderReady();
     const user = await openView(/Compare Lab/);
-    await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
+    await chooseDirectPair(user);
     await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
 
     expect(await screen.findByTestId("comparison-verdict")).toHaveTextContent("DIRECT");
@@ -320,7 +376,7 @@ describe("Catalog Audit Studio", () => {
     comparePayload = directComparison;
     await renderReady();
     const user = await openView(/Compare Lab/);
-    await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
+    await chooseDirectPair(user);
     await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
 
     expect(await screen.findByTestId("comparison-delta")).toHaveTextContent("-3.16%");
@@ -328,8 +384,10 @@ describe("Catalog Audit Studio", () => {
   });
 
   it("P5-UT-G2-001 조건 불일치 코드와 차단 사유를 표시한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
     await renderReady();
     const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
     await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
 
     expect(await screen.findByTestId("comparison-verdict")).toHaveTextContent("BLOCKED");
@@ -338,6 +396,7 @@ describe("Catalog Audit Studio", () => {
   });
 
   it("P5-UT-G2-003 모순된 BLOCKED 응답의 rank와 Delta를 무시한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
     comparePayload = {
       ...comparePayload,
       rankingAllowed: true,
@@ -345,6 +404,7 @@ describe("Catalog Audit Studio", () => {
     };
     await renderReady();
     const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
     await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("안전 규칙과 충돌");
@@ -473,14 +533,16 @@ describe("Catalog Audit Studio", () => {
   });
 
   it("P5-UT-LINK-002 비교 딥링크는 비교 요청을 한 번 수행한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
     window.history.replaceState(
       {},
       "",
-      `/?view=compare&baselineModelId=${encodeURIComponent(samsung.modelId)}&candidateModelId=${encodeURIComponent(competitor.modelId)}`,
+      `/?view=compare&baselineModelId=${encodeURIComponent(directSamsung.modelId)}&candidateModelId=${encodeURIComponent(directCompetitor.modelId)}&metric=eer`,
     );
     await renderReady();
 
-    expect(await screen.findByTestId("comparison-code")).toHaveTextContent("BLOCKED_CONDITION_MISMATCH");
+    expect(await screen.findByTestId("comparison-code")).toHaveTextContent("DIRECT_OK");
     const calls = vi.mocked(fetch).mock.calls.filter(([input]) => String(input).includes("/compare"));
     expect(calls).toHaveLength(1);
   });

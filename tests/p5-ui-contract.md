@@ -13,8 +13,9 @@ E2E의 책임·테스트 ID·합격 기준을 고정한다.
 - P5 책임: 권위값과 활성 Release만 표시하고 편집·발행 기능을 노출하지 않으며,
   API의 `DIRECT/REFERENCE/BLOCKED/GAP` 판정을 그대로 지킨다.
 
-UI 테스트에서 비교 수식이나 Validator를 다시 구현하지 않는다. API fixture의
-판정 결과를 화면이 안전하게 표현하는지만 검사한다.
+UI는 직접 비교 후보 목록을 만들기 위해 백엔드의 DIRECT 조건을 읽기 전용으로
+미리 적용한다. 최종 판정과 Delta 계산은 API가 담당하며, UI는 API 응답을 다시
+안전하게 표현한다.
 
 ## 2. 고정 실행 조건
 
@@ -47,13 +48,13 @@ UI 테스트에서 비교 수식이나 Validator를 다시 구현하지 않는�
 
 | 목적 | 고정값 |
 |---|---|
-| 활성 Release | `release:2026-07-30:002`, `status=PUBLISHED` |
+| 활성 Release | `release:2026-07-30:003`, `status=PUBLISHED` |
 | G1 Samsung | `model:samsung:DS8LC5040IN`, Sc/R454B/DOE-B/Fixed |
 | G1 경쟁사 | `model:gmcc:STDA031N1ULB`, 같은 비교키, 용량차 `6.21%` |
 | G1 판정 | EER 기준 `DIRECT`, `DIRECT_OK`, `rankingAllowed=true`, `deltaPct` 숫자 |
 | G2 Samsung | R32 Ro/ARI/Variable |
 | G2 경쟁사 | GMCC R32 Ro/SEER60/Variable |
-| G2 판정 | `BLOCKED`, `BLOCKED_CONDITION_MISMATCH`, `rankingAllowed=false`, `deltaPct=null` |
+| G2 선택 Gate | 조건 불일치 경쟁 모델은 후보에서 제외, 비교 실행 비활성 |
 | G3 포트폴리오 | `Re/R290=GAP`, Samsung 모델 `[]`, 경쟁 모델 `>=1` |
 | G4 권위 모델 | `model:samsung:DS4BC7066FVT`, COP `3.25` |
 | G6 Evidence | Release ID, Samsung 모델 ID, `data/Samsung-Compressor-Catalogue_2024.pdf`, `pdf-page`, page `92` |
@@ -70,7 +71,7 @@ fixture에 `3.34`, Samsung R290 Re 가짜 모델, 수치 `0`, Staging 레코드�
 | 앱/Release | `app-shell`, `active-release`, `release-id`, `release-status`, `release-hash`, `read-only-notice` |
 | 검색/필터 | `global-search`, `search-results`, `filter-type`, `filter-refrigerant`, `filter-condition`, `filter-drive-class` |
 | 모델 | `model-list`, `model-detail`, `model-name`, `model-cop` |
-| 비교 | `comparison-panel`, `comparison-verdict`, `comparison-code`, `comparison-ranking`, `comparison-delta`, `comparison-reason` |
+| 비교 | `compare-type-tabs`, `comparison-readiness`, `eligible-candidate-count`, `no-direct-candidate`, `comparison-panel`, `comparison-verdict`, `comparison-code`, `comparison-ranking`, `comparison-delta`, `comparison-reason` |
 | GAP | `portfolio-status`, `samsung-models`, `competitor-models` |
 | Evidence | `evidence-open`, `evidence-panel`, `evidence-model-id`, `evidence-release-id`, `evidence-source-path`, `evidence-locator`, `source-open` |
 
@@ -110,6 +111,9 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 | `P5-UT-G5-003` | 활성 Release 재조회 실패 | 마지막 정상 Release ID와 데이터는 유지하고 읽기 오류 배너만 표시 |
 | `P5-UT-G6-001` | Evidence 응답 렌더 | 모델 ID → 활성 Release ID → PDF 경로 → `pdf-page 92` 순서가 한 패널에서 확인 가능 |
 | `P5-UT-G6-002` | 원천 열기 링크 | 같은 origin의 읽기 전용 URL이며 PDF fragment 또는 UI 표기가 page 92를 가리킴 |
+| `P9-UT-G1-001` | Re/Ro/Sc 유형 탭 선택 | 선택 유형의 Samsung 모델만 표시 |
+| `P9-UT-G1-002` | Samsung 모델·지표 선택 | 동일 유형·냉매·조건·구동·용량 ±15%·지표 보유 경쟁 모델만 표시 |
+| `P9-UT-G2-001` | 직접 후보 0건 | 후보 없음 사유 표시, 경쟁 모델 선택과 비교 실행 비활성 |
 
 ### 검색·필터·딥링크·표시 안전성
 
@@ -127,7 +131,7 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 
 ### Vitest 합격 기준
 
-- 위 테스트 ID 23개 모두 PASS.
+- 현재 구현된 Vitest 27개 모두 PASS.
 - BLOCKED/GAP 테스트에서 순위·Δ·우열 표현이 0개.
 - `3.34`, 편집·발행 control이 0개.
 - 테스트 중 실제 `fetch`가 mock되지 않은 주소로 나가면 즉시 FAIL.
@@ -142,8 +146,8 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 
 | 기본 테스트 ID | 실제 사용자 흐름 | 합격 기준 |
 |---|---|---|
-| `P5-E2E-G1-001` | 필터 `Sc/R454B/DOE-B/Fixed` → DS8LC5040IN → STDA031N1ULB EER 비교 | `DIRECT_OK`, 동일 비교키, 순위와 Δ 모두 보임 |
-| `P5-E2E-G2-001` | R32 Ro Samsung ARI → GMCC SEER60 비교 | `BLOCKED_CONDITION_MISMATCH`; 순위·Δ testid와 우열 문구 모두 없음 |
+| `P5-E2E-G1-001` | `Sc` 탭 → EER → DS8LC5040IN → STDA031N1ULB 비교 | 후보가 직접 비교 모델로 제한되고 `DIRECT_OK`, 순위와 Δ 모두 보임 |
+| `P5-E2E-G2-001` | `Ro` 탭 → COP → R32 Samsung ARI 선택 | GMCC SEER60이 후보에 없고 실행 비활성, 순위·Δ 없음 |
 | `P5-E2E-G3-001` | 포트폴리오에서 `Re/R290` 선택 | GAP 표시, 경쟁 모델 `>=1`, Samsung 모델·가짜 0·순위 없음 |
 | `P5-E2E-G4-001` | 검색으로 DS4BC7066FVT 선택 | 모델 상세 COP 3.25, 공식 배지, 화면 전체에 3.34 없음 |
 | `P5-E2E-G5-001` | 앱 진입 → 여러 화면 이동 → 새로고침 | Release ID·해시 불변, PUBLISHED만 표시, 편집·발행 control 없음 |
