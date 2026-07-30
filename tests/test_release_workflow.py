@@ -190,3 +190,43 @@ def test_tampered_release_cannot_be_activated_by_rollback(tmp_path: Path) -> Non
             approved_by="catalog-owner",
             approved_at="2026-07-30T16:20:00+09:00",
         )
+
+
+def test_publish_records_separate_data_and_application_commits(
+    tmp_path: Path,
+) -> None:
+    store = FileReleaseStore(tmp_path)
+    bundle = staging_bundle()
+    release = store.publish(
+        bundle=bundle,
+        validation=validator().validate(bundle),
+        release_id="release:2026-07-30:001",
+        approved_by="catalog-owner",
+        approved_at="2026-07-30T16:00:00+09:00",
+        source_commit="f142bcaba987408a766fcb6b3e20f8d431719e13",
+        app_git_sha="3c1de57f8b6c95cdbf2181e6889b0ebc4e811834",
+    )
+
+    assert release["sourceCommit"] == (
+        "f142bcaba987408a766fcb6b3e20f8d431719e13"
+    )
+    assert release["appGitSha"] == (
+        "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834"
+    )
+    assert store.active_release()["appGitSha"] == release["appGitSha"]
+
+
+def test_publish_rejects_invalid_application_commit(tmp_path: Path) -> None:
+    store = FileReleaseStore(tmp_path)
+    bundle = staging_bundle()
+
+    with pytest.raises(ReleaseGateError, match="appGitSha"):
+        store.publish(
+            bundle=bundle,
+            validation=validator().validate(bundle),
+            release_id="release:2026-07-30:001",
+            approved_by="catalog-owner",
+            approved_at="2026-07-30T16:00:00+09:00",
+            source_commit="f142bcaba987408a766fcb6b3e20f8d431719e13",
+            app_git_sha="not-a-git-sha",
+        )

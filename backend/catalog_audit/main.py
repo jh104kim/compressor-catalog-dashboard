@@ -15,6 +15,7 @@ from .api import create_app as create_api_app
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_RELEASE_ROOT = ROOT / "catalog" / "published"
 DEFAULT_RULES_PATH = ROOT / "config" / "p0_catalog_rules.json"
+DEFAULT_EXPANSION_ROOT = ROOT / "catalog" / "expansion"
 DEFAULT_STUDIO_DIST = ROOT / "studio" / "dist"
 DEFAULT_SOURCE_PDF = ROOT / "data" / "Samsung-Compressor-Catalogue_2024.pdf"
 
@@ -30,6 +31,7 @@ def create_runtime_app(
     *,
     release_root: Path = DEFAULT_RELEASE_ROOT,
     rules_path: Path = DEFAULT_RULES_PATH,
+    expansion_root: Path = DEFAULT_EXPANSION_ROOT,
     studio_dist: Path = DEFAULT_STUDIO_DIST,
     source_pdf: Path = DEFAULT_SOURCE_PDF,
 ) -> FastAPI:
@@ -38,6 +40,7 @@ def create_runtime_app(
     app = create_api_app(
         release_root=Path(release_root),
         rules_path=Path(rules_path),
+        expansion_root=Path(expansion_root),
     )
     app.add_middleware(GZipMiddleware, minimum_size=500)
 

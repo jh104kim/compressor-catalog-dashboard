@@ -9,7 +9,7 @@
 1. Python 3.12 의존성 1회 설치
 2. 전체 pytest
 3. Draft 2020-12 Schema 검사
-4. 실제 `release:2026-07-30:001`의 상태·해시·승인·68/27/41 검증
+4. 실제 `release:2026-07-30:002`의 상태·해시·승인·68/27/41·B1 검증
 5. Node 24 설정과 QA 의존성 1회 설치
 6. Playwright Chromium 1회 설치
 7. 기존 P0 Characterization 1회
@@ -24,13 +24,16 @@ Job 제한시간은 30분이며 `P0_RETRIES=0`, `P5_RETRIES=0`이다. 실패 테
 
 CI는 Release를 새로 발행하지 않고 저장소의 실제 활성 Release를 읽기만 한다.
 
-- Release ID: `release:2026-07-30:001`
+- Release ID: `release:2026-07-30:002`
 - 상태: `PUBLISHED`
 - Validation: Critical 0, Major 0
 - 모델: 전체 68, Samsung 27, 경쟁사 41
 - 활성 포인터·Release metadata·Bundle SHA-256 일치
 - 승인자·승인시각 존재
 - `sourceCommit`: 소문자 40자리 Git SHA
+- `appGitSha`: 소문자 40자리 Git SHA
+- B1: 16행, 기존 모델 연결 8, 신규 후보 8, 조건 UNKNOWN 16,
+  `NOT_PUBLISHED`
 
 ## Runtime E2E
 
@@ -59,7 +62,7 @@ P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, Playwrig
 - P5 Artifact: `p5-catalog-audit-30523905496-1` (1,574,354 bytes)
 - P5 Artifact 내용 확인: 12/12 PASS, 스크린샷 12장
 
-Release의 `sourceCommit`은 **카탈로그 데이터 발행 입력 SHA**이고, 위 Actions
-대상 SHA는 **앱·검증 코드 SHA**다. 두 역할을 혼동하지 않고 Release metadata와
-CI gate context로 각각 추적한다. Published Bundle 내부의 `meta.stage=STAGING`은
+Release의 `sourceCommit`은 **카탈로그 데이터 발행 입력 SHA**이고,
+`appGitSha`는 **앱·검증 코드 SHA**다. 두 역할을 Release metadata 안에서
+분리해 추적한다. Published Bundle 내부의 `meta.stage=STAGING`은
 입력 bytes와 SHA를 보존하기 위한 provenance이며 API/UI 상태로 노출하지 않는다.

@@ -120,6 +120,7 @@ def published_client(tmp_path: Path) -> TestClient:
         create_app(
             release_root=tmp_path,
             rules_path=ROOT / "config" / "p0_catalog_rules.json",
+            expansion_root=ROOT / "catalog" / "expansion",
         )
     )
 
@@ -139,6 +140,22 @@ def test_active_release_and_filtered_catalog_are_read_only(tmp_path: Path) -> No
     assert models.json()["count"] == 1
     assert models.json()["items"][0]["model"] == "DS8LC5040IN"
     assert client.post("/api/v1/releases/publish").status_code == 404
+
+
+def test_b1_expansion_batch_is_review_only_and_condition_blocked(
+    tmp_path: Path,
+) -> None:
+    client = published_client(tmp_path)
+
+    response = client.get("/api/v1/expansion/batches/B1")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "SOURCE_VERIFIED"
+    assert payload["publicationStatus"] == "NOT_PUBLISHED"
+    assert payload["counts"]["totalRows"] == 16
+    assert payload["counts"]["newCandidates"] == 8
+    assert all(row["comparisonEligible"] is False for row in payload["rows"])
 
 
 def test_g1_direct_comparison_api(tmp_path: Path) -> None:

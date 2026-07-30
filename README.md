@@ -23,6 +23,10 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 
 현재 활성 데이터는 `catalog/published/active-release.json`이 가리키는 Release다. Studio는 조회 전용이며 편집·발행 기능을 제공하지 않는다. 발행·롤백 절차는 `docs/07-operations-and-362-expansion.md`를 따른다.
 
+화면 검증은 왼쪽 **Release / Evidence**에서 확인한다. 이 화면은 데이터
+입력 SHA와 앱 구현 SHA를 분리해 보여주며, B1 Scroll p.92의 16행이
+`NOT_PUBLISHED`·조건 `UNKNOWN` 상태로 비교에서 차단됐는지도 함께 표시한다.
+
 기존 DC 화면은 아래처럼 별도 실행한다.
 
 ```powershell
@@ -41,6 +45,7 @@ python -m http.server 8001 --directory frontend
 ├── backend/                         # Published Release 조회·비교 FastAPI
 ├── catalog/
 │   ├── staging/                     # 검증 전 이관 Bundle
+│   ├── expansion/                   # 362행 단계 확장 검토 Batch
 │   └── published/                   # 불변 Release와 활성 포인터
 ├── config/                          # 권위값·GAP·비교 정책
 ├── data/                            # 리서치 원천 데이터 (모든 콘텐츠의 1차 출처)

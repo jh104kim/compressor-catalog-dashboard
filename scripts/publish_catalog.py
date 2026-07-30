@@ -58,6 +58,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--approved-by", required=True)
     parser.add_argument("--approved-at", required=True, type=_approved_at)
     parser.add_argument("--source-commit", required=True)
+    parser.add_argument("--app-git-sha", required=True)
     parser.add_argument("--release-id", required=True)
     return parser.parse_args(argv)
 
@@ -99,6 +100,7 @@ def main(argv: list[str] | None = None) -> int:
             approved_by=args.approved_by,
             approved_at=args.approved_at,
             source_commit=args.source_commit,
+            app_git_sha=args.app_git_sha,
         )
     except (
         json.JSONDecodeError,

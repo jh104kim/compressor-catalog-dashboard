@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from .comparison import compare_models
+from .expansion import ExpansionBatchError, load_expansion_batch
 from .release import FileReleaseStore, ReleaseIntegrityError
 
 
@@ -52,7 +53,12 @@ class PublishedCatalog:
         raise HTTPException(status_code=404, detail="모델을 찾을 수 없습니다.")
 
 
-def create_app(*, release_root: Path, rules_path: Path) -> FastAPI:
+def create_app(
+    *,
+    release_root: Path,
+    rules_path: Path,
+    expansion_root: Path | None = None,
+) -> FastAPI:
     store = FileReleaseStore(Path(release_root))
     catalog = PublishedCatalog(store)
     rules = json.loads(Path(rules_path).read_text(encoding="utf-8"))
@@ -77,10 +83,24 @@ def create_app(*, release_root: Path, rules_path: Path) -> FastAPI:
             **active,
             "status": release["status"],
             "sourceCommit": release["sourceCommit"],
+            "appGitSha": release.get("appGitSha"),
             "validationSummary": release["validationSummary"],
             "counts": bundle["counts"],
             "asOf": bundle.get("asOf"),
         }
+
+    @app.get("/api/v1/expansion/batches/{batch_id}")
+    def expansion_batch(batch_id: str) -> dict[str, Any]:
+        if batch_id.upper() != "B1" or expansion_root is None:
+            raise HTTPException(status_code=404, detail="확장 Batch를 찾을 수 없습니다.")
+        path = Path(expansion_root) / "b1-scroll-p92.json"
+        try:
+            return load_expansion_batch(path)
+        except (ExpansionBatchError, json.JSONDecodeError, OSError) as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="B1 확장 Batch 검증에 실패했습니다.",
+            ) from exc
 
     @app.get("/api/v1/catalog/models")
     def list_models(

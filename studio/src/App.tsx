@@ -5,6 +5,7 @@ import {
   getActiveRelease,
   getCriticalGap,
   getEvidence,
+  getExpansionBatch,
   getModels,
 } from "./api";
 import type {
@@ -13,6 +14,7 @@ import type {
   ComparisonResult,
   CompressorType,
   EvidenceTrace,
+  ExpansionBatch,
   PortfolioStatus,
 } from "./types";
 
@@ -763,7 +765,13 @@ function PortfolioGaps({
   );
 }
 
-function ReleaseEvidence({ release }: { release: ActiveRelease }) {
+function ReleaseEvidence({
+  release,
+  expansionBatch,
+}: {
+  release: ActiveRelease;
+  expansionBatch: ExpansionBatch;
+}) {
   return (
     <div className="view-stack">
       <PageHeading
@@ -787,7 +795,8 @@ function ReleaseEvidence({ release }: { release: ActiveRelease }) {
           <dl>
             <div><dt>승인자</dt><dd>{release.approvedBy}</dd></div>
             <div><dt>활성화</dt><dd>{formatDate(release.activatedAt)}</dd></div>
-            <div><dt>Source commit</dt><dd><code>{release.sourceCommit}</code></dd></div>
+            <div><dt>Data source SHA</dt><dd><code data-testid="source-commit">{release.sourceCommit}</code></dd></div>
+            <div><dt>Application SHA</dt><dd><code data-testid="app-git-sha">{release.appGitSha ?? "Legacy release - 미기록"}</code></dd></div>
             <div><dt>Bundle SHA-256</dt><dd><code data-testid="release-hash">{release.dataSha256}</code></dd></div>
             <div><dt>이전 Release</dt><dd>{release.previousReleaseId ?? "최초 Release"}</dd></div>
           </dl>
@@ -807,6 +816,31 @@ function ReleaseEvidence({ release }: { release: ActiveRelease }) {
           </div>
         </article>
       </section>
+      <section className="panel expansion-card" data-testid="expansion-batch">
+        <div className="panel-title-row">
+          <div>
+            <p className="section-kicker">362-ROW EXPANSION · {expansionBatch.batchId}</p>
+            <h3>{expansionBatch.title}</h3>
+          </div>
+          <StatusPill tone="accent">{expansionBatch.status}</StatusPill>
+        </div>
+        <p>
+          공식 PDF p.{expansionBatch.source.page}의 Scroll 행을 검토용 후보로 분리했습니다.
+          아직 Published Release에는 합치지 않았습니다.
+        </p>
+        <div className="expansion-stats">
+          <div><span>원천 행</span><strong data-testid="expansion-total">{expansionBatch.counts.totalRows}</strong></div>
+          <div><span>기존 모델 연결</span><strong>{expansionBatch.counts.overlapModels}</strong></div>
+          <div><span>신규 후보</span><strong data-testid="expansion-new">{expansionBatch.counts.newCandidates}</strong></div>
+          <div><span>조건 UNKNOWN</span><strong data-testid="expansion-unknown">{expansionBatch.counts.conditionUnknown}</strong></div>
+        </div>
+        <div className="expansion-footer">
+          <span>비교 허용 0건 · {expansionBatch.publicationStatus}</span>
+          <a href={`/source/Samsung-Compressor-Catalogue_2024.pdf#page=${expansionBatch.source.page}`} target="_blank" rel="noreferrer">
+            공식 PDF p.{expansionBatch.source.page} 열기 →
+          </a>
+        </div>
+      </section>
       <section className="panel view-only-contract" data-testid="read-only-notice">
         <div><span className="state-icon">◉</span><div><h3>View-first 운영 경계</h3><p>이 앱은 조회·점검 전용입니다. 데이터 수정과 Published 발행은 UI에서 제공하지 않습니다.</p></div></div>
         <ul><li>Staging 값 노출 금지</li><li>발행 실패 시 활성 Release 불변</li><li>승인자 메타데이터 표시</li></ul>
@@ -821,16 +855,23 @@ export default function App() {
   const [release, setRelease] = useState<ActiveRelease | null>(null);
   const [models, setModels] = useState<CatalogModel[]>([]);
   const [gap, setGap] = useState<PortfolioStatus | null>(null);
+  const [expansionBatch, setExpansionBatch] = useState<ExpansionBatch | null>(null);
   const [error, setError] = useState("");
   const [refreshError, setRefreshError] = useState("");
 
   const loadData = useCallback((preserveCurrent: boolean) => {
     setRefreshError("");
-    return Promise.all([getActiveRelease(), getModels(), getCriticalGap()])
-      .then(([nextRelease, nextModels, nextGap]) => {
+    return Promise.all([
+      getActiveRelease(),
+      getModels(),
+      getCriticalGap(),
+      getExpansionBatch(),
+    ])
+      .then(([nextRelease, nextModels, nextGap, nextExpansionBatch]) => {
         setRelease(nextRelease);
         setModels(nextModels);
         setGap(nextGap);
+        setExpansionBatch(nextExpansionBatch);
       })
       .catch((loadError) => {
         const message = loadError instanceof Error ? loadError.message : String(loadError);
@@ -872,7 +913,7 @@ export default function App() {
   }
 
   if (error) return <ErrorState message={error} />;
-  if (!release || !gap) return <LoadingState />;
+  if (!release || !gap || !expansionBatch) return <LoadingState />;
 
   return (
     <div className="app-shell" data-testid="app-shell">
@@ -920,7 +961,7 @@ export default function App() {
           {view === "catalog" && <CatalogChecks release={release} models={models} initialModelId={route.modelId} initialEvidence={route.evidence} />}
           {view === "compare" && <CompareLab models={models} initialBaselineId={route.baselineModelId} initialCandidateId={route.candidateModelId} initialMetric={route.metric} />}
           {view === "portfolio" && <PortfolioGaps models={models} gap={gap} />}
-          {view === "release" && <ReleaseEvidence release={release} />}
+          {view === "release" && <ReleaseEvidence release={release} expansionBatch={expansionBatch} />}
         </main>
       </div>
     </div>

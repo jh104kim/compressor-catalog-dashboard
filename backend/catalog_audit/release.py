@@ -62,6 +62,7 @@ class FileReleaseStore:
         approved_by: str,
         approved_at: str,
         source_commit: str,
+        app_git_sha: str | None = None,
     ) -> dict[str, Any]:
         if validation.critical_count or validation.major_count:
             raise ReleaseGateError(
@@ -73,6 +74,9 @@ class FileReleaseStore:
             raise ReleaseGateError("승인자와 승인시각이 필요합니다.")
         if not re.fullmatch(r"[0-9a-f]{40}", source_commit):
             raise ReleaseGateError("sourceCommit은 40자리 Git SHA여야 합니다.")
+        resolved_app_git_sha = app_git_sha or source_commit
+        if not re.fullmatch(r"[0-9a-f]{40}", resolved_app_git_sha):
+            raise ReleaseGateError("appGitSha는 40자리 Git SHA여야 합니다.")
 
         data_sha256 = canonical_json_sha256(bundle)
         if validation.data_sha256 != data_sha256:
@@ -93,6 +97,7 @@ class FileReleaseStore:
             "approvedBy": approved_by,
             "approvedAt": approved_at,
             "sourceCommit": source_commit,
+            "appGitSha": resolved_app_git_sha,
             "dataSha256": data_sha256,
             "previousReleaseId": previous_release_id,
             "validationSummary": validation.to_dict(),
@@ -114,6 +119,8 @@ class FileReleaseStore:
                     "activatedAt": approved_at,
                     "approvedBy": approved_by,
                     "previousReleaseId": previous_release_id,
+                    "sourceCommit": source_commit,
+                    "appGitSha": resolved_app_git_sha,
                 }
             )
         finally:
@@ -158,6 +165,8 @@ class FileReleaseStore:
             "activatedAt": approved_at,
             "approvedBy": approved_by,
             "rollbackFromReleaseId": from_release_id,
+            "sourceCommit": metadata.get("sourceCommit"),
+            "appGitSha": metadata.get("appGitSha"),
         }
         self._activate(pointer)
         event_name = (

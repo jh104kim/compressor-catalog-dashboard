@@ -131,6 +131,7 @@ describe("Catalog Audit Studio", () => {
             activatedAt: "2026-07-30T16:00:00+09:00",
             dataSha256: "abc123",
             sourceCommit: "f142bca",
+            appGitSha: "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834",
             asOf: "2026-06-23",
             counts: { models: 68, samsungModels: 27, competitorModels: 41 },
             validationSummary: {
@@ -146,6 +147,34 @@ describe("Catalog Audit Studio", () => {
                 },
               ],
             },
+          });
+        }
+        if (url.includes("/expansion/batches/B1")) {
+          return jsonResponse({
+            batchId: "B1",
+            title: "Samsung 2024 Scroll p.92",
+            status: "SOURCE_VERIFIED",
+            publicationStatus: "NOT_PUBLISHED",
+            review: {
+              reviewedAt: "2026-07-30",
+              method: "PDF p.92 visual review and text extraction",
+              conditionDecision: "p.92에 측정조건이 없어 UNKNOWN 유지",
+            },
+            source: {
+              pdfPath: "data/Samsung-Compressor-Catalogue_2024.pdf",
+              pdfSha256: "pdf-sha",
+              parsedPath: "data/samsung-catalogue-2024-parsed.md",
+              parsedSha256: "parsed-sha",
+              page: 92,
+            },
+            counts: {
+              totalRows: 16,
+              uniqueModels: 16,
+              overlapModels: 8,
+              newCandidates: 8,
+              conditionUnknown: 16,
+            },
+            rows: [],
           });
         }
         if (url.includes("/catalog/models")) {
@@ -205,6 +234,24 @@ describe("Catalog Audit Studio", () => {
     expect(screen.getByText("41")).toBeInTheDocument();
     expect(screen.getByText("View-only")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /발행|편집/ })).not.toBeInTheDocument();
+  });
+
+  it("P8-UT-G7-001 앱 SHA와 B1 Scroll 검토상태를 분리해 보여준다", async () => {
+    await renderReady();
+    await openView(/Release \/ Evidence/);
+
+    expect(screen.getByTestId("app-git-sha")).toHaveTextContent(
+      "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834",
+    );
+    expect(screen.getByTestId("expansion-batch")).toHaveTextContent(
+      "SOURCE_VERIFIED",
+    );
+    expect(screen.getByTestId("expansion-total")).toHaveTextContent("16");
+    expect(screen.getByTestId("expansion-new")).toHaveTextContent("8");
+    expect(screen.getByTestId("expansion-unknown")).toHaveTextContent("16");
+    expect(screen.getByTestId("expansion-batch")).toHaveTextContent(
+      "아직 Published Release에는 합치지 않았습니다.",
+    );
   });
 
   it("P5-UT-G2-002 조건 불일치 비교에서는 순위와 Delta를 숨긴다", async () => {

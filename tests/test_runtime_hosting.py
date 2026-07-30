@@ -14,6 +14,7 @@ PUBLISH_SCRIPT = ROOT / "scripts" / "publish_catalog.py"
 STAGING_BUNDLE = ROOT / "catalog" / "staging" / "catalog-bundle.json"
 RULES = ROOT / "config" / "p0_catalog_rules.json"
 SOURCE_COMMIT = "f142bcaba987408a766fcb6b3e20f8d431719e13"
+APP_GIT_SHA = "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834"
 
 
 def _run_publish(
@@ -36,6 +37,8 @@ def _run_publish(
             "2026-07-30T18:00:00+09:00",
             "--source-commit",
             SOURCE_COMMIT,
+            "--app-git-sha",
+            APP_GIT_SHA,
             "--release-id",
             release_id,
         ],
@@ -98,6 +101,8 @@ def test_publish_cli_validates_and_publishes_to_requested_root(
     assert active["releaseId"] == "release:2026-07-30:901"
     assert metadata["approvedBy"] == "runtime-test-owner"
     assert metadata["sourceCommit"] == SOURCE_COMMIT
+    assert metadata["appGitSha"] == APP_GIT_SHA
+    assert active["appGitSha"] == APP_GIT_SHA
     assert metadata["validationSummary"]["status"] == "VALIDATED"
     assert metadata["validationSummary"]["criticalCount"] == 0
     assert metadata["validationSummary"]["majorCount"] == 0

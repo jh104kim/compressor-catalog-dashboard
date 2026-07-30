@@ -88,13 +88,13 @@ jobs:
           from backend.catalog_audit.validation import canonical_json_sha256
 
           root = Path("catalog/published")
-          expected_release_id = "release:2026-07-30:001"
+          expected_release_id = "release:2026-07-30:002"
           active = json.loads(
               (root / "active-release.json").read_text(encoding="utf-8")
           )
           assert active["releaseId"] == expected_release_id
 
-          release_dir = root / "releases" / "release_2026-07-30_001"
+          release_dir = root / "releases" / "release_2026-07-30_002"
           metadata = json.loads(
               (release_dir / "release.json").read_text(encoding="utf-8")
           )
@@ -119,6 +119,23 @@ jobs:
           assert metadata["approvedBy"].strip()
           assert metadata["approvedAt"].strip()
           assert re.fullmatch(r"[0-9a-f]{40}", metadata["sourceCommit"])
+          assert re.fullmatch(r"[0-9a-f]{40}", metadata["appGitSha"])
+          assert active["appGitSha"] == metadata["appGitSha"]
+
+          from backend.catalog_audit.expansion import load_expansion_batch
+
+          b1 = load_expansion_batch(
+              Path("catalog/expansion/b1-scroll-p92.json")
+          )
+          assert b1["status"] == "SOURCE_VERIFIED"
+          assert b1["publicationStatus"] == "NOT_PUBLISHED"
+          assert b1["counts"] == {
+              "totalRows": 16,
+              "uniqueModels": 16,
+              "overlapModels": 8,
+              "newCandidates": 8,
+              "conditionUnknown": 16,
+          }
 
           print(
               json.dumps(
@@ -127,6 +144,8 @@ jobs:
                       "status": metadata["status"],
                       "dataSha256": metadata["dataSha256"],
                       "sourceCommit": metadata["sourceCommit"],
+                      "appGitSha": metadata["appGitSha"],
+                      "b1Counts": b1["counts"],
                       "counts": bundle["counts"],
                       "validationSummary": {
                           "criticalCount": summary["criticalCount"],

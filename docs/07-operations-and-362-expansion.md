@@ -38,7 +38,8 @@
 5. Critical 또는 Major가 1건이라도 있으면 발행하지 않는다.
 6. Warning은 목록·원인·승인 판단을 증거로 남긴다.
 7. 롤백 대상은 해시 검증에 성공한 기존 Release만 허용한다.
-8. 모든 운영 판단은 Git SHA와 Release ID를 함께 기록한다.
+8. 모든 운영 판단은 데이터 입력 SHA(`sourceCommit`), 앱 구현
+   SHA(`appGitSha`), Release ID를 함께 기록한다.
 
 ## 4. 발행 전 검증
 
@@ -67,7 +68,8 @@ Pop-Location
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = (git rev-parse HEAD).Trim()
+$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$appGitSha = (git rev-parse HEAD).Trim()
 $approvedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
 $releaseDate = (Get-Date).ToString("yyyy-MM-dd")
 $rehearsalRoot = Join-Path $env:TEMP (
@@ -80,6 +82,7 @@ python scripts/publish_catalog.py `
   --approved-by "catalog-owner" `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
+  --app-git-sha $appGitSha `
   --release-id "release:${releaseDate}:901"
 
 if ($LASTEXITCODE -ne 0) {
@@ -92,6 +95,7 @@ python scripts/publish_catalog.py `
   --approved-by "catalog-owner" `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
+  --app-git-sha $appGitSha `
   --release-id "release:${releaseDate}:902"
 
 if ($LASTEXITCODE -ne 0) {
@@ -154,13 +158,15 @@ PASS 기준:
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = (git rev-parse HEAD).Trim()
+$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$appGitSha = (git rev-parse HEAD).Trim()
 $approvedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
 
 python scripts/publish_catalog.py `
   --approved-by "실제-승인자" `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
+  --app-git-sha $appGitSha `
   --release-id "release:2026-07-30:002"
 
 if ($LASTEXITCODE -ne 0) {

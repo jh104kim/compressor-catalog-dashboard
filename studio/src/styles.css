@@ -262,6 +262,13 @@ tbody tr:hover, .selected-row { background: #f7f9ff; }
 .issue-list { display: grid; margin-top: 12px; }.issue-row { padding: 12px 0; display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 9px; border-top: 1px solid #eef1f5; }
 .issue-row > span { width: 23px; height: 23px; display: grid; place-items: center; color: var(--orange); background: var(--orange-soft); border-radius: 7px; font-weight: 900; }
 .issue-row strong { font-size: 9px; }.issue-row p { margin: 4px 0; color: var(--muted); font-size: 9px; }.issue-row small { color: #98a2b3; font-size: 8px; }
+.expansion-card > p { margin: 12px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+.expansion-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+.expansion-stats > div { padding: 14px; border: 1px solid #e4e7ec; border-radius: 10px; background: #f8fafc; }
+.expansion-stats span { display: block; color: var(--muted); font-size: 8px; font-weight: 800; }
+.expansion-stats strong { display: block; margin-top: 7px; color: var(--navy); font-size: 21px; }
+.expansion-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; color: var(--muted); font-size: 9px; }
+.expansion-footer a { color: var(--blue); font-weight: 800; text-decoration: none; }
 .view-only-contract { display: flex; justify-content: space-between; gap: 20px; align-items: center; }
 .view-only-contract > div { display: flex; align-items: center; gap: 13px; }.view-only-contract p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
 .view-only-contract ul { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; margin: 0; padding: 0; list-style: none; }
@@ -314,6 +321,8 @@ tbody tr:hover, .selected-row { background: #f7f9ff; }
   .direct-metrics { grid-template-columns: 1fr; }
   .matrix-panel { overflow-x: auto; }.portfolio-matrix { min-width: 560px; }
   .release-banner { padding: 18px; grid-template-columns: 42px minmax(0,1fr); }.release-seal { width: 40px; height: 40px; }.release-banner > .status-pill { grid-column: 1 / -1; }
+  .expansion-stats { grid-template-columns: 1fr 1fr; }
+  .expansion-footer { align-items: flex-start; flex-direction: column; }
   .view-only-contract { align-items: flex-start; flex-direction: column; }.view-only-contract ul { justify-content: flex-start; }
 }
 

@@ -61,6 +61,7 @@ export interface ActiveRelease {
   approvedBy: string;
   dataSha256: string;
   sourceCommit: string;
+  appGitSha?: string | null;
   previousReleaseId?: string | null;
   asOf?: string | null;
   counts: {
@@ -74,6 +75,39 @@ export interface ActiveRelease {
     warningCount: number;
     issues: ValidationIssue[];
   };
+}
+
+export interface ExpansionBatch {
+  batchId: "B1";
+  title: string;
+  status: "SOURCE_VERIFIED";
+  publicationStatus: "NOT_PUBLISHED";
+  review: {
+    reviewedAt: string;
+    method: string;
+    conditionDecision: string;
+  };
+  source: {
+    pdfPath: string;
+    pdfSha256: string;
+    parsedPath: string;
+    parsedSha256: string;
+    page: number;
+  };
+  counts: {
+    totalRows: number;
+    uniqueModels: number;
+    overlapModels: number;
+    newCandidates: number;
+    conditionUnknown: number;
+  };
+  rows: Array<{
+    catalogRowId: string;
+    model: string;
+    existingModelId?: string | null;
+    condition: "UNKNOWN";
+    comparisonEligible: false;
+  }>;
 }
 
 export interface ComparisonResult {

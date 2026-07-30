@@ -183,7 +183,8 @@ R290 Re는 GAP, R290 Ro/Sc는 HAVE, R454B Ro/Sc는 HAVE가 회귀 없이 표시�
 
 | 뷰/컴포넌트 | API | 사용 필드 |
 |---|---|---|
-| `ReleaseBar`, Overview | `GET /api/v1/releases/active` | releaseId, approvedBy, activatedAt, counts, validationSummary, sourceCommit |
+| `ReleaseBar`, Overview | `GET /api/v1/releases/active` | releaseId, approvedBy, activatedAt, counts, validationSummary, sourceCommit, appGitSha |
+| `Release / Evidence` B1 | `GET /api/v1/expansion/batches/B1` | 16행, 기존 연결 8, 신규 후보 8, 조건 UNKNOWN 16, NOT_PUBLISHED |
 | Overview 모델 수 | `GET /api/v1/catalog/models` | count, items |
 | Catalog Checks | `GET /api/v1/releases/active` | validationSummary.issues |
 | 모델 검색·선택 | `GET /api/v1/catalog/models?...` | manufacturer, type, refrigerant, condition, driveClass, specs |

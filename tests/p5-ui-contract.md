@@ -47,7 +47,7 @@ UI 테스트에서 비교 수식이나 Validator를 다시 구현하지 않는�
 
 | 목적 | 고정값 |
 |---|---|
-| 활성 Release | `release:2026-07-30:001`, `status=PUBLISHED` |
+| 활성 Release | `release:2026-07-30:002`, `status=PUBLISHED` |
 | G1 Samsung | `model:samsung:DS8LC5040IN`, Sc/R454B/DOE-B/Fixed |
 | G1 경쟁사 | `model:gmcc:STDA031N1ULB`, 같은 비교키, 용량차 `6.21%` |
 | G1 판정 | EER 기준 `DIRECT`, `DIRECT_OK`, `rankingAllowed=true`, `deltaPct` 숫자 |

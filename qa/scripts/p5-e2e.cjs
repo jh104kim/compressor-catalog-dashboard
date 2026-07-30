@@ -29,7 +29,7 @@ const MODELS = {
 };
 
 const EXPECTED = {
-  releaseId: "release:2026-07-30:001",
+  releaseId: "release:2026-07-30:002",
   sourcePath: "data/Samsung-Compressor-Catalogue_2024.pdf",
   authorityCop: "3.25",
   authorityPage: "PDF p.92",
@@ -520,7 +520,14 @@ const SCENARIOS = [
           hashes.some((value) => /^[0-9a-f]{64}$/.test(value)),
           `전체 Release SHA-256이 없습니다: ${hashes.join(", ")}`,
         );
-        return { releaseIds, statuses, fullHashPresent: true };
+        const appGitSha = (
+          await page.getByTestId("app-git-sha").innerText()
+        ).trim();
+        invariant(
+          /^[0-9a-f]{40}$/.test(appGitSha),
+          `Application SHA가 40자리 Git SHA가 아닙니다: ${appGitSha}`,
+        );
+        return { releaseIds, statuses, fullHashPresent: true, appGitSha };
       });
       await assertion(log, "G5 View-only와 편집·발행 control 없음", async () => {
         await requireVisible(
@@ -544,6 +551,51 @@ const SCENARIOS = [
           `새로고침 후 Release가 변경됨: ${after.join(", ")}`,
         );
         return { before: releaseIds, after };
+      });
+    },
+  },
+  {
+    id: "G7-B1-EXPANSION",
+    title: "B1 Scroll p.92 검토 Batch와 비교 차단",
+    query: "/?view=release",
+    run: async (page, log) => {
+      await assertion(log, "G7 B1 16행·8개 신규 후보", async () => {
+        await requireVisible(page.getByTestId("expansion-batch"), "B1 확장 Batch");
+        const total = (
+          await page.getByTestId("expansion-total").innerText()
+        ).trim();
+        const newCandidates = (
+          await page.getByTestId("expansion-new").innerText()
+        ).trim();
+        invariant(total === "16", `B1 원천 행이 16이 아닙니다: ${total}`);
+        invariant(
+          newCandidates === "8",
+          `B1 신규 후보가 8이 아닙니다: ${newCandidates}`,
+        );
+        return { totalRows: 16, newCandidates: 8 };
+      });
+      await assertion(log, "G7 조건 UNKNOWN·Published 미반영", async () => {
+        const unknown = (
+          await page.getByTestId("expansion-unknown").innerText()
+        ).trim();
+        const batchText = await page.getByTestId("expansion-batch").innerText();
+        invariant(
+          unknown === "16",
+          `B1 조건 UNKNOWN이 16이 아닙니다: ${unknown}`,
+        );
+        invariant(
+          batchText.includes("비교 허용 0건"),
+          "B1 비교 차단 문구가 없습니다.",
+        );
+        invariant(
+          batchText.includes("NOT_PUBLISHED"),
+          "B1 미발행 상태가 없습니다.",
+        );
+        return {
+          conditionUnknown: 16,
+          comparisonEligible: 0,
+          publicationStatus: "NOT_PUBLISHED",
+        };
       });
     },
   },

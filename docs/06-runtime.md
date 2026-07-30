@@ -16,7 +16,7 @@ Runtime은 다음 두 대상만 읽는다.
 1. `catalog/staging/catalog-bundle.json` 읽기
 2. 기존 `CatalogValidator`로 검증
 3. `VALIDATED`, Critical 0, Major 0 확인
-4. 승인자·승인시각·Git SHA·Release ID 확인
+4. 승인자·승인시각·데이터 입력 SHA·앱 구현 SHA·Release ID 확인
 5. `FileReleaseStore`로 불변 Release 저장
 6. 마지막에 활성 포인터를 원자적으로 교체
 
@@ -28,12 +28,14 @@ Runtime은 다음 두 대상만 읽는다.
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = (git rev-parse HEAD).Trim()
+$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$appGitSha = (git rev-parse HEAD).Trim()
 python scripts/publish_catalog.py `
   --approved-by "catalog-owner" `
   --approved-at "2026-07-30T18:00:00+09:00" `
   --source-commit $sourceCommit `
-  --release-id "release:2026-07-30:001"
+  --app-git-sha $appGitSha `
+  --release-id "release:2026-07-30:002"
 ```
 
 기본 입력은 `catalog/staging/catalog-bundle.json`, 기본 출력은 `catalog/published`이다. 테스트에서는 `--bundle`, `--output-root`, `--schema`, `--rules`로 임시 경로를 사용한다.
@@ -68,6 +70,8 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 - `/assets/*`와 확장자가 있는 파일 요청도 index로 보내지 않는다.
 - 확장자 없는 Studio deep-link만 `index.html`로 fallback한다.
 - `POST /api/v1/releases/publish`는 존재하지 않는다.
+- `GET /api/v1/expansion/batches/B1`은 검토 후보만 반환하며 Published
+  모델 API에 합치지 않는다.
 
 ## 검증
 

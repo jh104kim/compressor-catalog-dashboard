@@ -3,6 +3,7 @@ import type {
   CatalogModel,
   ComparisonResult,
   EvidenceTrace,
+  ExpansionBatch,
   PortfolioStatus,
 } from "./types";
 
@@ -16,6 +17,10 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
 
 export function getActiveRelease(): Promise<ActiveRelease> {
   return requestJson<ActiveRelease>("/api/v1/releases/active");
+}
+
+export function getExpansionBatch(): Promise<ExpansionBatch> {
+  return requestJson<ExpansionBatch>("/api/v1/expansion/batches/B1");
 }
 
 export async function getModels(): Promise<CatalogModel[]> {

@@ -119,7 +119,11 @@ GAP과 UNKNOWN은 가짜 모델이나 수치 `0`을 만들지 않는다. 현재 
 
 ## Release 계약
 
-Release 메타데이터의 최소 필드는 `releaseId`, `status`, `createdAt`, `sourceCommit`, `dataSha256`, `previousReleaseId`, `validationSummary`이다. 상태는 `STAGING → VALIDATED → PUBLISHED`이며 실패 시 `REJECTED`로 남긴다.
+Release 메타데이터의 최소 필드는 `releaseId`, `status`, `createdAt`,
+`sourceCommit`, `appGitSha`, `dataSha256`, `previousReleaseId`,
+`validationSummary`이다. `sourceCommit`은 발행 데이터 입력 SHA,
+`appGitSha`는 해당 데이터를 보여주는 앱 구현 SHA다. 상태는
+`STAGING → VALIDATED → PUBLISHED`이며 실패 시 `REJECTED`로 남긴다.
 
 Published Gate는 다음과 같다.
 
