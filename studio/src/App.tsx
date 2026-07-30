@@ -27,6 +27,13 @@ const NAV_ITEMS: Array<{ id: ViewId; label: string; kicker: string }> = [
   { id: "portfolio", label: "Portfolio Gaps", kicker: "공백 관리" },
   { id: "release", label: "Release / Evidence", kicker: "추적성" },
 ];
+const SIDEBAR_ITEMS: Array<
+  | { id: ViewId; label: string; kicker: string }
+  | { id: "compare-report"; label: string; kicker: string }
+> = [
+  ...NAV_ITEMS,
+  { id: "compare-report", label: "Compare Report", kicker: "정적 보고서 ↗" },
+];
 
 const TYPE_LABEL: Record<CompressorType, string> = {
   Re: "왕복동",
@@ -1342,6 +1349,15 @@ export default function App() {
     writeQuery({ view: nextView });
   }
 
+  function openCompareReport() {
+    const popup = window.open(
+      "/compare-lab-output.html",
+      "compareLabReport",
+      "popup=yes,width=1440,height=960,resizable=yes,scrollbars=yes",
+    );
+    popup?.focus();
+  }
+
   if (error) return <ErrorState message={error} />;
   if (!release || !gap || !expansionBatch) return <LoadingState />;
 
@@ -1353,12 +1369,20 @@ export default function App() {
           <div><strong>Compressor</strong><small>CATALOG AUDIT</small></div>
         </div>
         <nav aria-label="주요 화면">
-          {NAV_ITEMS.map((item, index) => (
+          {SIDEBAR_ITEMS.map((item, index) => (
             <button
               key={item.id}
               aria-current={view === item.id ? "page" : undefined}
+              aria-haspopup={item.id === "compare-report" ? "dialog" : undefined}
               className={view === item.id ? "active" : ""}
-              onClick={() => navigate(item.id)}
+              data-testid={
+                item.id === "compare-report" ? "nav-compare-report" : undefined
+              }
+              onClick={() =>
+                item.id === "compare-report"
+                  ? openCompareReport()
+                  : navigate(item.id)
+              }
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div><strong>{item.label}</strong><small>{item.kicker}</small></div>

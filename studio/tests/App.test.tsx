@@ -254,6 +254,7 @@ describe("Catalog Audit Studio", () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
     vi.unstubAllGlobals();
   });
 
@@ -291,6 +292,22 @@ describe("Catalog Audit Studio", () => {
     expect(screen.getByTestId("expansion-batch")).toHaveTextContent(
       "아직 Published Release에는 합치지 않았습니다.",
     );
+  });
+
+  it("P14-UT-NAV-001 랜딩 Compare Report 탭은 정적 보고서를 명명된 팝업으로 연다", async () => {
+    const popup = vi.spyOn(window, "open").mockReturnValue(null);
+    await renderReady();
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole("button", { name: /Compare Report/ }));
+
+    expect(popup).toHaveBeenCalledOnce();
+    expect(popup).toHaveBeenCalledWith(
+      "/compare-lab-output.html",
+      "compareLabReport",
+      "popup=yes,width=1440,height=960,resizable=yes,scrollbars=yes",
+    );
+    expect(window.location.search).toBe("");
   });
 
   it("P10-UT-G1-001 유형 선택 시 직접 가능한 지표와 Samsung 모델만 먼저 표시한다", async () => {

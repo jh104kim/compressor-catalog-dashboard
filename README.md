@@ -32,9 +32,11 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 ### Compare Lab 전체 보고서
 
 `scripts/build_compare_lab_report.py`는 활성 Published Release와 백엔드 비교
-엔진을 사용해 `studio/public/compare-lab-output.html`을 생성한다. 보고서는
-Samsung 27개 전 모델의 COP/EER 직접 후보, `DIRECT_OK` 결과, 직접 비교가
-없는 모델의 조사 사유와 목표조건을 함께 보여준다.
+엔진을 사용해 `studio/public/compare-lab-output.html`과
+`compare-lab-output.csv`를 함께 생성한다. 보고서는 Samsung 27개 전 모델의
+COP/EER 직접 후보, `DIRECT_OK` 결과, 직접 비교가 없는 모델의 조사 사유와
+목표조건을 함께 보여준다. 랜딩 사이드바의 **Compare Report** 탭은 이 보고서를
+별도 팝업으로 연다.
 
 ```powershell
 python scripts/build_compare_lab_report.py
@@ -43,6 +45,7 @@ npm --prefix qa run test:report
 ```
 
 Release를 갱신하면 위 명령으로 보고서를 다시 생성한 뒤 Studio를 빌드한다.
+GitHub CI도 같은 생성 명령과 팝업·CSV Chromium 검증을 실행한다.
 
 기존 DC 화면은 아래처럼 별도 실행한다.
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import html
 import json
 import sys
@@ -543,7 +544,8 @@ def render_report(data: dict[str, Any]) -> str:
     .topbar nav {{ display:flex; gap:8px; flex-wrap:wrap; }}
     .topbar nav a {{ padding:7px 10px; color:#3c4c65; border-radius:8px; font-size:13px; font-weight:700; }}
     .topbar nav a:hover {{ background:#edf3ff; text-decoration:none; }}
-    .print-btn {{ border:1px solid var(--line); background:#fff; color:var(--ink); padding:8px 12px; border-radius:9px; font-weight:700; cursor:pointer; }}
+    .top-action {{ border:1px solid var(--line); background:#fff; color:var(--ink); padding:8px 12px; border-radius:9px; font-weight:700; cursor:pointer; }}
+    .top-action:hover {{ background:#f5f8ff; text-decoration:none; }}
     .container {{ width:min(1320px,calc(100% - 40px)); margin:0 auto; }}
     .hero {{ color:#fff; background:radial-gradient(circle at 85% 20%,rgba(31,102,255,.5),transparent 30%),linear-gradient(135deg,#0a1e3e 0%,#12396b 100%); padding:76px 0 66px; }}
     .eyebrow {{ margin:0 0 10px; color:#7fb5ff; font-size:12px; font-weight:900; letter-spacing:.15em; }}
@@ -618,10 +620,10 @@ def render_report(data: dict[str, Any]) -> str:
       .report-section {{ padding:18px; border-radius:15px; }} .section-title,.model-head,.footer .container {{ align-items:flex-start; flex-direction:column; }}
       .section-title p {{ text-align:left; }} .type-grid {{ grid-template-columns:1fr; }} .model-meta {{ grid-template-columns:repeat(2,1fr); }}
       .model-actions {{ align-items:flex-start; }} .research-note dl {{ flex-direction:column; gap:5px; }} .rule-grid {{ grid-template-columns:1fr; }}
-      .topbar {{ padding:10px 12px; }} .print-btn {{ margin-left:auto; }}
+      .topbar {{ padding:10px 12px; }} .top-action:first-of-type {{ margin-left:auto; }}
     }}
     @media print {{
-      body {{ background:#fff; }} .topbar,.print-btn {{ display:none; }} .hero {{ padding:30px 0; }}
+      body {{ background:#fff; }} .topbar,.top-action {{ display:none; }} .hero {{ padding:30px 0; }}
       .report-section,.model-card,.kpi {{ box-shadow:none; break-inside:avoid; }} a {{ color:inherit; }}
     }}
   </style>
@@ -633,7 +635,8 @@ def render_report(data: dict[str, Any]) -> str:
       <a href="#summary">요약</a><a href="#matrix">전체 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
-    <button class="print-btn" type="button" onclick="window.print()">인쇄 / PDF</button>
+    <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
+    <button class="top-action" type="button" onclick="window.print()">인쇄 / PDF</button>
   </header>
 
   <main>
@@ -721,6 +724,51 @@ def build_report(
     data = build_report_data(release, bundle, rules)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(render_report(data), encoding="utf-8")
+    csv_path = output_path.with_suffix(".csv")
+    fieldnames = [
+        "release_id",
+        "compressor_type",
+        "refrigerant",
+        "condition",
+        "drive_class",
+        "samsung_model",
+        "competitor_manufacturer",
+        "competitor_model",
+        "metric",
+        "samsung_value",
+        "competitor_value",
+        "capacity_diff_pct",
+        "competitor_delta_pct",
+        "verdict",
+        "code",
+    ]
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in data["directRows"]:
+            baseline = row["baseline"]
+            candidate = row["candidate"]
+            metric = row["metric"]
+            result = row["result"]
+            writer.writerow(
+                {
+                    "release_id": release["releaseId"],
+                    "compressor_type": baseline["type"],
+                    "refrigerant": baseline["refrigerant"],
+                    "condition": baseline["condition"],
+                    "drive_class": baseline["driveClass"],
+                    "samsung_model": baseline["model"],
+                    "competitor_manufacturer": candidate["manufacturer"],
+                    "competitor_model": candidate["model"],
+                    "metric": metric,
+                    "samsung_value": (baseline.get("specs") or {}).get(metric),
+                    "competitor_value": (candidate.get("specs") or {}).get(metric),
+                    "capacity_diff_pct": result["capacityDiffPct"],
+                    "competitor_delta_pct": result["deltaPct"],
+                    "verdict": result["verdict"],
+                    "code": result["code"],
+                }
+            )
     return data
 
 
@@ -743,7 +791,8 @@ def main() -> int:
         f"ready={summary['readyModels']} "
         f"pairs={summary['uniquePairs']} "
         f"comparisons={summary['comparisons']} "
-        f"output={args.output.resolve()}"
+        f"output={args.output.resolve()} "
+        f"csv={args.output.with_suffix('.csv').resolve()}"
     )
     return 0
 

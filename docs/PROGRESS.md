@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-07-31 — Phase P14-A 랜딩 보고서 팝업·CSV·TDD 계약 ✅
+
+- **RED 우선**: 랜딩 `Compare Report` 탭 부재 1 failed, CSV 미생성 1 failed, P14 계획/테스트 계약 부재 3 failed를 구현 전에 확인.
+- **랜딩 탭**: 사이드바 6번째 `Compare Report` 탭을 사용자 클릭형 명명 팝업(`compareLabReport`)으로 구현.
+- **추가 제안 반영**: 정적 HTML과 동일한 DIRECT_OK 15건을 `compare-lab-output.csv`로 동시 생성하고 보고서 상단에 내려받기 추가. CI도 HTML+CSV를 재생성.
+- **P14 후속 계약**: 안전 비교 후 결정론적 추가 분석·5개 레포트 섹션·Evidence·stale 응답 차단을 `REQ-P14-001~006`과 Unit/API/E2E ID로 고정.
+- **현재 점수**: P14-A `15/15`. P14 전체는 `15/100` 진행 상태이며 P14-B~E 구현 후 `96/100`, 품질축별 `4.8/5`, Critical 0/Major 0을 완료 Gate로 사용.
+- **회귀 검증**: Python 76, Vitest 29/29, 기존 Compare Lab E2E 16/16, 보고서 팝업 E2E 2/2를 retries 0으로 2회 연속 PASS. 같은 서버를 사용하는 브라우저 E2E는 순차 실행.
+- **증거**: `qa/test-runs/RUN-20260731-014-P14-RED-GREEN.md`, `qa/evidence/p14/report-popup/compare-report-e2e.json`, `qa/evidence/p14/report-popup-run-2/compare-report-e2e.json`.
+
+---
+
 ## 2026-07-30 — Phase P13 Compare Lab 전 모델 HTML 보고서 ✅
 
 - **전체 범위**: 활성 Release 005의 Samsung 27개(Re 4, Ro 12, Sc 11)와 경쟁사 49개를 백엔드 비교 엔진으로 전수 판정.

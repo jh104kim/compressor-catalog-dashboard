@@ -23,7 +23,8 @@
     .topbar nav { display:flex; gap:8px; flex-wrap:wrap; }
     .topbar nav a { padding:7px 10px; color:#3c4c65; border-radius:8px; font-size:13px; font-weight:700; }
     .topbar nav a:hover { background:#edf3ff; text-decoration:none; }
-    .print-btn { border:1px solid var(--line); background:#fff; color:var(--ink); padding:8px 12px; border-radius:9px; font-weight:700; cursor:pointer; }
+    .top-action { border:1px solid var(--line); background:#fff; color:var(--ink); padding:8px 12px; border-radius:9px; font-weight:700; cursor:pointer; }
+    .top-action:hover { background:#f5f8ff; text-decoration:none; }
     .container { width:min(1320px,calc(100% - 40px)); margin:0 auto; }
     .hero { color:#fff; background:radial-gradient(circle at 85% 20%,rgba(31,102,255,.5),transparent 30%),linear-gradient(135deg,#0a1e3e 0%,#12396b 100%); padding:76px 0 66px; }
     .eyebrow { margin:0 0 10px; color:#7fb5ff; font-size:12px; font-weight:900; letter-spacing:.15em; }
@@ -98,10 +99,10 @@
       .report-section { padding:18px; border-radius:15px; } .section-title,.model-head,.footer .container { align-items:flex-start; flex-direction:column; }
       .section-title p { text-align:left; } .type-grid { grid-template-columns:1fr; } .model-meta { grid-template-columns:repeat(2,1fr); }
       .model-actions { align-items:flex-start; } .research-note dl { flex-direction:column; gap:5px; } .rule-grid { grid-template-columns:1fr; }
-      .topbar { padding:10px 12px; } .print-btn { margin-left:auto; }
+      .topbar { padding:10px 12px; } .top-action:first-of-type { margin-left:auto; }
     }
     @media print {
-      body { background:#fff; } .topbar,.print-btn { display:none; } .hero { padding:30px 0; }
+      body { background:#fff; } .topbar,.top-action { display:none; } .hero { padding:30px 0; }
       .report-section,.model-card,.kpi { box-shadow:none; break-inside:avoid; } a { color:inherit; }
     }
   </style>
@@ -113,7 +114,8 @@
       <a href="#summary">요약</a><a href="#matrix">전체 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
-    <button class="print-btn" type="button" onclick="window.print()">인쇄 / PDF</button>
+    <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
+    <button class="top-action" type="button" onclick="window.print()">인쇄 / PDF</button>
   </header>
 
   <main>
