@@ -1,0 +1,143 @@
+name: Catalog Audit Gate
+
+on:
+  push:
+    branches:
+      - "codex/**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-audit-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  p0-catalog-audit:
+    name: Contract, schema, and P0 Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+      PYTHONUTF8: "1"
+      P0_RETRIES: "0"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare P0 evidence directory
+        shell: bash
+        run: |
+          mkdir -p qa/baseline/github-actions
+          {
+            echo "repository=${GITHUB_REPOSITORY}"
+            echo "sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "retries=${P0_RETRIES}"
+          } > qa/baseline/github-actions/gate-context.txt
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python gate dependencies
+        run: >-
+          python -m pip install
+          pytest==9.1.1
+          jsonschema==4.26.0
+          fastapi==0.141.1
+          httpx==0.28.1
+
+      - name: Run catalog audit Python suite
+        shell: bash
+        run: |
+          python -m pytest -q \
+            2>&1 | tee qa/baseline/github-actions/python-tests.log
+
+      - name: Check Draft 2020-12 catalog schema
+        shell: bash
+        run: |
+          python - <<'PY' 2>&1 | tee qa/baseline/github-actions/schema-check.log
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+
+          schema_path = Path("data/contracts/catalog.schema.json")
+          schema = json.loads(schema_path.read_text(encoding="utf-8"))
+          Draft202012Validator.check_schema(schema)
+          print(f"Draft 2020-12 schema PASS: {schema_path}")
+          PY
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: qa/package-lock.json
+
+      - name: Install QA dependencies
+        working-directory: qa
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: qa
+        run: npx playwright install --with-deps chromium
+
+      - name: Run P0 Chromium characterization once with retries 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence_dir="$GITHUB_WORKSPACE/qa/baseline/github-actions"
+          mkdir -p "$evidence_dir"
+
+          port="$(python - <<'PY'
+          import socket
+          with socket.socket() as sock:
+              sock.bind(("127.0.0.1", 0))
+              print(sock.getsockname()[1])
+          PY
+          )"
+
+          python -m http.server "$port" \
+            --bind 127.0.0.1 \
+            --directory frontend \
+            >"$evidence_dir/server.log" 2>&1 &
+          server_pid="$!"
+          cleanup() {
+            kill "$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          base_url="http://127.0.0.1:${port}/"
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error "$base_url" >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "P0 HTTP server did not become ready: $base_url" >&2
+            exit 1
+          fi
+
+          test "$P0_RETRIES" = "0"
+          BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir" \
+          npm --prefix qa run test:p0:ci
+
+      - name: Upload P0 GitHub Actions evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-catalog-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/baseline/github-actions/**
+          if-no-files-found: error
+          retention-days: 14

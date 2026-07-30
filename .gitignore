@@ -20,5 +20,9 @@ desktop.ini
 # Logs
 *.log
 
+# Local QA scratch runs (final consecutive evidence is kept)
+qa/baseline/run-*/
+qa/evidence/p0/local-run-1/
+
 # Node (if ever used)
 node_modules/

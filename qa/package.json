@@ -1,0 +1,16 @@
+{
+  "name": "compressor-catalog-dashboard-qa",
+  "version": "0.1.0",
+  "private": true,
+  "description": "P0 catalog contract and browser characterization tooling",
+  "scripts": {
+    "test:p0": "node ./scripts/p0-characterization.cjs",
+    "test:p0:ci": "node ./scripts/p0-characterization.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

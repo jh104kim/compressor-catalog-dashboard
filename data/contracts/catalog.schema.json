@@ -1,0 +1,413 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jh104kim/compressor-catalog-dashboard/data/contracts/catalog.schema.json",
+  "title": "Compressor catalog model contract",
+  "description": "Staging과 Published Release가 공통으로 사용하는 압축기 모델 1건의 최소 계약",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model",
+    "manufacturer",
+    "type",
+    "refrigerant",
+    "condition",
+    "driveClass",
+    "sourceLayer",
+    "postCatalog",
+    "evidence"
+  ],
+  "properties": {
+    "modelId": {
+      "type": "string",
+      "pattern": "^model:[a-z0-9-]+:[A-Za-z0-9._-]+$",
+      "description": "model:<manufacturer-slug>:<normalized-model>"
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "manufacturer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "type": {
+      "enum": [
+        "Re",
+        "Ro",
+        "Sc"
+      ]
+    },
+    "application": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refrigerant": {
+      "type": "string",
+      "pattern": "^R[0-9A-Za-z-]+$"
+    },
+    "condition": {
+      "enum": [
+        "ARI",
+        "DOE-A",
+        "DOE-B",
+        "EN12900",
+        "ASHRAE-LBP",
+        "ASHRAE-MBP",
+        "CECOMAF",
+        "SEER60",
+        "HP-heating",
+        "UNKNOWN"
+      ]
+    },
+    "driveClass": {
+      "enum": [
+        "Fixed",
+        "Variable",
+        "Mixed",
+        "Unknown"
+      ]
+    },
+    "driveDetail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lifecycleStatus": {
+      "enum": [
+        "MASS_PRODUCT",
+        "IN_PROGRESS"
+      ]
+    },
+    "sourceLayer": {
+      "enum": [
+        "samsung_catalog_2024",
+        "samsung_legacy_research",
+        "post_catalog",
+        "competitor_research"
+      ]
+    },
+    "postCatalog": {
+      "type": "boolean"
+    },
+    "confidence": {
+      "enum": [
+        "High",
+        "Medium",
+        "Low",
+        "Unknown"
+      ]
+    },
+    "specs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "displacementCc": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "capacityW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "capacityBtuH": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "inputW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "cop": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "eer": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nameNote": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "$ref": "#/$defs/evidence",
+      "required": [
+        "sourcePath"
+      ]
+    },
+    "supportingEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "releaseId": {
+      "type": "string",
+      "pattern": "^release:[0-9]{4}-[0-9]{2}-[0-9]{2}:[0-9]{3}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "sourceLayer": {
+            "const": "samsung_legacy_research"
+          }
+        },
+        "required": [
+          "sourceLayer"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "const": "Samsung"
+          },
+          "postCatalog": {
+            "const": false
+          },
+          "evidence": {
+            "properties": {
+              "authority": {
+                "not": {
+                  "const": "official"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "sourceLayer": {
+            "const": "samsung_catalog_2024"
+          }
+        },
+        "required": [
+          "sourceLayer"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "const": "Samsung"
+          },
+          "postCatalog": {
+            "const": false
+          },
+          "evidence": {
+            "properties": {
+              "authority": {
+                "const": "official"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "sourceLayer": {
+            "const": "post_catalog"
+          }
+        },
+        "required": [
+          "sourceLayer"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "const": "Samsung"
+          },
+          "postCatalog": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "sourceLayer": {
+            "const": "competitor_research"
+          }
+        },
+        "required": [
+          "sourceLayer"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "not": {
+              "const": "Samsung"
+            }
+          },
+          "postCatalog": {
+            "const": false
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourcePath",
+        "authority",
+        "locator",
+        "fieldPaths"
+      ],
+      "properties": {
+        "evidenceId": {
+          "type": "string",
+          "pattern": "^evidence:[a-z0-9._:-]+$"
+        },
+        "sourcePath": {
+          "type": "string",
+          "pattern": "^(data|docs)/.+"
+        },
+        "authority": {
+          "enum": [
+            "official",
+            "secondary",
+            "research"
+          ]
+        },
+        "locator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "pdf-page",
+                "markdown-section",
+                "url"
+              ]
+            },
+            "page": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "section": {
+              "type": "string",
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "accessedAt": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "pdf-page"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "page"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "markdown-section"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "section"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "url"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "url",
+                  "accessedAt"
+                ]
+              }
+            }
+          ]
+        },
+        "fieldPaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9.]*$"
+          }
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

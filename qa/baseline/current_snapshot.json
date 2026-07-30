@@ -1,0 +1,171 @@
+{
+  "snapshotVersion": 1,
+  "capturedAt": "2026-07-30T15:17:37+09:00",
+  "timezone": "Asia/Seoul",
+  "repository": {
+    "name": "jh104kim/compressor-catalog-dashboard",
+    "url": "https://github.com/jh104kim/compressor-catalog-dashboard",
+    "commit": "f142bcaba987408a766fcb6b3e20f8d431719e13",
+    "snapshotBranch": "codex/catalog-audit-snapshot-20260730",
+    "pullRequest": {
+      "number": 1,
+      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/pull/1",
+      "state": "OPEN",
+      "draft": true,
+      "base": "main",
+      "head": "codex/catalog-audit-snapshot-20260730"
+    }
+  },
+  "source": {
+    "path": "frontend/compressor-data.js",
+    "sha256": "16cfc74dce4eeebdf243996a83aa143d99dd90c256828fc4d5fbc589ef4de6b0",
+    "asOf": "2026-06-23",
+    "sourceCount": 29
+  },
+  "authority": {
+    "manufacturer": "Samsung",
+    "catalogYear": 2024,
+    "source": "data/Samsung-Compressor-Catalogue_2024.pdf"
+  },
+  "counts": {
+    "models": 68,
+    "samsungModels": 27,
+    "competitorModels": 41,
+    "benchmarkGroups": 12
+  },
+  "inventory": {
+    "samsungByType": {
+      "Re": 4,
+      "Ro": 12,
+      "Sc": 11
+    },
+    "allModelsByType": {
+      "Re": 14,
+      "Ro": 18,
+      "Sc": 36
+    },
+    "manufacturers": 9,
+    "refrigerants": 11,
+    "gaps": 4,
+    "priorities": 6,
+    "regulations": 5,
+    "samsungMoves": 5,
+    "catalogSources": 9,
+    "postCatalogSamsungModels": [
+      "DS2LD5046F",
+      "DS8LC5040IN",
+      "DS8LC5049IN"
+    ]
+  },
+  "criticalFacts": {
+    "DS4BC7066FVT": {
+      "cop": 3.25,
+      "condition": "ARI",
+      "source": "2024 catalogue p.92"
+    },
+    "DS4HD5066FVT": {
+      "cop": 3.43,
+      "condition": "ARI",
+      "status": "양산",
+      "source": "2024 catalogue p.92"
+    },
+    "R290": {
+      "Re": "gap",
+      "Ro": "have",
+      "Sc": "have"
+    },
+    "R454B": {
+      "Ro": "have",
+      "Sc": "have"
+    }
+  },
+  "runtime": {
+    "entrypoint": "frontend/index.html",
+    "redirectTarget": "frontend/Compressor Dashboard.dc.html?v=20260624-ticket",
+    "dataGlobal": "window.COMPRESSOR_DATA",
+    "framework": "DC Framework + React 18.3.1",
+    "httpRequired": true,
+    "internetRequiredForReactCdn": true,
+    "defaultView": "kpi"
+  },
+  "tabs": [
+    {
+      "id": "kpi",
+      "label": "KPI 현황",
+      "characterizationAnchor": "Samsung 압축기 포트폴리오 현황"
+    },
+    {
+      "id": "decision",
+      "label": "Decision 전략",
+      "characterizationAnchor": "지금, 무엇을 결정해야 하는가"
+    },
+    {
+      "id": "analysis",
+      "label": "모델 분석",
+      "characterizationAnchor": "유사 경쟁 모델 TOP 5"
+    },
+    {
+      "id": "reporting",
+      "label": "Reporting",
+      "characterizationAnchor": "모델별 경쟁 비교 리포트"
+    },
+    {
+      "id": "backlog",
+      "label": "보완 과제",
+      "characterizationAnchor": "데이터 보완 과제"
+    }
+  ],
+  "fileHashes": {
+    "frontend/Compressor Dashboard.dc.html": "c817dee53f55189f104383b50abbe5f14a345fce7ef8fb984e0ea4267262233e",
+    "frontend/index.html": "30d8717ae1ec728692e62e4c5ccbad72e61dc9f812541c89e1c026ff2983d522",
+    "frontend/support.js": "505f94e08eeccbc87acc6fcc6a47dd9f51fcd74a8d28ab58eb7eb784f7b92efe",
+    "data/Samsung-Compressor-Catalogue_2024.pdf": "8913bee2e757dafbfd0fd34cbcc21759f6a441dc880e9dbe5e486e0990abd1ce"
+  },
+  "knownLegacyBehavior": [
+    {
+      "id": "start-view-excludes-backlog",
+      "description": "backlog은 내비게이션으로 접근 가능한 5번째 탭이지만 startView enum에는 포함되지 않는다.",
+      "p0Handling": "characterize"
+    },
+    {
+      "id": "r32-ro-mixed-condition-group",
+      "description": "r32-ro-var 비교군은 ARI와 SEER60을 함께 보유하고 reliability 1 경고를 표시한다.",
+      "p0Handling": "warning-characterization",
+      "p1Target": "BLOCKED"
+    }
+  ],
+  "characterizationE2E": {
+    "status": "local-pass-ci-pending",
+    "reason": "390x844 및 1440x1024 로컬 2회 연속 PASS를 확보했고 GitHub Actions 1회 PASS를 대기한다.",
+    "requiredLocalConsecutivePasses": 2,
+    "requiredGithubActionsRuns": 1,
+    "requiredScreenshotCount": 10,
+    "viewports": [
+      "1440x1024",
+      "390x844"
+    ],
+    "evidenceRoot": "qa/evidence/p0",
+    "localRuns": [
+      {
+        "id": "local-run-2",
+        "startedAt": "2026-07-30T07:09:10.067Z",
+        "finishedAt": "2026-07-30T07:09:20.287Z",
+        "status": "PASS",
+        "passedTabs": 10,
+        "passedWorkflows": 2,
+        "screenshotCount": 10,
+        "result": "qa/evidence/p0/local-run-2/browser-characterization.json"
+      },
+      {
+        "id": "local-run-3",
+        "startedAt": "2026-07-30T07:09:52.093Z",
+        "finishedAt": "2026-07-30T07:10:02.234Z",
+        "status": "PASS",
+        "passedTabs": 10,
+        "passedWorkflows": 2,
+        "screenshotCount": 10,
+        "result": "qa/evidence/p0/local-run-3/browser-characterization.json"
+      }
+    ]
+  }
+}

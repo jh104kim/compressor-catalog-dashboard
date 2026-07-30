@@ -3,24 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
 <script src="./compressor-data.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; background: #fff; -webkit-font-smoothing: antialiased; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; -webkit-font-smoothing: antialiased; }
   ::selection { background: #FFE0E5; }
   aside::-webkit-scrollbar { width: 6px; }
   aside::-webkit-scrollbar-thumb { background: #E4E4E4; border-radius: 3px; }
   .dc-kpi-panel{ min-width: 0; }
   .dc-ticket-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+  .dc-priority-card > *{ min-width: 0; overflow-wrap: anywhere; }
+  .dc-priority-rank{ grid-area: rank; }
+  .dc-priority-target{ grid-area: target; }
+  .dc-priority-action{ grid-area: action; }
+  .dc-priority-driver{ grid-area: driver; }
   .dc-scroll-x{ width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
     background:
       linear-gradient(to right, #fff 40%, rgba(255,255,255,0)) left center,
@@ -69,6 +74,16 @@
   @media (max-width: 480px){
     .dc-tiles{ grid-template-columns: 1fr 1fr !important; }
     .dc-gaps4{ grid-template-columns: 1fr !important; }
+    .dc-priority-card{
+      grid-template-columns: 48px minmax(0,1fr) !important;
+      grid-template-areas:
+        "rank target"
+        "rank action"
+        "rank driver";
+      gap: 8px 12px !important;
+      padding: 16px !important;
+      align-items: start !important;
+    }
   }
 </style>
 </helmet>
@@ -427,20 +442,20 @@
               <p style="font-size: 13.5px; color: #717171; margin: 0 0 20px; font-weight: 500;">P1 → P6, 시급성 순</p>
               <div style="display: flex; flex-direction: column; gap: 12px;">
                 <sc-for list="{{ priorities }}" as="p" hint-placeholder-count="6">
-                  <div style="background: #fff; border: 1px solid #EBEBEB; border-left: 4px solid {{ p.accent }}; border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 64px 1.5fr 1fr 1.3fr; gap: 20px; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                  <div class="dc-priority-card" style="background: #fff; border: 1px solid #EBEBEB; border-left: 4px solid {{ p.accent }}; border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 64px 1.5fr 1fr 1.3fr; grid-template-areas: 'rank target action driver'; gap: 20px; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                    <div class="dc-priority-rank" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
                       <span style="font-size: 22px; font-weight: 800; color: {{ p.accent }}; letter-spacing: -0.02em;">{{ p.p }}</span>
                       <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: {{ p.urgBg }}; color: {{ p.urgFg }};">{{ p.urgency }}</span>
                     </div>
-                    <div>
+                    <div class="dc-priority-target">
                       <div style="font-size: 16px; font-weight: 800; color: #222; letter-spacing: -0.01em;">{{ p.path }}</div>
                       <div style="font-size: 12.5px; color: #9b9b9b; font-weight: 600; margin-top: 3px;">{{ p.type }} · 현황 {{ p.status }}</div>
                     </div>
-                    <div>
+                    <div class="dc-priority-action">
                       <div style="font-size: 11px; font-weight: 700; color: #b0b0b0;">권고 액션</div>
                       <div style="font-size: 13.5px; font-weight: 700; color: {{ p.accent }}; margin-top: 3px;">{{ p.action }}</div>
                     </div>
-                    <div>
+                    <div class="dc-priority-driver">
                       <div style="font-size: 11px; font-weight: 700; color: #b0b0b0;">드라이버</div>
                       <div style="font-size: 12.5px; font-weight: 600; color: #555; margin-top: 3px; line-height: 1.45;">{{ p.driver }}</div>
                     </div>
