@@ -35,7 +35,7 @@ python scripts/publish_catalog.py `
   --approved-at "2026-07-30T18:00:00+09:00" `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:002"
+  --release-id "release:2026-07-30:003"
 ```
 
 기본 입력은 `catalog/staging/catalog-bundle.json`, 기본 출력은 `catalog/published`이다. 테스트에서는 `--bundle`, `--output-root`, `--schema`, `--rules`로 임시 경로를 사용한다.

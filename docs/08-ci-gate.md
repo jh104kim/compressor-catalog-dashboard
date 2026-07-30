@@ -9,7 +9,7 @@
 1. Python 3.12 의존성 1회 설치
 2. 전체 pytest
 3. Draft 2020-12 Schema 검사
-4. 실제 `release:2026-07-30:002`의 상태·해시·승인·68/27/41·B1 검증
+4. 실제 `release:2026-07-30:003`의 상태·해시·승인·68/27/41·B1 검증
 5. Node 24 설정과 QA 의존성 1회 설치
 6. Playwright Chromium 1회 설치
 7. 기존 P0 Characterization 1회
@@ -24,7 +24,7 @@ Job 제한시간은 30분이며 `P0_RETRIES=0`, `P5_RETRIES=0`이다. 실패 테
 
 CI는 Release를 새로 발행하지 않고 저장소의 실제 활성 Release를 읽기만 한다.
 
-- Release ID: `release:2026-07-30:002`
+- Release ID: `release:2026-07-30:003`
 - 상태: `PUBLISHED`
 - Validation: Critical 0, Major 0
 - 모델: 전체 68, Samsung 27, 경쟁사 41
