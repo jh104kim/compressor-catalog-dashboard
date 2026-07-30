@@ -2,10 +2,12 @@
   "name": "compressor-catalog-dashboard-qa",
   "version": "0.1.0",
   "private": true,
-  "description": "P0 catalog contract and browser characterization tooling",
+  "description": "Catalog Audit Studio browser characterization and E2E tooling",
   "scripts": {
     "test:p0": "node ./scripts/p0-characterization.cjs",
-    "test:p0:ci": "node ./scripts/p0-characterization.cjs"
+    "test:p0:ci": "node ./scripts/p0-characterization.cjs",
+    "test:p5": "node ./scripts/p5-e2e.cjs",
+    "test:p5:ci": "node ./scripts/p5-e2e.cjs"
   },
   "devDependencies": {
     "playwright": "1.62.0"

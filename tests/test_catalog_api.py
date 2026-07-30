@@ -186,6 +186,7 @@ def test_g3_r290_re_is_gap_without_fake_samsung_model(tmp_path: Path) -> None:
     payload = response.json()
     assert payload["status"] == "GAP"
     assert payload["samsungModels"] == []
+    assert payload["competitorModels"] == []
     assert payload["rankingAllowed"] is False
     assert payload["evidence"]["sourcePath"] == "config/p0_catalog_rules.json"
 

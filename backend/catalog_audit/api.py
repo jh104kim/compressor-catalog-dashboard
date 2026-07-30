@@ -146,6 +146,13 @@ def create_app(*, release_root: Path, rules_path: Path) -> FastAPI:
             and item["type"] == compressor_type
             and item["refrigerant"] == refrigerant
         ]
+        competitor_models = [
+            item
+            for item in bundle["models"]
+            if item["manufacturer"] != "Samsung"
+            and item["type"] == compressor_type
+            and item["refrigerant"] == refrigerant
+        ]
         if any(
             item.get("lifecycleStatus") == "MASS_PRODUCT"
             for item in samsung_models
@@ -167,6 +174,7 @@ def create_app(*, release_root: Path, rules_path: Path) -> FastAPI:
             "refrigerant": refrigerant,
             "status": status,
             "samsungModels": samsung_models,
+            "competitorModels": competitor_models,
             "rankingAllowed": False if status in {"GAP", "UNKNOWN"} else None,
             "evidence": {
                 "sourcePath": "config/p0_catalog_rules.json",

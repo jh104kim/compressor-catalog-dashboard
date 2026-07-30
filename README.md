@@ -1,18 +1,34 @@
 # 압축기 경쟁 인텔리전스 대시보드
 
-Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·모델 분석·Reporting·보완 과제 뷰로 시각화한다.
+Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 현재 기본 개발 대상은 검증된 Published Release만 읽는 **Catalog Audit Studio**이며, 기존 DC 대시보드는 `/legacy/` 호환 화면으로 유지한다.
 
 ---
 
 ## 빠른 시작
 
-```bash
-cd frontend
-python -m http.server 8000
-# 브라우저: http://localhost:8000/
+```powershell
+# 1. React production build
+Push-Location studio
+npm ci
+npm test
+npm run build
+Pop-Location
+
+# 2. Published Release + API + UI same-origin 실행
+python -m uvicorn backend.catalog_audit.main:create_runtime_app `
+  --factory --host 127.0.0.1 --port 8000
+
+# 브라우저: http://127.0.0.1:8000/
 ```
 
-> **주의**: `file://` 직접 열기 불가(런타임이 `fetch` 사용). HTTP 서버 필수. 인터넷 연결 필요(React CDN unpkg). `index.html`은 `Compressor Dashboard.dc.html`로 자동 이동하는 진입점입니다.
+현재 활성 데이터는 `catalog/published/active-release.json`이 가리키는 Release다. Studio는 조회 전용이며 편집·발행 기능을 제공하지 않는다. 발행·롤백 절차는 `docs/07-operations-and-362-expansion.md`를 따른다.
+
+기존 DC 화면은 아래처럼 별도 실행한다.
+
+```powershell
+python -m http.server 8001 --directory frontend
+# 브라우저: http://127.0.0.1:8001/
+```
 
 ---
 
@@ -22,6 +38,11 @@ python -m http.server 8000
 2606-Compressor-Catalog-Dashboard/
 ├── CLAUDE.md                        # Claude Code 작업 지침
 ├── README.md                        # 이 파일
+├── backend/                         # Published Release 조회·비교 FastAPI
+├── catalog/
+│   ├── staging/                     # 검증 전 이관 Bundle
+│   └── published/                   # 불변 Release와 활성 포인터
+├── config/                          # 권위값·GAP·비교 정책
 ├── data/                            # 리서치 원천 데이터 (모든 콘텐츠의 1차 출처)
 │   ├── Samsung-Compressor-Catalogue_2024.pdf          # 당사 공식 카탈로그 (권위 소스)
 │   ├── samsung-catalogue-2024-parsed.md               # 위 PDF 자동 파싱 참조본
@@ -38,7 +59,10 @@ python -m http.server 8000
 │   ├── PLAN.md                      # 아키텍처·구현 계획
 │   ├── PROGRESS.md                  # 단계별 진행 스냅샷
 │   └── DATA-ENRICHMENT.md          # 데이터 보완 브리프 (Tier 1~3)
-└── frontend/                        # 대시보드 (정적 파일)
+├── studio/                          # React 19 + Vite View-first 앱
+├── qa/                              # P0/P5 E2E와 완료 증거
+├── tests/                           # Python·UI 계약
+└── frontend/                        # 기존 DC 대시보드
     ├── index.html                   # 기본 진입점 (대시보드로 자동 이동)
     ├── Compressor Dashboard.dc.html # 대시보드 본체
     ├── compressor-data.js           # 데이터 단일소스 (SSOT)
@@ -115,13 +139,13 @@ Compressor Dashboard.dc.html (renderVals → 템플릿 바인딩)
 
 | 레이어 | 기술 |
 |---|---|
-| 렌더링 | DC Framework (Design Component, `support.js`) |
-| 런타임 | React 18.3.1 (unpkg CDN) |
-| 데이터 | 순수 JS 객체 (`window.COMPRESSOR_DATA`) |
-| 서버 | 빌드 없음 — 정적 파일, HTTP 서버 필요 |
-| 스타일 | 인라인 CSS + helmet `<style>` 미디어쿼리 |
+| Studio | React 19, TypeScript, Vite |
+| API/Runtime | FastAPI, same-origin 정적 제공 |
+| 데이터 | JSON Schema Draft 2020-12, 불변 Published Release |
+| 검증 | pytest, Vitest, Playwright Chromium |
+| Legacy | DC Framework + vendored React 18.3.1 |
 
-### DC 프레임워크 핵심 규칙
+### Legacy DC 프레임워크 핵심 규칙
 
 ```js
 class Component extends DCLogic {
@@ -160,7 +184,7 @@ class Component extends DCLogic {
 
 ---
 
-## 배포
+## Legacy DC 정적 배포
 
 ```bash
 # 옵션 A: 로컬 개발
