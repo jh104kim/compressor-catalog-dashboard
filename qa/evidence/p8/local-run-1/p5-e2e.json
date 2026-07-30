@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "phase": "P5",
+  "runId": "2026-07-30_08-21-31-310Z",
+  "runStartedAt": "2026-07-30T08:21:31.312Z",
+  "runFinishedAt": "2026-07-30T08:21:31.328Z",
+  "baseUrl": "http://127.0.0.1:8000/",
+  "outputDir": "qa/evidence/p8/local-run-1",
+  "resultPath": "qa/evidence/p8/local-run-1/p5-e2e.json",
+  "screenshotDir": "qa/evidence/p8/local-run-1/screenshots",
+  "browser": {
+    "name": "chromium",
+    "version": null
+  },
+  "retries": 0,
+  "serverStartedByRunner": false,
+  "status": "FAIL",
+  "viewports": [],
+  "summary": {
+    "viewportCount": 2,
+    "scenarioCount": 14,
+    "passedScenarios": 0,
+    "failedScenarios": 14,
+    "screenshotCount": 0
+  },
+  "fatalError": {
+    "name": "Error",
+    "message": "browserType.launch: Executable doesn't exist at C:\\Users\\jh104.kim\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1234\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+    "stack": "browserType.launch: Executable doesn't exist at C:\\Users\\jh104.kim\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1234\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n    at main (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p5-e2e.cjs:753:30)\n    at Object.<anonymous> (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p5-e2e.cjs:803:1)"
+  }
+}

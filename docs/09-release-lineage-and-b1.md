@@ -7,6 +7,10 @@
 - 두 SHA는 Release metadata, 활성 포인터, API, Release / Evidence 화면,
   CI Gate에서 각각 확인한다.
 
+현재 `release:2026-07-30:002`는 데이터 입력 SHA
+`d413cfa2037438f025edeb1111812289a489889e`와 앱 구현 SHA
+`cd33149ba577d8c27e37ce5dbc2bd3808154495d`를 기록한다.
+
 ## B1 Scroll p.92
 
 공식 `Samsung-Compressor-Catalogue_2024.pdf` p.92를 PNG와 텍스트로

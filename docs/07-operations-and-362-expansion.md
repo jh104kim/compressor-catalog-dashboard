@@ -18,16 +18,19 @@
 
 | 항목 | 값 |
 |---|---|
-| Release | `release:2026-07-30:001` |
+| Release | `release:2026-07-30:002` |
 | 전체 모델 | 68 |
 | Samsung / 경쟁사 | 27 / 41 |
 | 상태 | `PUBLISHED` |
-| 승인자 | `project-owner:user-confirmed-defaults` |
+| 승인자 | `project-owner:user-confirmed-recommendations` |
 | Source Commit | `d413cfa2037438f025edeb1111812289a489889e` |
+| Application SHA | `cd33149ba577d8c27e37ce5dbc2bd3808154495d` |
 | Bundle SHA-256 | `5c532241c74768528412550f0139b820dda651ee3aefb321aa2fecdee1c77524` |
 | Validation | Critical 0, Major 0, Warning 2 |
 
-현재 Warning은 `UB9TK2150F`의 EER 계산 오차 2.02%와 `NLE12.6CNL`의 COP 계산 오차 8.62%다. Warning은 발행 가능하지만 승인자가 내용을 확인해야 한다.
+현재 승인자는 `project-owner:user-confirmed-recommendations`이며, Warning은
+`UB9TK2150F`의 EER 계산 오차 2.02%와 `NLE12.6CNL`의 COP 계산 오차
+8.62%다. Warning은 발행 가능하지만 승인자가 내용을 확인해야 한다.
 
 ## 3. 운영 원칙
 
