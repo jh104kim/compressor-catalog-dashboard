@@ -29,7 +29,7 @@ const MODELS = {
 };
 
 const EXPECTED = {
-  releaseId: "release:2026-07-30:003",
+  releaseId: "release:2026-07-30:004",
   sourcePath: "data/Samsung-Compressor-Catalogue_2024.pdf",
   authorityCop: "3.25",
   authorityPage: "PDF p.92",
@@ -392,22 +392,25 @@ const SCENARIOS = [
     },
   },
   {
-    id: "G2-INCOMPATIBLE-HIDDEN",
-    title: "R32 Ro ARI 기준에서 GMCC SEER60 후보 숨김",
+    id: "G2-RESEARCH-QUEUE",
+    title: "직접 비교 불가 Samsung 모델의 공식 자료 리서치 큐",
     query: "/?view=compare",
     run: async (page, log) => {
       const baseline = page.getByLabel("Samsung 기준 모델");
       const candidate = page.getByLabel("경쟁 모델");
-      await assertion(log, "G2 Ro와 Samsung ARI 모델 선택", async () => {
+      await assertion(log, "G2 Ro 직접 비교 가능 모델 없음", async () => {
         await page.getByRole("tab", { name: "Ro 로터리" }).click();
         await page.getByLabel("비교 지표").selectOption("cop");
-        await baseline.selectOption(MODELS.g2Baseline);
+        invariant(
+          await baseline.isDisabled(),
+          "G2 직접 비교 가능 Samsung 모델이 없는데 기준 모델 선택이 활성화되었습니다.",
+        );
         return {
-          baseline: MODELS.g2Baseline,
+          directBaselineSelectable: false,
           metric: "cop",
         };
       });
-      await assertion(log, "G2 조건 불일치 후보 숨김", async () => {
+      await assertion(log, "G2 비교 불가 모델과 요구조건을 리서치 큐에 표시", async () => {
         const optionValues = await candidate.locator("option").evaluateAll(
           (options) => options.map((option) => option.value),
         );
@@ -419,7 +422,16 @@ const SCENARIOS = [
           await candidate.isDisabled(),
           "G2 직접 비교 후보가 없는데 경쟁 모델 선택이 활성화되었습니다.",
         );
-        await requireVisible(page.getByTestId("no-direct-candidate"), "G2 후보 없음 안내");
+        const queue = page.getByTestId("comparison-research-queue");
+        await requireVisible(queue, "G2 공식 자료 리서치 큐");
+        const queueText = await queue.innerText();
+        invariant(
+          queueText.includes("UB8TN8300F") &&
+            queueText.includes("R32") &&
+            queueText.includes("ARI") &&
+            queueText.includes("Variable"),
+          `G2 리서치 요구조건이 불완전합니다: ${queueText}`,
+        );
         invariant(
           await page.getByRole("button", { name: "안전 비교 실행" }).isDisabled(),
           "G2 비교 실행 버튼이 활성화되었습니다.",
@@ -428,6 +440,7 @@ const SCENARIOS = [
         await requireHidden(page.getByTestId("comparison-delta"), "G2 Delta");
         return {
           incompatibleCandidateHidden: true,
+          researchTarget: MODELS.g2Baseline,
           comparisonDisabled: true,
           rankingVisible: false,
           deltaVisible: false,

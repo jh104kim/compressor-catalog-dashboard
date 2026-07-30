@@ -278,17 +278,19 @@ describe("Catalog Audit Studio", () => {
     );
   });
 
-  it("P9-UT-G1-001 유형을 먼저 선택하면 해당 Samsung 모델만 표시한다", async () => {
-    modelItems = [samsungRe, directSamsung, directCompetitor];
+  it("P10-UT-G1-001 유형 선택 시 직접 가능한 지표와 Samsung 모델만 먼저 표시한다", async () => {
+    modelItems = [samsungRe, samsung, directSamsung, directCompetitor];
     await renderReady();
     const user = await openView(/Compare Lab/);
 
     expect(screen.getByLabelText("Samsung 기준 모델")).toBeDisabled();
     await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
 
+    expect(screen.getByLabelText("비교 지표")).toHaveValue("eer");
     const baselineSelect = screen.getByLabelText("Samsung 기준 모델");
     expect(baselineSelect).toBeEnabled();
     expect(within(baselineSelect).getByRole("option", { name: /DS8LC5040IN/ })).toBeInTheDocument();
+    expect(within(baselineSelect).queryByRole("option", { name: /DS4BC7066FVT/ })).not.toBeInTheDocument();
     expect(within(baselineSelect).queryByRole("option", { name: /MKV190C-L2J/ })).not.toBeInTheDocument();
   });
 
@@ -307,18 +309,21 @@ describe("Catalog Audit Studio", () => {
     expect(screen.getByTestId("eligible-candidate-count")).toHaveTextContent("1");
   });
 
-  it("P9-UT-G2-001 직접 비교 후보가 없으면 사유를 알리고 실행을 막는다", async () => {
+  it("P10-UT-G2-001 직접 불가 Samsung 모델은 리서치 큐와 요구조건에 표시한다", async () => {
+    modelItems = [samsung, directSamsung, directCompetitor];
     await renderReady();
     const user = await openView(/Compare Lab/);
 
     await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
-    await user.selectOptions(screen.getByLabelText("Samsung 기준 모델"), samsung.modelId);
 
-    expect(screen.getByLabelText("경쟁 모델")).toBeDisabled();
-    expect(screen.getByTestId("no-direct-candidate")).toHaveTextContent(
-      "직접 비교 가능한 경쟁 모델이 없습니다",
-    );
-    expect(screen.getByRole("button", { name: "안전 비교 실행" })).toBeDisabled();
+    const queue = screen.getByTestId("comparison-research-queue");
+    expect(queue).toHaveTextContent("DS4BC7066FVT");
+    expect(queue).toHaveTextContent("R32");
+    expect(queue).toHaveTextContent("ARI");
+    expect(queue).toHaveTextContent("Variable");
+    expect(queue).toHaveTextContent("850~1,150 W");
+    expect(queue).toHaveTextContent("EER");
+    expect(queue).not.toHaveTextContent("DS8LC5040IN");
   });
 
   it("P5-UT-G2-002 BLOCKED 응답에서는 순위와 Delta를 숨긴다", async () => {

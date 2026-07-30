@@ -88,13 +88,13 @@ jobs:
           from backend.catalog_audit.validation import canonical_json_sha256
 
           root = Path("catalog/published")
-          expected_release_id = "release:2026-07-30:003"
+          expected_release_id = "release:2026-07-30:004"
           active = json.loads(
               (root / "active-release.json").read_text(encoding="utf-8")
           )
           assert active["releaseId"] == expected_release_id
 
-          release_dir = root / "releases" / "release_2026-07-30_003"
+          release_dir = root / "releases" / "release_2026-07-30_004"
           metadata = json.loads(
               (release_dir / "release.json").read_text(encoding="utf-8")
           )

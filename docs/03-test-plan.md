@@ -25,7 +25,8 @@
 | ID | 흐름 | 기대 결과 |
 |---|---|---|
 | `G1-DIRECT` | R454B Sc Fixed DOE-B에서 Samsung과 동일 키·용량 ±15% 후보 선택 | `DIRECT_OK`, 동일 조건 배지, 순위·Δ 표시 |
-| `G2-CONDITION-MISMATCH` | Samsung R32 Ro ARI와 GMCC SEER60 비교 | `BLOCKED_CONDITION_MISMATCH`, 순위·Δ 없음 |
+| `G2-CONDITION-MISMATCH` | API에 Samsung R32 Ro ARI와 GMCC SEER60 비교 요청 | `BLOCKED_CONDITION_MISMATCH`, 순위·Δ 없음 |
+| `G2-RESEARCH-QUEUE` | 직접 후보가 없는 Samsung R32 Ro 선택 시도 | Samsung 선택 비활성, 공식 자료 요구조건 표시, 순위·Δ 없음 |
 | `G3-PORTFOLIO-GAP` | Samsung R290 Re 조회 | `PORTFOLIO_GAP`, 경쟁 모델은 표시하되 Samsung 가짜 모델·0·순위 없음 |
 | `G4-AUTHORITY` | `DS4BC7066FVT COP=3.34`인 Staging 검증 | `AUTHORITY_VALUE_MISMATCH`, 3.25만 PASS |
 | `G5-RELEASE-SAFETY` | 오류 Bundle 발행 시도 | 발행 실패, 활성 Release ID·해시·화면 수치 불변 |

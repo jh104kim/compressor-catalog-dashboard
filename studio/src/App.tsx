@@ -102,6 +102,101 @@ function isDirectComparisonCandidate(
   );
 }
 
+function directCandidates(
+  baseline: CatalogModel,
+  competitors: CatalogModel[],
+  comparisonMetric: "cop" | "eer",
+) {
+  return competitors.filter((candidate) =>
+    isDirectComparisonCandidate(baseline, candidate, comparisonMetric),
+  );
+}
+
+function comparisonResearchTarget(
+  model: CatalogModel,
+  competitors: CatalogModel[],
+  comparisonMetric: "cop" | "eer",
+) {
+  const modelCapacity = capacityW(model);
+  const sameType = competitors.filter((item) => item.type === model.type);
+  const sameRefrigerant = sameType.filter(
+    (item) => item.refrigerant === model.refrigerant,
+  );
+  const sameKey = sameRefrigerant.filter(
+    (item) =>
+      item.condition === model.condition &&
+      item.driveClass === model.driveClass &&
+      typeof item.specs?.[comparisonMetric] === "number" &&
+      item.specs[comparisonMetric]! > 0 &&
+      capacityW(item) != null,
+  );
+  const nearest = [...sameRefrigerant]
+    .map((item) => {
+      const itemCapacity = capacityW(item);
+      const capacityDiffPct =
+        modelCapacity != null && itemCapacity != null
+          ? (Math.abs(itemCapacity - modelCapacity) / modelCapacity) * 100
+          : null;
+      return { item, capacityDiffPct };
+    })
+    .sort(
+      (left, right) =>
+        (left.capacityDiffPct ?? Number.POSITIVE_INFINITY) -
+        (right.capacityDiffPct ?? Number.POSITIVE_INFINITY),
+    )[0];
+  const targetManufacturers = [
+    ...new Set((sameRefrigerant.length ? sameRefrigerant : sameType).map(
+      (item) => item.manufacturer,
+    )),
+  ].slice(0, 3);
+
+  let priority = "P3";
+  let reason = `동일 냉매(${model.refrigerant}) 경쟁 모델 공식 성능값이 없습니다.`;
+  if (sameKey.length > 0) {
+    const keyDiffs = sameKey
+      .map((item) => {
+        const itemCapacity = capacityW(item);
+        return modelCapacity != null && itemCapacity != null
+          ? (Math.abs(itemCapacity - modelCapacity) / modelCapacity) * 100
+          : Number.POSITIVE_INFINITY;
+      })
+      .sort((left, right) => left - right);
+    const nearestDiff = keyDiffs[0];
+    priority = nearestDiff <= 30 ? "P1" : "P2";
+    reason = `동일 비교 키 후보는 있으나 최근접 용량 차이 ${nearestDiff.toFixed(1)}%로 ±15%를 벗어납니다.`;
+  } else if (sameRefrigerant.length > 0) {
+    const sameCondition = sameRefrigerant.some(
+      (item) => item.condition === model.condition,
+    );
+    const sameDrive = sameRefrigerant.some(
+      (item) => item.driveClass === model.driveClass,
+    );
+    const nearCapacity =
+      nearest?.capacityDiffPct != null && nearest.capacityDiffPct <= 15;
+    priority = nearCapacity ? "P1" : "P2";
+    if (!sameCondition) {
+      reason = `용량이 ${nearCapacity ? "근접하지만 " : ""}${model.condition} 측정조건의 공식값이 없습니다.`;
+    } else if (!sameDrive) {
+      reason = `${model.driveClass} 구동 분류의 공식 성능값이 없습니다.`;
+    } else {
+      reason = `${comparisonMetric.toUpperCase()} 또는 용량 공식값이 누락됐습니다.`;
+    }
+  }
+
+  return {
+    model,
+    priority,
+    reason,
+    targetManufacturers,
+    capacityRange:
+      modelCapacity == null
+        ? "용량 확인 필요"
+        : `${Math.round(modelCapacity * 0.85).toLocaleString("ko-KR")}~${Math.round(
+            modelCapacity * 1.15,
+          ).toLocaleString("ko-KR")} W`,
+  };
+}
+
 function StatusPill({
   tone,
   children,
@@ -594,19 +689,52 @@ function CompareLab({
     () => selectedType ? samsung.filter((item) => item.type === selectedType) : [],
     [samsung, selectedType],
   );
-  const baseline = samsungByType.find((item) => item.modelId === baselineId);
+  const directReadySamsung = useMemo(
+    () =>
+      samsungByType
+        .map((item) => ({
+          item,
+          candidateCount: directCandidates(item, competitors, comparisonMetric).length,
+        }))
+        .filter(({ candidateCount }) => candidateCount > 0)
+        .sort(
+          (left, right) =>
+            right.candidateCount - left.candidateCount ||
+            left.item.model.localeCompare(right.item.model),
+        ),
+    [comparisonMetric, competitors, samsungByType],
+  );
+  const directReadyIds = useMemo(
+    () => new Set(directReadySamsung.map(({ item }) => item.modelId)),
+    [directReadySamsung],
+  );
+  const researchTargets = useMemo(
+    () =>
+      samsungByType
+        .filter((item) => !directReadyIds.has(item.modelId))
+        .map((item) =>
+          comparisonResearchTarget(item, competitors, comparisonMetric),
+        )
+        .sort(
+          (left, right) =>
+            left.priority.localeCompare(right.priority) ||
+            left.model.model.localeCompare(right.model.model),
+        ),
+    [comparisonMetric, competitors, directReadyIds, samsungByType],
+  );
+  const baseline = directReadySamsung
+    .map(({ item }) => item)
+    .find((item) => item.modelId === baselineId);
   const eligibleCandidates = useMemo(
     () => baseline
-      ? competitors.filter((item) =>
-          isDirectComparisonCandidate(baseline, item, comparisonMetric),
-        )
+      ? directCandidates(baseline, competitors, comparisonMetric)
       : [],
     [baseline, comparisonMetric, competitors],
   );
   const candidate = eligibleCandidates.find((item) => item.modelId === candidateId);
   const readiness = useMemo(() => {
     if (!selectedType) {
-      return { samsungCount: 0, competitorCount: 0, readySamsungCount: 0, pairCount: 0 };
+      return { samsungCount: 0, readySamsungCount: 0, researchCount: 0, pairCount: 0 };
     }
     const typeSamsung = samsung.filter((item) => item.type === selectedType);
     const typeCompetitors = competitors.filter((item) => item.type === selectedType);
@@ -618,8 +746,8 @@ function CompareLab({
     );
     return {
       samsungCount: typeSamsung.length,
-      competitorCount: typeCompetitors.length,
       readySamsungCount: pairCounts.filter((count) => count > 0).length,
+      researchCount: pairCounts.filter((count) => count === 0).length,
       pairCount: pairCounts.reduce((sum, count) => sum + count, 0),
     };
   }, [comparisonMetric, competitors, samsung, selectedType]);
@@ -666,7 +794,18 @@ function CompareLab({
   ]);
 
   function chooseType(type: CompressorType) {
+    const typeSamsung = samsung.filter((item) => item.type === type);
+    const hasDirectFor = (metricName: "cop" | "eer") =>
+      typeSamsung.some(
+        (item) => directCandidates(item, competitors, metricName).length > 0,
+      );
+    const nextMetric =
+      !hasDirectFor(comparisonMetric) &&
+      hasDirectFor(comparisonMetric === "cop" ? "eer" : "cop")
+        ? comparisonMetric === "cop" ? "eer" : "cop"
+        : comparisonMetric;
     setSelectedType(type);
+    setComparisonMetric(nextMetric);
     setBaselineId("");
     setCandidateId("");
     setResult(null);
@@ -741,6 +880,11 @@ function CompareLab({
         >
           {(["Re", "Ro", "Sc"] as CompressorType[]).map((type) => {
             const count = samsung.filter((item) => item.type === type).length;
+            const directCount = samsung.filter(
+              (item) =>
+                item.type === type &&
+                directCandidates(item, competitors, comparisonMetric).length > 0,
+            ).length;
             return (
               <button
                 key={type}
@@ -753,16 +897,16 @@ function CompareLab({
               >
                 <strong>{type}</strong>
                 <span>{TYPE_LABEL[type]}</span>
-                <small>Samsung {count}개</small>
+                <small>전체 {count} · 직접 {directCount}</small>
               </button>
             );
           })}
         </div>
         <div className="readiness-grid" data-testid="comparison-readiness">
           <div><span>선택 유형 Samsung</span><strong>{readiness.samsungCount}</strong></div>
-          <div><span>선택 유형 경쟁 모델</span><strong>{readiness.competitorCount}</strong></div>
-          <div><span>{comparisonMetric.toUpperCase()} 비교 가능 Samsung</span><strong>{readiness.readySamsungCount}</strong></div>
+          <div><span>직접 비교 가능 Samsung</span><strong>{readiness.readySamsungCount}</strong></div>
           <div><span>직접 비교 조합</span><strong>{readiness.pairCount}</strong></div>
+          <div><span>공식 자료 리서치 대상</span><strong>{readiness.researchCount}</strong></div>
         </div>
         <div className="criteria-chips" aria-label="직접 비교 기준">
           <span>동일 유형</span><span>동일 냉매</span><span>동일 측정조건</span>
@@ -777,20 +921,32 @@ function CompareLab({
             <select
               aria-label="Samsung 기준 모델"
               value={baselineId}
-              disabled={!selectedType}
+              disabled={!selectedType || directReadySamsung.length === 0}
               onChange={(event) => chooseBaseline(event.target.value)}
             >
               <option value="">
-                {selectedType ? `${TYPE_LABEL[selectedType]} Samsung 모델을 선택하세요` : "먼저 Re/Ro/Sc를 선택하세요"}
+                {!selectedType
+                  ? "먼저 Re/Ro/Sc를 선택하세요"
+                  : directReadySamsung.length === 0
+                    ? "직접 비교 가능 Samsung 모델 없음"
+                    : `직접 비교 가능 ${TYPE_LABEL[selectedType]} 모델을 선택하세요`}
               </option>
-              {samsungByType.map((item) => <option key={item.modelId} value={item.modelId}>{item.model} · {item.refrigerant} · {item.condition}</option>)}
+              {directReadySamsung.map(({ item, candidateCount }) => (
+                <option key={item.modelId} value={item.modelId}>
+                  {item.model} · {item.refrigerant} · {item.condition} · 후보 {candidateCount}
+                </option>
+              ))}
             </select>
           </label>
           {baseline ? (
             <ModelMiniCard model={baseline} />
           ) : (
             <p className="selection-hint">
-              {selectedType ? "기준 모델을 선택하면 직접 비교 가능한 후보를 계산합니다." : "유형 탭을 먼저 선택하세요."}
+              {!selectedType
+                ? "유형 탭을 먼저 선택하세요."
+                : directReadySamsung.length === 0
+                  ? `${comparisonMetric.toUpperCase()} 직접 비교 가능 모델이 없습니다. 아래 리서치 큐를 확인하세요.`
+                  : "직접 비교 가능한 Samsung 모델만 표시했습니다."}
             </p>
           )}
         </article>
@@ -868,6 +1024,46 @@ function CompareLab({
         <section className="panel comparison-placeholder">
           <span className="state-icon">↔</span>
           <div><h3>두 모델을 선택해 비교 Gate를 실행하세요</h3><p>결과는 DIRECT, REFERENCE, BLOCKED 중 하나로 설명됩니다.</p></div>
+        </section>
+      )}
+      {selectedType && researchTargets.length > 0 && (
+        <section
+          className="panel research-queue"
+          data-testid="comparison-research-queue"
+        >
+          <div className="panel-title-row">
+            <div>
+              <p className="section-kicker">RESEARCH QUEUE</p>
+              <h3>직접 비교 불가 Samsung 모델 · {researchTargets.length}개</h3>
+            </div>
+            <StatusPill tone="warn">공식 자료 필요</StatusPill>
+          </div>
+          <p className="research-intro">
+            아래 비교 키와 용량 범위를 만족하는 경쟁사 카탈로그·데이터시트를
+            우선 조사합니다. 판매처·블로그 수치는 Published 후보로 사용하지 않습니다.
+          </p>
+          <div className="research-target-grid">
+            {researchTargets.map((target) => (
+              <article
+                key={target.model.modelId}
+                data-research-model-id={target.model.modelId}
+              >
+                <div className="research-target-head">
+                  <strong>{target.model.model}</strong>
+                  <StatusPill tone={target.priority === "P1" ? "danger" : "warn"}>
+                    {target.priority}
+                  </StatusPill>
+                </div>
+                <p>{target.reason}</p>
+                <dl>
+                  <div><dt>필수 키</dt><dd>{target.model.refrigerant} · {target.model.condition} · {target.model.driveClass}</dd></div>
+                  <div><dt>용량 목표</dt><dd>{target.capacityRange}</dd></div>
+                  <div><dt>필수 지표</dt><dd>{comparisonMetric.toUpperCase()}</dd></div>
+                  <div><dt>우선 조사사</dt><dd>{target.targetManufacturers.join(", ") || "동종 경쟁사 신규 조사"}</dd></div>
+                </dl>
+              </article>
+            ))}
+          </div>
         </section>
       )}
     </div>

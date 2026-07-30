@@ -18,7 +18,7 @@
 
 | 항목 | 값 |
 |---|---|
-| Release | `release:2026-07-30:003` |
+| Release | `release:2026-07-30:004` |
 | 전체 모델 | 68 |
 | Samsung / 경쟁사 | 27 / 41 |
 | 상태 | `PUBLISHED` |
@@ -170,7 +170,7 @@ python scripts/publish_catalog.py `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:003"
+  --release-id "release:2026-07-30:004"
 
 if ($LASTEXITCODE -ne 0) {
   throw "운영 발행 실패"

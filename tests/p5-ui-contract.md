@@ -48,7 +48,7 @@ UI는 직접 비교 후보 목록을 만들기 위해 백엔드의 DIRECT 조건
 
 | 목적 | 고정값 |
 |---|---|
-| 활성 Release | `release:2026-07-30:003`, `status=PUBLISHED` |
+| 활성 Release | `release:2026-07-30:004`, `status=PUBLISHED` |
 | G1 Samsung | `model:samsung:DS8LC5040IN`, Sc/R454B/DOE-B/Fixed |
 | G1 경쟁사 | `model:gmcc:STDA031N1ULB`, 같은 비교키, 용량차 `6.21%` |
 | G1 판정 | EER 기준 `DIRECT`, `DIRECT_OK`, `rankingAllowed=true`, `deltaPct` 숫자 |
@@ -111,9 +111,9 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 | `P5-UT-G5-003` | 활성 Release 재조회 실패 | 마지막 정상 Release ID와 데이터는 유지하고 읽기 오류 배너만 표시 |
 | `P5-UT-G6-001` | Evidence 응답 렌더 | 모델 ID → 활성 Release ID → PDF 경로 → `pdf-page 92` 순서가 한 패널에서 확인 가능 |
 | `P5-UT-G6-002` | 원천 열기 링크 | 같은 origin의 읽기 전용 URL이며 PDF fragment 또는 UI 표기가 page 92를 가리킴 |
-| `P9-UT-G1-001` | Re/Ro/Sc 유형 탭 선택 | 선택 유형의 Samsung 모델만 표시 |
+| `P10-UT-G1-001` | Re/Ro/Sc 유형 탭 선택 | 선택 유형에서 직접 후보가 있는 Samsung 모델만 표시하고 가능한 지표로 전환 |
 | `P9-UT-G1-002` | Samsung 모델·지표 선택 | 동일 유형·냉매·조건·구동·용량 ±15%·지표 보유 경쟁 모델만 표시 |
-| `P9-UT-G2-001` | 직접 후보 0건 | 후보 없음 사유 표시, 경쟁 모델 선택과 비교 실행 비활성 |
+| `P10-UT-G2-001` | 직접 후보 0건인 Samsung 모델 | Samsung 선택에서 제외하고 공식 자료 리서치 큐에 냉매·조건·구동·용량 범위·지표 표시 |
 
 ### 검색·필터·딥링크·표시 안전성
 
