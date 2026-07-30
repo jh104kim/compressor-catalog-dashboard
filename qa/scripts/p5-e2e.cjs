@@ -342,20 +342,24 @@ const SCENARIOS = [
     title: "R454B Sc Fixed DOE-B EER 직접 비교",
     query: "/?view=compare",
     run: async (page, log) => {
-      const baseline = page.getByLabel("Samsung 기준 모델");
-      const candidate = page.getByLabel("경쟁 모델");
       const metric = page.getByLabel("비교 지표");
       await assertion(log, "G1 Sc 유형과 EER 선택", async () => {
         await page.getByRole("tab", { name: "Sc 스크롤" }).click();
         await metric.selectOption("eer");
-        await baseline.selectOption(MODELS.g1Baseline);
-        await candidate.selectOption(MODELS.g1Candidate);
+        const baseline = page.locator(
+          `[data-testid="samsung-model-option"][data-model-id="${MODELS.g1Baseline}"]`,
+        );
+        await baseline.click();
+        const candidate = page.locator(
+          `[data-testid="competitor-model-option"][data-model-id="${MODELS.g1Candidate}"]`,
+        );
+        await candidate.click();
         invariant(
-          (await baseline.inputValue()) === MODELS.g1Baseline,
+          (await baseline.getAttribute("aria-selected")) === "true",
           "G1 Samsung 기준 모델 선택 실패",
         );
         invariant(
-          (await candidate.inputValue()) === MODELS.g1Candidate,
+          (await candidate.getAttribute("aria-selected")) === "true",
           "G1 경쟁 모델 선택 실패",
         );
         invariant((await metric.inputValue()) === "eer", "G1 EER 선택 실패");
@@ -398,16 +402,16 @@ const SCENARIOS = [
     title: "직접 비교 불가 Samsung 모델의 공식 자료 리서치 큐",
     query: "/?view=compare",
     run: async (page, log) => {
-      const baseline = page.getByLabel("Samsung 기준 모델");
-      const candidate = page.getByLabel("경쟁 모델");
       await assertion(log, "G2 Ro 직접 비교 가능 모델만 선택 허용", async () => {
         await page.getByRole("tab", { name: "Ro 로터리" }).click();
         await page.getByLabel("비교 지표").selectOption("cop");
-        const baselineValues = await baseline.locator("option").evaluateAll(
-          (options) => options.map((option) => option.value),
+        const baselineValues = await page
+          .getByTestId("samsung-model-option")
+          .evaluateAll(
+            (options) => options.map((option) => option.getAttribute("data-model-id")),
         );
         invariant(
-          !(await baseline.isDisabled()),
+          baselineValues.length > 0,
           "G2 직접 비교 가능한 Samsung 모델이 있는데 기준 모델 선택이 비활성화되었습니다.",
         );
         invariant(
@@ -426,15 +430,17 @@ const SCENARIOS = [
         };
       });
       await assertion(log, "G2 비교 불가 모델과 요구조건을 리서치 큐에 표시", async () => {
-        const optionValues = await candidate.locator("option").evaluateAll(
-          (options) => options.map((option) => option.value),
+        const optionValues = await page
+          .getByTestId("competitor-model-option")
+          .evaluateAll(
+            (options) => options.map((option) => option.getAttribute("data-model-id")),
         );
         invariant(
           !optionValues.includes(MODELS.g2Candidate),
           "G2 조건 불일치 경쟁 모델이 선택 목록에 노출되었습니다.",
         );
         invariant(
-          await candidate.isDisabled(),
+          await anyVisible(page.getByText("② Samsung 모델을 먼저 선택하세요")),
           "G2 Samsung 기준 모델 선택 전 경쟁 모델 선택이 활성화되었습니다.",
         );
         const queue = page.getByTestId("comparison-research-queue");
@@ -462,13 +468,18 @@ const SCENARIOS = [
         };
       });
       await assertion(log, "G2 직접 후보 선택 시 Panasonic만 노출", async () => {
-        await baseline.selectOption(MODELS.g2DirectBaseline);
+        await page
+          .locator(
+            `[data-testid="samsung-model-option"][data-model-id="${MODELS.g2DirectBaseline}"]`,
+          )
+          .click();
+        const candidateOptions = page.getByTestId("competitor-model-option");
         invariant(
-          !(await candidate.isDisabled()),
+          (await candidateOptions.count()) > 0,
           "G2 직접 후보가 있는데 경쟁 모델 선택이 비활성화되었습니다.",
         );
-        const optionValues = await candidate.locator("option").evaluateAll(
-          (options) => options.map((option) => option.value),
+        const optionValues = await candidateOptions.evaluateAll(
+          (options) => options.map((option) => option.getAttribute("data-model-id")),
         );
         invariant(
           optionValues.includes(MODELS.g2DirectCandidate),
@@ -483,6 +494,38 @@ const SCENARIOS = [
           directCandidate: MODELS.g2DirectCandidate,
           incompatibleCandidateHidden: MODELS.g2Candidate,
         };
+      });
+    },
+  },
+  {
+    id: "G8-DIRECT-LINK-STABILITY",
+    title: "비교 딥링크 지연 응답 후 loading 정상 복귀",
+    query:
+      `/?view=compare&baselineModelId=${encodeURIComponent(MODELS.g1Baseline)}` +
+      `&candidateModelId=${encodeURIComponent(MODELS.g1Candidate)}&metric=eer`,
+    run: async (page, log) => {
+      await assertion(log, "G8 딥링크 비교 결과 자동 복원", async () => {
+        await requireVisible(
+          page.getByTestId("comparison-result"),
+          "G8 딥링크 비교 결과",
+        );
+        invariant(
+          (await page.getByTestId("comparison-code").innerText()).trim() ===
+            "DIRECT_OK",
+          "G8 딥링크 비교 결과가 DIRECT_OK가 아닙니다.",
+        );
+        return { code: "DIRECT_OK" };
+      });
+      await assertion(log, "G8 비교 규칙 확인 중 상태 해제", async () => {
+        await page.waitForTimeout(250);
+        const runButton = page.getByRole("button", { name: "안전 비교 실행" });
+        await requireVisible(runButton, "G8 비교 실행 버튼");
+        invariant(!(await runButton.isDisabled()), "G8 비교 실행 버튼이 계속 비활성화 상태입니다.");
+        await requireHidden(
+          page.getByRole("button", { name: "비교 규칙 확인 중…" }),
+          "G8 loading 버튼",
+        );
+        return { runningCleared: true };
       });
     },
   },

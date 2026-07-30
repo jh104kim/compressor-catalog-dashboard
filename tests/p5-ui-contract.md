@@ -7,7 +7,7 @@ P5 UI는 활성 `PUBLISHED` Release를 조회하고, 비교 판정을 왜곡 없
 E2E의 책임·테스트 ID·합격 기준을 고정한다.
 
 - Vitest: API 응답을 UI가 올바르게 표시·숨김·라우팅하는지 검사한다.
-- Playwright: FastAPI가 제공하는 실제 React 빌드에서 Golden G1~G6와 사용자
+- Playwright: FastAPI가 제공하는 실제 React 빌드에서 Golden G1~G8과 사용자
   흐름을 검사한다.
 - P3 책임: Staging 검증, 실제 발행 실패 원자성, 활성 Release 포인터 교체.
 - P5 책임: 권위값과 활성 Release만 표시하고 편집·발행 기능을 노출하지 않으며,
@@ -93,7 +93,7 @@ fixture에 `3.34`, Samsung R290 Re 가짜 모델, 수치 `0`, Staging 레코드�
 React Testing Library와 `userEvent`를 사용한다. API는 MSW 또는 동등한
 in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 
-### Golden G1~G6
+### Golden G1~G8
 
 | 테스트 ID | 입력/행동 | 필수 assertion |
 |---|---|---|
@@ -127,11 +127,12 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 | `P5-UT-LINK-002` | 비교 딥링크 직접 렌더 | baseline/candidate를 복원해 동일 비교 요청 1회만 수행 |
 | `P5-UT-LINK-003` | Evidence 딥링크 직접 렌더 | 모델 상세와 Evidence 패널이 함께 열림 |
 | `P5-UT-LINK-004` | 존재하지 않는 modelId | 명시적 `모델을 찾을 수 없음`, 빈 순위·가짜 수치 없음 |
+| `P11-UT-LINK-005` | 비교 API 응답이 지연되는 딥링크 직접 렌더 | loading 상태가 해제되고 비교 결과와 실행 버튼이 정상 복구 |
 | `P5-UT-STATE-001` | API loading/error/empty 각각 렌더 | 서로 구분되는 상태, 오류 중 이전 Release를 Staging 값으로 대체하지 않음 |
 
 ### Vitest 합격 기준
 
-- 현재 구현된 Vitest 27개 모두 PASS.
+- 현재 구현된 Vitest 28개 모두 PASS.
 - BLOCKED/GAP 테스트에서 순위·Δ·우열 표현이 0개.
 - `3.34`, 편집·발행 control이 0개.
 - 테스트 중 실제 `fetch`가 mock되지 않은 주소로 나가면 즉시 FAIL.
@@ -142,7 +143,7 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 각 Golden 테스트는 같은 시나리오를 데스크톱 `-D`와 모바일 `-M`로 실행한다.
 예: `P5-E2E-G1-001-D`, `P5-E2E-G1-001-M`.
 
-### Golden G1~G6
+### Golden G1~G8
 
 | 기본 테스트 ID | 실제 사용자 흐름 | 합격 기준 |
 |---|---|---|
@@ -152,6 +153,8 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 | `P5-E2E-G4-001` | 검색으로 DS4BC7066FVT 선택 | 모델 상세 COP 3.25, 공식 배지, 화면 전체에 3.34 없음 |
 | `P5-E2E-G5-001` | 앱 진입 → 여러 화면 이동 → 새로고침 | Release ID·해시 불변, PUBLISHED만 표시, 편집·발행 control 없음 |
 | `P5-E2E-G6-001` | G4 상세에서 Evidence 열기 | DS4BC7066FVT → 활성 Release → Samsung PDF → pdf-page 92 연결 |
+| `P5-E2E-G7-001` | B1 Scroll p.92 검토 Batch 확인 | 비교 불가 후보가 직접 비교 목록에 섞이지 않고 검토 상태로 유지 |
+| `P5-E2E-G8-001` | 비교 딥링크 직접 진입 | `DIRECT_OK` 복원 후 loading 문구가 사라지고 실행 버튼이 다시 활성화 |
 
 ### 검색·필터·딥링크
 
@@ -198,7 +201,7 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 P5는 아래 조건을 모두 만족해야 완료다.
 
 1. Vitest assertion catalog 전부 PASS.
-2. Golden G1~G6가 두 viewport에서 PASS.
+2. Golden G1~G8이 두 viewport에서 PASS.
 3. 검색·4종 필터·모델/비교/Evidence 딥링크가 두 viewport에서 PASS.
 4. BLOCKED/GAP에서 순위·Δ·우열·가짜 0이 0개.
 5. 화면에 활성 `PUBLISHED` Release ID·상태·해시가 항상 표시됨.

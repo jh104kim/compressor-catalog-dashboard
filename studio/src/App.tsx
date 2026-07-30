@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import {
   compareCatalogModels,
@@ -678,9 +678,7 @@ function CompareLab({
   const [comparisonMetric, setComparisonMetric] = useState<"cop" | "eer">(
     initialMetric ?? "cop",
   );
-  const [initialPairPending, setInitialPairPending] = useState(
-    Boolean(initialBaselineId && initialCandidateId),
-  );
+  const initialPairAttempted = useRef(false);
   const [result, setResult] = useState<ComparisonResult | null>(null);
   const [error, setError] = useState("");
   const [running, setRunning] = useState(false);
@@ -753,10 +751,15 @@ function CompareLab({
   }, [comparisonMetric, competitors, samsung, selectedType]);
 
   useEffect(() => {
-    if (!initialPairPending) return;
-    setInitialPairPending(false);
+    if (
+      initialPairAttempted.current ||
+      !initialBaselineId ||
+      !initialCandidateId
+    ) {
+      return;
+    }
+    initialPairAttempted.current = true;
     const canRestorePair =
-      Boolean(initialBaselineId && initialCandidateId) &&
       eligibleCandidates.some((item) => item.modelId === initialCandidateId);
     if (!canRestorePair) {
       setCandidateId("");
@@ -790,7 +793,6 @@ function CompareLab({
     initialBaselineId,
     initialCandidateId,
     initialMetric,
-    initialPairPending,
   ]);
 
   function chooseType(type: CompressorType) {
@@ -902,6 +904,15 @@ function CompareLab({
             );
           })}
         </div>
+        {!selectedType && (
+          <div className="type-first-callout" data-testid="type-first-callout" role="status">
+            <span>①</span>
+            <div>
+              <strong>위에서 Re · Ro · Sc 유형을 먼저 선택하세요</strong>
+              <small>유형을 선택하면 직접 비교 가능한 Samsung 모델 카드만 바로 열립니다.</small>
+            </div>
+          </div>
+        )}
         <div className="readiness-grid" data-testid="comparison-readiness">
           <div><span>선택 유형 Samsung</span><strong>{readiness.samsungCount}</strong></div>
           <div><span>직접 비교 가능 Samsung</span><strong>{readiness.readySamsungCount}</strong></div>
@@ -916,74 +927,94 @@ function CompareLab({
       <section className="compare-grid" data-testid="comparison-panel">
         <article className="panel selection-card">
           <div className="number-tag">02</div>
-          <label>
+          <div className="model-picker-head">
             <span>Samsung 기준 모델</span>
-            <select
-              aria-label="Samsung 기준 모델"
-              value={baselineId}
-              disabled={!selectedType || directReadySamsung.length === 0}
-              onChange={(event) => chooseBaseline(event.target.value)}
-            >
-              <option value="">
-                {!selectedType
-                  ? "먼저 Re/Ro/Sc를 선택하세요"
-                  : directReadySamsung.length === 0
-                    ? "직접 비교 가능 Samsung 모델 없음"
-                    : `직접 비교 가능 ${TYPE_LABEL[selectedType]} 모델을 선택하세요`}
-              </option>
-              {directReadySamsung.map(({ item, candidateCount }) => (
-                <option key={item.modelId} value={item.modelId}>
-                  {item.model} · {item.refrigerant} · {item.condition} · 후보 {candidateCount}
-                </option>
-              ))}
-            </select>
-          </label>
-          {baseline ? (
-            <ModelMiniCard model={baseline} />
+            <b>{selectedType ? `${directReadySamsung.length}개` : "대기"}</b>
+          </div>
+          {!selectedType ? (
+            <div className="picker-empty">
+              <strong>① 유형 선택이 필요합니다</strong>
+              <span>위의 Re · Ro · Sc 카드 중 하나를 눌러주세요.</span>
+            </div>
+          ) : directReadySamsung.length === 0 ? (
+            <div className="picker-empty warning">
+              <strong>직접 비교 가능한 Samsung 모델이 없습니다</strong>
+              <span>{comparisonMetric.toUpperCase()} 기준 Research Queue를 확인하세요.</span>
+            </div>
           ) : (
-            <p className="selection-hint">
-              {!selectedType
-                ? "유형 탭을 먼저 선택하세요."
-                : directReadySamsung.length === 0
-                  ? `${comparisonMetric.toUpperCase()} 직접 비교 가능 모델이 없습니다. 아래 리서치 큐를 확인하세요.`
-                  : "직접 비교 가능한 Samsung 모델만 표시했습니다."}
-            </p>
+            <div
+              className="model-choice-list"
+              role="listbox"
+              aria-label="Samsung 기준 모델"
+            >
+              {directReadySamsung.map(({ item, candidateCount }) => (
+                <button
+                  key={item.modelId}
+                  type="button"
+                  role="option"
+                  aria-label={`Samsung 기준 모델 ${item.model}`}
+                  aria-selected={baselineId === item.modelId}
+                  className={baselineId === item.modelId ? "active" : ""}
+                  data-testid="samsung-model-option"
+                  data-model-id={item.modelId}
+                  onClick={() => chooseBaseline(item.modelId)}
+                >
+                  <strong>{item.model}</strong>
+                  <span>{item.refrigerant} · {item.condition} · {item.driveClass}</span>
+                  <small>직접 후보 {candidateCount}개</small>
+                </button>
+              ))}
+            </div>
           )}
+          {baseline && <ModelMiniCard model={baseline} />}
         </article>
         <div className="compare-connector"><span>VS</span></div>
         <article className="panel selection-card">
           <div className="number-tag">03</div>
-          <label>
-            <span>
-              경쟁 모델 · <b data-testid="eligible-candidate-count">{eligibleCandidates.length}개</b>
-            </span>
-            <select
+          <div className="model-picker-head">
+            <span>경쟁 모델</span>
+            <b data-testid="eligible-candidate-count">{eligibleCandidates.length}개</b>
+          </div>
+          {!baseline ? (
+            <div className="picker-empty">
+              <strong>② Samsung 모델을 먼저 선택하세요</strong>
+              <span>선택한 기준 모델과 직접 비교 가능한 경쟁 모델만 표시됩니다.</span>
+            </div>
+          ) : eligibleCandidates.length === 0 ? (
+            <div className="picker-empty warning" data-testid="no-direct-candidate">
+              <strong>직접 비교 가능한 경쟁 모델이 없습니다</strong>
+              <span>조건이 다른 모델은 숨겼습니다. Research Queue를 확인하세요.</span>
+            </div>
+          ) : (
+            <div
+              className="model-choice-list"
+              role="listbox"
               aria-label="경쟁 모델"
-              value={candidateId}
-              disabled={!baseline || eligibleCandidates.length === 0}
-              onChange={(event) => {
-                setCandidateId(event.target.value);
-                setResult(null);
-                setError("");
-              }}
             >
-              <option value="">
-                {!baseline
-                  ? "먼저 Samsung 모델을 선택하세요"
-                  : eligibleCandidates.length === 0
-                    ? "직접 비교 가능 경쟁 모델 없음"
-                    : "경쟁 모델을 선택하세요"}
-              </option>
-              {eligibleCandidates.map((item) => <option key={item.modelId} value={item.modelId} data-candidate-id={item.modelId}>{item.manufacturer} · {item.model} · {item.condition}</option>)}
-            </select>
-          </label>
-          {candidate && <ModelMiniCard model={candidate} />}
-          {baseline && eligibleCandidates.length === 0 && (
-            <div className="candidate-empty" data-testid="no-direct-candidate">
-              <strong>직접 비교 가능한 경쟁 모델이 없습니다.</strong>
-              <span>조건이 다른 모델은 숨겼습니다. 이 상태는 다음 조사 대상을 알려주는 데이터 공백입니다.</span>
+              {eligibleCandidates.map((item) => (
+                <button
+                  key={item.modelId}
+                  type="button"
+                  role="option"
+                  aria-label={`경쟁 모델 ${item.manufacturer} ${item.model}`}
+                  aria-selected={candidateId === item.modelId}
+                  className={candidateId === item.modelId ? "active" : ""}
+                  data-testid="competitor-model-option"
+                  data-model-id={item.modelId}
+                  onClick={() => {
+                    setCandidateId(item.modelId);
+                    setResult(null);
+                    setError("");
+                  }}
+                >
+                  <strong>{item.manufacturer} · {item.model}</strong>
+                  <span>{item.refrigerant} · {item.condition} · {item.driveClass}</span>
+                  <small>용량 {metric(capacityW(item), " W")}</small>
+                </button>
+              ))}
             </div>
           )}
+          {candidate && <ModelMiniCard model={candidate} />}
         </article>
       </section>
       <button className="primary-button compare-button" disabled={!baselineId || !candidateId || running} onClick={runComparison}>

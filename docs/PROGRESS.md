@@ -4,6 +4,16 @@
 
 ---
 
+## 2026-07-30 — Phase P12 Compare Lab 로딩 복구·선택 UX 개선 ✅
+
+- **고착 원인 수정**: 비교 딥링크 복원 효과가 자체 상태 변경으로 정리(cleanup)되어 느린 `/compare` 응답을 무시하던 문제를 일회성 `useRef` 가드로 교체.
+- **선택 UX 개선**: `Re · Ro · Sc 유형 먼저 선택` 안내를 강조하고, Samsung·경쟁 모델을 드롭다운 대신 조건·용량·지표가 보이는 선택 카드로 변경. 선택 불가 단계에는 다음 행동을 명확히 표시.
+- **회귀 방지**: 지연된 비교 응답에서도 loading 해제와 결과 복구를 검증하는 Vitest·Playwright 시나리오 추가.
+- **검증**: Vitest 28 passed · build 통과 · Release 005 Studio E2E 16/16을 데스크톱·모바일에서 2회 연속 통과 · 콘솔/페이지/네트워크 오류 0.
+- **증거**: `qa/evidence/p12/local-run-1/p5-e2e.json`, `qa/evidence/p12/local-run-2/p5-e2e.json`.
+
+---
+
 ## 2026-07-30 — Phase P11 공식 경쟁사 카탈로그 확장 ✅
 
 - **공식 자료 우선 조사**: LG 외 Embraco·Secop·Panasonic·GMCC·Highly·Danfoss·Copeland의 Re/Ro/Sc 후보를 재점검.

@@ -107,10 +107,10 @@ Published Release를 발행한다.
 - 활성 Release: `release:2026-07-30:005`
 - Published 데이터: 76개(Samsung 27, 경쟁사 49)
 - 직접 비교 가능 Samsung: 8개
-- Vitest: 27/27 PASS
+- Vitest: 28/28 PASS
 - Python: 69/69 PASS
 - Studio build: PASS
-- Playwright: Release 005 desktop/mobile 14/14 PASS, 2회 연속
+- Playwright: Release 005 desktop/mobile 16/16 PASS, 2회 연속
 - Evidence:
-  - `qa/evidence/p11/local-run-1/p5-e2e.json`
-  - `qa/evidence/p11/local-run-2/p5-e2e.json`
+  - `qa/evidence/p12/local-run-1/p5-e2e.json`
+  - `qa/evidence/p12/local-run-2/p5-e2e.json`

@@ -87,6 +87,7 @@ const directComparison = {
 };
 
 let comparePayload: Record<string, unknown>;
+let compareResponseDelayMs = 0;
 let failActiveRelease = false;
 let modelItems: Array<Record<string, unknown>>;
 
@@ -113,13 +114,15 @@ async function openView(name: RegExp) {
 async function chooseDirectPair(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole("tab", { name: "Sc 스크롤" }));
   await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
-  await user.selectOptions(
-    screen.getByLabelText("Samsung 기준 모델"),
-    directSamsung.modelId,
+  await user.click(
+    screen.getByRole("option", {
+      name: `Samsung 기준 모델 ${directSamsung.model}`,
+    }),
   );
-  await user.selectOptions(
-    screen.getByLabelText("경쟁 모델"),
-    directCompetitor.modelId,
+  await user.click(
+    screen.getByRole("option", {
+      name: `경쟁 모델 ${directCompetitor.manufacturer} ${directCompetitor.model}`,
+    }),
   );
 }
 
@@ -127,6 +130,7 @@ describe("Catalog Audit Studio", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
     failActiveRelease = false;
+    compareResponseDelayMs = 0;
     comparePayload = {
       releaseId: "release:2026-07-30:001",
       verdict: "BLOCKED",
@@ -230,6 +234,17 @@ describe("Catalog Audit Studio", () => {
           });
         }
         if (url.includes("/compare")) {
+          if (compareResponseDelayMs > 0) {
+            return new Promise((resolve) => {
+              window.setTimeout(
+                () => resolve(new Response(JSON.stringify(comparePayload), {
+                  status: 200,
+                  headers: { "Content-Type": "application/json" },
+                })),
+                compareResponseDelayMs,
+              );
+            });
+          }
           return jsonResponse(comparePayload);
         }
         throw new Error(`Unexpected request: ${url}`);
@@ -283,15 +298,21 @@ describe("Catalog Audit Studio", () => {
     await renderReady();
     const user = await openView(/Compare Lab/);
 
-    expect(screen.getByLabelText("Samsung 기준 모델")).toBeDisabled();
+    expect(screen.getByTestId("type-first-callout")).toHaveTextContent(
+      "Re · Ro · Sc 유형을 먼저 선택하세요",
+    );
+    expect(
+      screen.queryByRole("listbox", { name: "Samsung 기준 모델" }),
+    ).not.toBeInTheDocument();
     await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
 
     expect(screen.getByLabelText("비교 지표")).toHaveValue("eer");
-    const baselineSelect = screen.getByLabelText("Samsung 기준 모델");
-    expect(baselineSelect).toBeEnabled();
-    expect(within(baselineSelect).getByRole("option", { name: /DS8LC5040IN/ })).toBeInTheDocument();
-    expect(within(baselineSelect).queryByRole("option", { name: /DS4BC7066FVT/ })).not.toBeInTheDocument();
-    expect(within(baselineSelect).queryByRole("option", { name: /MKV190C-L2J/ })).not.toBeInTheDocument();
+    const baselineList = screen.getByRole("listbox", {
+      name: "Samsung 기준 모델",
+    });
+    expect(within(baselineList).getByRole("option", { name: /DS8LC5040IN/ })).toBeInTheDocument();
+    expect(within(baselineList).queryByRole("option", { name: /DS4BC7066FVT/ })).not.toBeInTheDocument();
+    expect(within(baselineList).queryByRole("option", { name: /MKV190C-L2J/ })).not.toBeInTheDocument();
   });
 
   it("P9-UT-G1-002 Samsung 모델 기준 직접 비교 가능한 경쟁 모델만 표시한다", async () => {
@@ -301,11 +322,15 @@ describe("Catalog Audit Studio", () => {
 
     await user.click(screen.getByRole("tab", { name: /Sc 스크롤/ }));
     await user.selectOptions(screen.getByLabelText("비교 지표"), "eer");
-    await user.selectOptions(screen.getByLabelText("Samsung 기준 모델"), directSamsung.modelId);
+    await user.click(
+      screen.getByRole("option", {
+        name: `Samsung 기준 모델 ${directSamsung.model}`,
+      }),
+    );
 
-    const candidateSelect = screen.getByLabelText("경쟁 모델");
-    expect(within(candidateSelect).getByRole("option", { name: /STDA031N1ULB/ })).toBeInTheDocument();
-    expect(within(candidateSelect).queryByRole("option", { name: /ATQ360D1UMU/ })).not.toBeInTheDocument();
+    const candidateList = screen.getByRole("listbox", { name: "경쟁 모델" });
+    expect(within(candidateList).getByRole("option", { name: /STDA031N1ULB/ })).toBeInTheDocument();
+    expect(within(candidateList).queryByRole("option", { name: /ATQ360D1UMU/ })).not.toBeInTheDocument();
     expect(screen.getByTestId("eligible-candidate-count")).toHaveTextContent("1");
   });
 
@@ -550,6 +575,23 @@ describe("Catalog Audit Studio", () => {
     expect(await screen.findByTestId("comparison-code")).toHaveTextContent("DIRECT_OK");
     const calls = vi.mocked(fetch).mock.calls.filter(([input]) => String(input).includes("/compare"));
     expect(calls).toHaveLength(1);
+  });
+
+  it("P11-UT-LINK-005 느린 비교 딥링크도 loading에서 정상 복귀한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
+    compareResponseDelayMs = 80;
+    window.history.replaceState(
+      {},
+      "",
+      `/?view=compare&baselineModelId=${encodeURIComponent(directSamsung.modelId)}&candidateModelId=${encodeURIComponent(directCompetitor.modelId)}&metric=eer`,
+    );
+    await renderReady();
+
+    expect(await screen.findByTestId("comparison-code")).toHaveTextContent("DIRECT_OK");
+    expect(
+      screen.getByRole("button", { name: "안전 비교 실행" }),
+    ).toBeEnabled();
   });
 
   it("P5-UT-LINK-003 Evidence 딥링크는 상세과 근거를 함께 연다", async () => {
