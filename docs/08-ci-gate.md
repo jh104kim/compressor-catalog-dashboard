@@ -49,3 +49,17 @@ E2E에 전달하는 환경변수:
 - P5: `p5-catalog-audit-<run_id>-<attempt>`
 
 P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, Playwright 로그와 QA 스크립트가 생성한 결과·스크린샷을 포함한다. 실패해도 `if: always()`로 업로드하며 Evidence가 전혀 없으면 Gate가 실패한다.
+
+## 2026-07-30 실행 증거
+
+- 대상 SHA: `cf95c93dc59f9422881353dbff5154be7efbac0d`
+- Actions Run: [30523905496](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30523905496)
+- 결과: PASS, 1분 15초
+- P0 Artifact: `p0-catalog-audit-30523905496-1` (3,523,669 bytes)
+- P5 Artifact: `p5-catalog-audit-30523905496-1` (1,574,354 bytes)
+- P5 Artifact 내용 확인: 12/12 PASS, 스크린샷 12장
+
+Release의 `sourceCommit`은 **카탈로그 데이터 발행 입력 SHA**이고, 위 Actions
+대상 SHA는 **앱·검증 코드 SHA**다. 두 역할을 혼동하지 않고 Release metadata와
+CI gate context로 각각 추적한다. Published Bundle 내부의 `meta.stage=STAGING`은
+입력 bytes와 SHA를 보존하기 위한 provenance이며 API/UI 상태로 노출하지 않는다.
