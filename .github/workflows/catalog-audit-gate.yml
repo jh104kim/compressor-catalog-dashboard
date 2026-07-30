@@ -94,7 +94,7 @@ jobs:
           )
           assert active["releaseId"] == expected_release_id
 
-          release_dir = root / "releases" / "release_2026-07-30_002"
+          release_dir = root / "releases" / "release_2026-07-30_003"
           metadata = json.loads(
               (release_dir / "release.json").read_text(encoding="utf-8")
           )
