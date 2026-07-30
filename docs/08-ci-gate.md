@@ -53,7 +53,7 @@ E2E에 전달하는 환경변수:
 
 P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, Playwright 로그와 QA 스크립트가 생성한 결과·스크린샷을 포함한다. 실패해도 `if: always()`로 업로드하며 Evidence가 전혀 없으면 Gate가 실패한다.
 
-## 2026-07-30 실행 증거
+## 이전 Release 003 실행 증거
 
 - 대상 SHA: `cf95c93dc59f9422881353dbff5154be7efbac0d`
 - Actions Run: [30523905496](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30523905496)

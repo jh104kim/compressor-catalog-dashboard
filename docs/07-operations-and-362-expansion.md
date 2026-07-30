@@ -22,13 +22,13 @@
 | 전체 모델 | 68 |
 | Samsung / 경쟁사 | 27 / 41 |
 | 상태 | `PUBLISHED` |
-| 승인자 | `project-owner:user-requested-compare-flow` |
+| 승인자 | `project-owner:user-requested-direct-first-research` |
 | Source Commit | `d413cfa2037438f025edeb1111812289a489889e` |
-| Application SHA | `fba9d6688d5f5fc486b6b8c3fb77f3ab1e52e325` |
+| Application SHA | `5f61d1df7358c5c1873a1779a80b1770b9fd3370` |
 | Bundle SHA-256 | `5c532241c74768528412550f0139b820dda651ee3aefb321aa2fecdee1c77524` |
 | Validation | Critical 0, Major 0, Warning 2 |
 
-현재 승인자는 `project-owner:user-requested-compare-flow`이며, Warning은
+현재 승인자는 `project-owner:user-requested-direct-first-research`이며, Warning은
 `UB9TK2150F`의 EER 계산 오차 2.02%와 `NLE12.6CNL`의 COP 계산 오차
 8.62%다. Warning은 발행 가능하지만 승인자가 내용을 확인해야 한다.
 

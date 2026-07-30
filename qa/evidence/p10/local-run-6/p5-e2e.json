@@ -1,0 +1,1971 @@
+{
+  "schemaVersion": 1,
+  "phase": "P5",
+  "runId": "local-run-6",
+  "runStartedAt": "2026-07-30T09:19:13.182Z",
+  "runFinishedAt": "2026-07-30T09:19:30.670Z",
+  "baseUrl": "http://127.0.0.1:8000/",
+  "outputDir": "qa/evidence/p10/local-run-6",
+  "resultPath": "qa/evidence/p10/local-run-6/p5-e2e.json",
+  "screenshotDir": "qa/evidence/p10/local-run-6/screenshots",
+  "browser": {
+    "name": "chromium",
+    "version": "150.0.7871.186"
+  },
+  "retries": 0,
+  "serverStartedByRunner": false,
+  "status": "PASS",
+  "viewports": [
+    {
+      "id": "desktop-1440x1024",
+      "viewport": {
+        "width": 1440,
+        "height": 1024
+      },
+      "status": "PASS",
+      "scenarios": [
+        {
+          "id": "G1-DIRECT",
+          "title": "R454B Sc Fixed DOE-B EER 직접 비교",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "status": 200
+              }
+            },
+            {
+              "name": "G1 Sc 유형과 EER 선택",
+              "status": "PASS",
+              "details": {
+                "baseline": "model:samsung:DS8LC5040IN",
+                "candidate": "model:gmcc:STDA031N1ULB",
+                "metric": "eer"
+              }
+            },
+            {
+              "name": "G1 비교 실행",
+              "status": "PASS",
+              "details": null
+            },
+            {
+              "name": "G1 DIRECT_OK와 순위·Delta 표시",
+              "status": "PASS",
+              "details": {
+                "verdict": "DIRECT",
+                "code": "DIRECT_OK",
+                "delta": "EER Δ\n-3.16%"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g1-direct.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g1-direct.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "POST",
+                "url": "http://127.0.0.1:8000/api/v1/compare",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G2-RESEARCH-QUEUE",
+          "title": "직접 비교 불가 Samsung 모델의 공식 자료 리서치 큐",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "status": 200
+              }
+            },
+            {
+              "name": "G2 Ro 직접 비교 가능 모델 없음",
+              "status": "PASS",
+              "details": {
+                "directBaselineSelectable": false,
+                "metric": "cop"
+              }
+            },
+            {
+              "name": "G2 비교 불가 모델과 요구조건을 리서치 큐에 표시",
+              "status": "PASS",
+              "details": {
+                "incompatibleCandidateHidden": true,
+                "researchTarget": "model:samsung:UB8TN8300F",
+                "comparisonDisabled": true,
+                "rankingVisible": false,
+                "deltaVisible": false
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g2-research-queue.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g2-research-queue.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G3-PORTFOLIO-GAP",
+          "title": "Samsung R290 Re GAP",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=portfolio",
+                "status": 200
+              }
+            },
+            {
+              "name": "G3 GAP과 Samsung 없음",
+              "status": "PASS",
+              "details": {
+                "status": "GAP",
+                "samsungModels": "없음",
+                "competitorModels": 10
+              }
+            },
+            {
+              "name": "G3 순위·Delta DOM 없음",
+              "status": "PASS",
+              "details": null
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g3-portfolio-gap.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g3-portfolio-gap.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=portfolio",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G4-AUTHORITY",
+          "title": "DS4BC7066FVT 공식 COP 3.25",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT",
+                "status": 200
+              }
+            },
+            {
+              "name": "G4 권위 모델과 COP 3.25",
+              "status": "PASS",
+              "details": {
+                "model": "DS4BC7066FVT",
+                "cop": "3.25"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g4-authority.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g4-authority.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G5-RELEASE-SAFETY",
+          "title": "활성 Published Release와 View-first 경계",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=release",
+                "status": 200
+              }
+            },
+            {
+              "name": "G5 Release ID·상태·해시",
+              "status": "PASS",
+              "details": {
+                "releaseIds": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ],
+                "statuses": [
+                  "PUBLISHED",
+                  "PUBLISHED"
+                ],
+                "fullHashPresent": true,
+                "appGitSha": "5f61d1df7358c5c1873a1779a80b1770b9fd3370"
+              }
+            },
+            {
+              "name": "G5 View-only와 편집·발행 control 없음",
+              "status": "PASS",
+              "details": {
+                "forbiddenControls": 0
+              }
+            },
+            {
+              "name": "G5 새로고침 후 활성 Release 불변",
+              "status": "PASS",
+              "details": {
+                "before": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ],
+                "after": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ]
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g5-release-safety.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g5-release-safety.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G7-B1-EXPANSION",
+          "title": "B1 Scroll p.92 검토 Batch와 비교 차단",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=release",
+                "status": 200
+              }
+            },
+            {
+              "name": "G7 B1 16행·8개 신규 후보",
+              "status": "PASS",
+              "details": {
+                "totalRows": 16,
+                "newCandidates": 8
+              }
+            },
+            {
+              "name": "G7 조건 UNKNOWN·Published 미반영",
+              "status": "PASS",
+              "details": {
+                "conditionUnknown": 16,
+                "comparisonEligible": 0,
+                "publicationStatus": "NOT_PUBLISHED"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g7-b1-expansion.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g7-b1-expansion.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G6-EVIDENCE-TRACE",
+          "title": "DS4BC7066FVT → Release → Samsung PDF p.92",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT&evidence=1",
+                "status": 200
+              }
+            },
+            {
+              "name": "G6 Evidence chain",
+              "status": "PASS",
+              "details": {
+                "modelId": "model:samsung:DS4BC7066FVT",
+                "releaseId": "release:2026-07-30:004",
+                "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+                "locator": "PDF p.92"
+              }
+            },
+            {
+              "name": "G6 같은 origin 원천 PDF 200",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/source/Samsung-Compressor-Catalogue_2024.pdf#page=92",
+                "status": 200,
+                "contentType": "application/pdf"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 1440,
+                "documentClientWidth": 1440,
+                "bodyScrollWidth": 1440,
+                "bodyClientWidth": 1440,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g6-evidence-trace.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/desktop-1440x1024-g6-evidence-trace.png",
+          "layout": {
+            "documentScrollWidth": 1440,
+            "documentClientWidth": 1440,
+            "bodyScrollWidth": 1440,
+            "bodyClientWidth": 1440,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT&evidence=1",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/evidence/model%3Asamsung%3ADS4BC7066FVT",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        }
+      ],
+      "browserGates": {
+        "externalRequests": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requestFailures": [],
+        "badResponses": [],
+        "forbiddenWrites": [],
+        "requestCount": 58,
+        "status": "PASS"
+      }
+    },
+    {
+      "id": "mobile-390x844",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "scenarios": [
+        {
+          "id": "G1-DIRECT",
+          "title": "R454B Sc Fixed DOE-B EER 직접 비교",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "status": 200
+              }
+            },
+            {
+              "name": "G1 Sc 유형과 EER 선택",
+              "status": "PASS",
+              "details": {
+                "baseline": "model:samsung:DS8LC5040IN",
+                "candidate": "model:gmcc:STDA031N1ULB",
+                "metric": "eer"
+              }
+            },
+            {
+              "name": "G1 비교 실행",
+              "status": "PASS",
+              "details": null
+            },
+            {
+              "name": "G1 DIRECT_OK와 순위·Delta 표시",
+              "status": "PASS",
+              "details": {
+                "verdict": "DIRECT",
+                "code": "DIRECT_OK",
+                "delta": "EER Δ\n-3.16%"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g1-direct.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g1-direct.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "POST",
+                "url": "http://127.0.0.1:8000/api/v1/compare",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G2-RESEARCH-QUEUE",
+          "title": "직접 비교 불가 Samsung 모델의 공식 자료 리서치 큐",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "status": 200
+              }
+            },
+            {
+              "name": "G2 Ro 직접 비교 가능 모델 없음",
+              "status": "PASS",
+              "details": {
+                "directBaselineSelectable": false,
+                "metric": "cop"
+              }
+            },
+            {
+              "name": "G2 비교 불가 모델과 요구조건을 리서치 큐에 표시",
+              "status": "PASS",
+              "details": {
+                "incompatibleCandidateHidden": true,
+                "researchTarget": "model:samsung:UB8TN8300F",
+                "comparisonDisabled": true,
+                "rankingVisible": false,
+                "deltaVisible": false
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g2-research-queue.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g2-research-queue.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=compare",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G3-PORTFOLIO-GAP",
+          "title": "Samsung R290 Re GAP",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=portfolio",
+                "status": 200
+              }
+            },
+            {
+              "name": "G3 GAP과 Samsung 없음",
+              "status": "PASS",
+              "details": {
+                "status": "GAP",
+                "samsungModels": "없음",
+                "competitorModels": 10
+              }
+            },
+            {
+              "name": "G3 순위·Delta DOM 없음",
+              "status": "PASS",
+              "details": null
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g3-portfolio-gap.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g3-portfolio-gap.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=portfolio",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G4-AUTHORITY",
+          "title": "DS4BC7066FVT 공식 COP 3.25",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT",
+                "status": 200
+              }
+            },
+            {
+              "name": "G4 권위 모델과 COP 3.25",
+              "status": "PASS",
+              "details": {
+                "model": "DS4BC7066FVT",
+                "cop": "3.25"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g4-authority.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g4-authority.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G5-RELEASE-SAFETY",
+          "title": "활성 Published Release와 View-first 경계",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=release",
+                "status": 200
+              }
+            },
+            {
+              "name": "G5 Release ID·상태·해시",
+              "status": "PASS",
+              "details": {
+                "releaseIds": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ],
+                "statuses": [
+                  "PUBLISHED",
+                  "PUBLISHED"
+                ],
+                "fullHashPresent": true,
+                "appGitSha": "5f61d1df7358c5c1873a1779a80b1770b9fd3370"
+              }
+            },
+            {
+              "name": "G5 View-only와 편집·발행 control 없음",
+              "status": "PASS",
+              "details": {
+                "forbiddenControls": 0
+              }
+            },
+            {
+              "name": "G5 새로고침 후 활성 Release 불변",
+              "status": "PASS",
+              "details": {
+                "before": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ],
+                "after": [
+                  "release:2026-07-30:004",
+                  "release:2026-07-30:004"
+                ]
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g5-release-safety.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g5-release-safety.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G7-B1-EXPANSION",
+          "title": "B1 Scroll p.92 검토 Batch와 비교 차단",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=release",
+                "status": 200
+              }
+            },
+            {
+              "name": "G7 B1 16행·8개 신규 후보",
+              "status": "PASS",
+              "details": {
+                "totalRows": 16,
+                "newCandidates": 8
+              }
+            },
+            {
+              "name": "G7 조건 UNKNOWN·Published 미반영",
+              "status": "PASS",
+              "details": {
+                "conditionUnknown": 16,
+                "comparisonEligible": 0,
+                "publicationStatus": "NOT_PUBLISHED"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g7-b1-expansion.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g7-b1-expansion.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=release",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "G6-EVIDENCE-TRACE",
+          "title": "DS4BC7066FVT → Release → Samsung PDF p.92",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "화면 진입",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT&evidence=1",
+                "status": 200
+              }
+            },
+            {
+              "name": "G6 Evidence chain",
+              "status": "PASS",
+              "details": {
+                "modelId": "model:samsung:DS4BC7066FVT",
+                "releaseId": "release:2026-07-30:004",
+                "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+                "locator": "PDF p.92"
+              }
+            },
+            {
+              "name": "G6 같은 origin 원천 PDF 200",
+              "status": "PASS",
+              "details": {
+                "url": "http://127.0.0.1:8000/source/Samsung-Compressor-Catalogue_2024.pdf#page=92",
+                "status": 200,
+                "contentType": "application/pdf"
+              }
+            },
+            {
+              "name": "페이지 가로 overflow 0",
+              "status": "PASS",
+              "details": {
+                "documentScrollWidth": 390,
+                "documentClientWidth": 390,
+                "bodyScrollWidth": 390,
+                "bodyClientWidth": 390,
+                "overflowPixels": 0,
+                "unresolvedBindings": [],
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "미해결 보간과 빈 root 0",
+              "status": "PASS",
+              "details": {
+                "unresolvedBindings": 0,
+                "rootChildCount": 1
+              }
+            },
+            {
+              "name": "스크린샷 저장",
+              "status": "PASS",
+              "details": {
+                "path": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g6-evidence-trace.png"
+              }
+            },
+            {
+              "name": "외부요청·console·page·network·금지쓰기 0",
+              "status": "PASS",
+              "details": {
+                "console": 0,
+                "page": 0,
+                "requestFailed": 0,
+                "http": 0,
+                "external": 0,
+                "forbiddenWrite": 0
+              }
+            }
+          ],
+          "screenshot": "qa/evidence/p10/local-run-6/screenshots/mobile-390x844-g6-evidence-trace.png",
+          "layout": {
+            "documentScrollWidth": 390,
+            "documentClientWidth": 390,
+            "bodyScrollWidth": 390,
+            "bodyClientWidth": 390,
+            "overflowPixels": 0,
+            "unresolvedBindings": [],
+            "rootChildCount": 1
+          },
+          "errors": {
+            "consoleErrors": [],
+            "pageErrors": [],
+            "requestFailures": [],
+            "badResponses": [],
+            "externalRequests": [],
+            "forbiddenWrites": [],
+            "requests": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/?view=model&modelId=model%3Asamsung%3ADS4BC7066FVT&evidence=1",
+                "resourceType": "document"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-DDEXyi7w.js",
+                "resourceType": "script"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/assets/index-BM3M4thk.css",
+                "resourceType": "stylesheet"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/releases/active",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/catalog/models",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/portfolio/Re/R290",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/expansion/batches/B1",
+                "resourceType": "fetch"
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/api/v1/evidence/model%3Asamsung%3ADS4BC7066FVT",
+                "resourceType": "fetch"
+              }
+            ]
+          }
+        }
+      ],
+      "browserGates": {
+        "externalRequests": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "requestFailures": [],
+        "badResponses": [],
+        "forbiddenWrites": [],
+        "requestCount": 58,
+        "status": "PASS"
+      }
+    }
+  ],
+  "summary": {
+    "viewportCount": 2,
+    "scenarioCount": 14,
+    "passedScenarios": 14,
+    "failedScenarios": 0,
+    "screenshotCount": 14
+  }
+}

@@ -100,3 +100,16 @@ Published Release를 발행한다.
    우선 탐색한다.
 3. 검토 완료 후보만 별도 Staging batch로 만들고 Release 전 비교 Gate를
    자동 실행한다.
+
+## 6. 구현·검증 스냅샷
+
+- 앱 구현 SHA: `5f61d1df7358c5c1873a1779a80b1770b9fd3370`
+- 활성 Release: `release:2026-07-30:004`
+- Published 데이터: 기존 검증 Bundle 68개 유지
+- Vitest: 27/27 PASS
+- Python: 49/49 PASS
+- Studio build: PASS
+- Playwright: desktop/mobile 14/14 PASS, 2회 연속
+- Evidence:
+  - `qa/evidence/p10/local-run-6/p5-e2e.json`
+  - `qa/evidence/p10/local-run-7/p5-e2e.json`
