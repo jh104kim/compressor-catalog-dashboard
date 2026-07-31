@@ -10,7 +10,7 @@
 | test_id | P14-API-ANALYSIS-001~003, P14-UT-ANALYSIS-001~002, P14-UT-STALE-001~002, P14-E2E-ANALYSIS/BLOCK/TRACE/STALE/MOBILE-001 |
 | expected | 안전 비교와 5개 분석 섹션을 같은 Release로 반환하고 비직접 수치·stale 응답을 차단 |
 | reviewer_or_judge | P14 Contract Judge |
-| version_or_commit | 구현 커밋에 기록 |
+| version_or_commit | `e1e28e3efd405c9bd755e260ed9fd05cbef1f8f8` |
 
 ## RED
 
@@ -54,4 +54,4 @@
 | P14-E E2E·운영 Gate | 15 | 15 |
 | **합계** | **100** | **100** |
 
-GitHub Actions run ID와 최종 commit은 원격 Gate 완료 후 평가 문서에 기록한다.
+GitHub Actions PR run `30593045132`와 push run `30593042846` 모두 성공했다.

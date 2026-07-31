@@ -47,5 +47,6 @@
 
 ## 원격 Gate
 
-- 구현 commit: 원격 반영 후 기록
-- GitHub Actions: 원격 반영 후 기록
+- 구현 commit: `e1e28e3efd405c9bd755e260ed9fd05cbef1f8f8`
+- GitHub Actions PR run: `30593045132` — success
+- GitHub Actions push run: `30593042846` — success
