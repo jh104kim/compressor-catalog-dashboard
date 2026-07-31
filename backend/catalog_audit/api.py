@@ -7,6 +7,7 @@ from typing import Any, Literal
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
+from .analysis import build_comparison_analysis
 from .comparison import compare_models
 from .expansion import ExpansionBatchError, load_expansion_batch
 from .release import FileReleaseStore, ReleaseIntegrityError
@@ -46,11 +47,22 @@ class PublishedCatalog:
         return active, release, bundle
 
     def model(self, model_id: str) -> tuple[dict[str, Any], str]:
+        models, release_id = self.models(model_id)
+        return models[0], release_id
+
+    def models(
+        self,
+        *model_ids: str,
+    ) -> tuple[list[dict[str, Any]], str]:
         active, _, bundle = self.read()
-        for item in bundle["models"]:
-            if item["modelId"] == model_id:
-                return item, active["releaseId"]
-        raise HTTPException(status_code=404, detail="모델을 찾을 수 없습니다.")
+        by_id = {item["modelId"]: item for item in bundle["models"]}
+        try:
+            return [by_id[model_id] for model_id in model_ids], active["releaseId"]
+        except KeyError as exc:
+            raise HTTPException(
+                status_code=404,
+                detail="모델을 찾을 수 없습니다.",
+            ) from exc
 
 
 def create_app(
@@ -144,8 +156,10 @@ def create_app(
 
     @app.post("/api/v1/compare")
     def compare(request: CompareRequest) -> dict[str, Any]:
-        baseline, release_id = catalog.model(request.baseline_model_id)
-        candidate, _ = catalog.model(request.candidate_model_id)
+        (baseline, candidate), release_id = catalog.models(
+            request.baseline_model_id,
+            request.candidate_model_id,
+        )
         result = compare_models(
             baseline,
             candidate,
@@ -155,6 +169,32 @@ def create_app(
             ],
         )
         return {"releaseId": release_id, **result.to_dict()}
+
+    @app.post("/api/v1/compare/report")
+    def compare_report(request: CompareRequest) -> dict[str, Any]:
+        (baseline, candidate), release_id = catalog.models(
+            request.baseline_model_id,
+            request.candidate_model_id,
+        )
+        result = compare_models(
+            baseline,
+            candidate,
+            metric=request.metric,
+            capacity_tolerance_pct=rules["benchmark"][
+                "similarityCapacityTolerancePct"
+            ],
+        )
+        analysis = build_comparison_analysis(
+            baseline,
+            candidate,
+            result,
+            release_id=release_id,
+        )
+        return {
+            "releaseId": release_id,
+            "comparison": result.to_dict(),
+            "analysis": analysis,
+        }
 
     @app.get("/api/v1/portfolio/{compressor_type}/{refrigerant}")
     def portfolio(compressor_type: str, refrigerant: str) -> dict[str, Any]:

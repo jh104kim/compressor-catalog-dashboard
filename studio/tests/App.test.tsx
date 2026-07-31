@@ -78,15 +78,79 @@ const directComparison = {
   verdict: "DIRECT",
   code: "DIRECT_OK",
   reason: "동일 조건 직접 비교가 가능합니다.",
-  baselineModelId: samsung.modelId,
-  candidateModelId: competitor.modelId,
+  baselineModelId: directSamsung.modelId,
+  candidateModelId: directCompetitor.modelId,
   metric: "eer",
   capacityDiffPct: 6.21,
   deltaPct: -3.16,
   rankingAllowed: true,
 };
 
+const directAnalysis = {
+  releaseId: "release:2026-07-30:001",
+  baselineModelId: directSamsung.modelId,
+  candidateModelId: directCompetitor.modelId,
+  metric: "eer",
+  executiveSummary:
+    "동일 비교 키에서 직접 비교할 수 있습니다. GMCC EER은 Samsung 대비 3.16% 낮습니다.",
+  conditionSafety: {
+    status: "DIRECT_SAFE",
+    summary: "유형·냉매·측정조건·구동 분류와 용량 범위를 확인했습니다.",
+  },
+  performanceInterpretation: {
+    allowed: true,
+    metric: "eer",
+    baselineValue: 6.64,
+    candidateValue: 6.43,
+    capacityDiffPct: 6.21,
+    deltaPct: -3.16,
+    direction: "BASELINE_HIGHER",
+    summary: "GMCC EER은 Samsung 대비 3.16% 낮습니다.",
+  },
+  evidenceConfidence: {
+    level: "Medium",
+    basis: "두 모델의 authority와 confidence 중 가장 낮은 수준",
+    baselineAuthority: "research",
+    candidateAuthority: "research",
+    baselineConfidence: "Medium",
+    candidateConfidence: "High",
+  },
+  portfolioImplications: [
+    "Sc · R454B · DOE-B · Fixed 비교군에서 직접 비교할 수 있습니다.",
+  ],
+  recommendedActions: [
+    "양쪽 제조사의 최신 공식 데이터시트에서 동일 조건 값을 재확인합니다.",
+  ],
+  limitations: [
+    "카탈로그 성능값만으로 비용 절감, 수명, 소음, 품질을 판단하지 않습니다.",
+  ],
+  evidenceRefs: [
+    {
+      modelId: directSamsung.modelId,
+      manufacturer: "Samsung",
+      model: directSamsung.model,
+      sourcePath: directSamsung.evidence.sourcePath,
+      authority: "research",
+      confidence: "Medium",
+      locator: directSamsung.evidence.locator,
+      fieldPaths: ["specs.eer"],
+    },
+    {
+      modelId: directCompetitor.modelId,
+      manufacturer: "GMCC",
+      model: directCompetitor.model,
+      sourcePath: directCompetitor.evidence.sourcePath,
+      authority: "research",
+      confidence: "High",
+      locator: directCompetitor.evidence.locator,
+      fieldPaths: ["specs.eer"],
+    },
+  ],
+};
+
 let comparePayload: Record<string, unknown>;
+let analysisPayload: Record<string, unknown>;
+let reportReleaseId = "release:2026-07-30:001";
 let compareResponseDelayMs = 0;
 let failActiveRelease = false;
 let modelItems: Array<Record<string, unknown>>;
@@ -136,13 +200,15 @@ describe("Catalog Audit Studio", () => {
       verdict: "BLOCKED",
       code: "BLOCKED_CONDITION_MISMATCH",
       reason: "측정조건이 달라 직접 비교할 수 없습니다.",
-      baselineModelId: samsung.modelId,
-      candidateModelId: competitor.modelId,
-      metric: "cop",
+      baselineModelId: directSamsung.modelId,
+      candidateModelId: directCompetitor.modelId,
+      metric: "eer",
       capacityDiffPct: null,
       deltaPct: null,
       rankingAllowed: false,
     };
+    analysisPayload = directAnalysis;
+    reportReleaseId = "release:2026-07-30:001";
     modelItems = [samsung, competitor];
     vi.stubGlobal(
       "fetch",
@@ -231,6 +297,28 @@ describe("Catalog Audit Studio", () => {
             modelId: samsung.modelId,
             evidence: samsung.evidence,
             supportingEvidence: [],
+          });
+        }
+        if (url.includes("/compare/report")) {
+          if (compareResponseDelayMs > 0) {
+            return new Promise((resolve) => {
+              window.setTimeout(
+                () => resolve(new Response(JSON.stringify({
+                  releaseId: reportReleaseId,
+                  comparison: comparePayload,
+                  analysis: analysisPayload,
+                }), {
+                  status: 200,
+                  headers: { "Content-Type": "application/json" },
+                })),
+                compareResponseDelayMs,
+              );
+            });
+          }
+          return jsonResponse({
+            releaseId: reportReleaseId,
+            comparison: comparePayload,
+            analysis: analysisPayload,
           });
         }
         if (url.includes("/compare")) {
@@ -431,6 +519,111 @@ describe("Catalog Audit Studio", () => {
 
     expect(await screen.findByTestId("comparison-delta")).toHaveTextContent("-3.16%");
     expect(screen.getByTestId("comparison-ranking")).toHaveTextContent("동일군 내 허용");
+  });
+
+  it("P14-UT-ANALYSIS-001 안전 비교 후 5개 분석 섹션과 추적 가능한 출력을 표시한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
+    const print = vi.spyOn(window, "print").mockImplementation(() => undefined);
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+
+    const report = await screen.findByTestId("analysis-report");
+    expect(report).toHaveTextContent("release:2026-07-30:001");
+    expect(report).toHaveTextContent(directSamsung.modelId);
+    expect(report).toHaveTextContent(directCompetitor.modelId);
+    expect(screen.getByTestId("analysis-condition-safety")).toBeInTheDocument();
+    expect(screen.getByTestId("analysis-performance")).toHaveTextContent(
+      "Samsung 대비 3.16% 낮습니다",
+    );
+    expect(screen.getByTestId("analysis-evidence")).toHaveTextContent(
+      directSamsung.evidence.sourcePath,
+    );
+    expect(screen.getByTestId("analysis-portfolio")).toBeInTheDocument();
+    expect(screen.getByTestId("analysis-actions")).toHaveTextContent(
+      "카탈로그 성능값만으로",
+    );
+    const download = screen.getByRole("link", { name: "JSON 내려받기" });
+    expect(download).toHaveAttribute("download", expect.stringContaining("DS8LC5040IN"));
+    expect(download.getAttribute("href")).toContain("data:application/json");
+    await user.click(screen.getByRole("button", { name: "분석 인쇄 / PDF" }));
+    expect(print).toHaveBeenCalledOnce();
+  });
+
+  it("P14-UT-ANALYSIS-002 비직접 분석은 수치와 방향 문구를 표시하지 않는다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    analysisPayload = {
+      ...directAnalysis,
+      executiveSummary: "측정조건이 달라 직접 수치 해석은 생성하지 않았습니다.",
+      conditionSafety: {
+        status: "COMPARISON_BLOCKED",
+        summary: "측정조건이 달라 직접 비교할 수 없습니다.",
+      },
+      performanceInterpretation: {
+        allowed: false,
+        metric: "eer",
+        baselineValue: null,
+        candidateValue: null,
+        capacityDiffPct: null,
+        deltaPct: null,
+        direction: "NOT_ASSESSED",
+        summary: "측정조건이 달라 직접 비교할 수 없습니다.",
+      },
+    };
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+
+    const report = await screen.findByTestId("analysis-report");
+    expect(screen.getByTestId("analysis-performance")).toHaveTextContent(
+      "직접 비교할 수 없습니다",
+    );
+    expect(report).not.toHaveTextContent("-3.16");
+    expect(report).not.toHaveTextContent("우위");
+    expect(report).not.toHaveTextContent("열위");
+    expect(report).not.toHaveTextContent("순위");
+    expect(report).not.toHaveTextContent("Δ");
+  });
+
+  it("P14-UT-STALE-001 선택 변경 후 도착한 지연 분석 응답을 폐기한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
+    compareResponseDelayMs = 80;
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+    await user.selectOptions(screen.getByLabelText("비교 지표"), "cop");
+    await new Promise((resolve) => window.setTimeout(resolve, 120));
+
+    expect(screen.queryByTestId("comparison-result")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("analysis-report")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("비교 지표")).toHaveValue("cop");
+  });
+
+  it("P14-UT-STALE-002 현재 Active Release와 다른 분석 응답을 폐기한다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
+    reportReleaseId = "release:2026-07-29:999";
+    analysisPayload = {
+      ...directAnalysis,
+      releaseId: reportReleaseId,
+    };
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+
+    expect(
+      await screen.findByText(
+        "분석 응답의 Release·모델·지표가 현재 선택과 일치하지 않습니다.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("comparison-result")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("analysis-report")).not.toBeInTheDocument();
   });
 
   it("P5-UT-G2-001 조건 불일치 코드와 차단 사유를 표시한다", async () => {

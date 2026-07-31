@@ -47,6 +47,18 @@ npm --prefix qa run test:report
 Release를 갱신하면 위 명령으로 보고서를 다시 생성한 뒤 Studio를 빌드한다.
 GitHub CI도 같은 생성 명령과 팝업·CSV Chromium 검증을 실행한다.
 
+### Compare Lab 추가 분석
+
+`안전 비교 실행`은 `POST /api/v1/compare/report`를 호출해 비교 판정과 함께
+조건 안전성, 용량·효율 해석, Evidence 신뢰도, 포트폴리오 시사점, 권장
+조치·한계를 표시한다. 분석은 LLM 없이 활성 Published Release의 값만 사용하며,
+REFERENCE/BLOCKED에서는 직접 비교 수치를 만들지 않는다. 결과는 JSON 또는
+인쇄/PDF로 저장할 수 있다.
+
+```powershell
+npm --prefix qa run test:p14
+```
+
 기존 DC 화면은 아래처럼 별도 실행한다.
 
 ```powershell

@@ -1,6 +1,7 @@
 import type {
   ActiveRelease,
   CatalogModel,
+  ComparisonReport,
   ComparisonResult,
   EvidenceTrace,
   ExpansionBatch,
@@ -40,6 +41,22 @@ export function compareCatalogModels(
   metric: "cop" | "eer" = "cop",
 ): Promise<ComparisonResult> {
   return requestJson<ComparisonResult>("/api/v1/compare", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      baselineModelId,
+      candidateModelId,
+      metric,
+    }),
+  });
+}
+
+export function compareCatalogModelsWithReport(
+  baselineModelId: string,
+  candidateModelId: string,
+  metric: "cop" | "eer" = "cop",
+): Promise<ComparisonReport> {
+  return requestJson<ComparisonReport>("/api/v1/compare/report", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -4,6 +4,17 @@
 
 ---
 
+## 2026-07-31 — Phase P14-B~E 안전 비교 추가 분석·레포팅 ✅
+
+- **P14-B 분석 API**: `POST /api/v1/compare/report`와 결정론적 분석 엔진을 추가. DIRECT만 수치 해석하며 REFERENCE/BLOCKED는 직접 성능 판단을 생성하지 않음.
+- **P14-C 레포트 UI**: 조건 안전성·용량/효율·Evidence 신뢰도·포트폴리오·후속 조치/한계 5개 섹션, Release/두 modelId/지표 추적, JSON·인쇄/PDF 반영.
+- **P14-D 비동기 안전**: `comparisonRevision`과 요청 snapshot으로 선택 변경 뒤 도착한 지연 비교·분석 응답을 폐기. 두 모델은 서버에서 단일 Release snapshot으로 읽고, 화면 Active Release와 다른 응답도 차단.
+- **P14-E 검증**: Python 82, Vitest 33/33, build, 기존 P5 16/16, 정적 보고서 2/2, P14 분석 E2E 6/6을 retries 0으로 PASS.
+- **점수**: Task `100/100`, 독립 Gate 품질축 `5.0/5.0/5.0/4.9/4.9`, 환산 `99.2/100`, Critical 0·Major 0.
+- **증거**: `qa/test-runs/RUN-20260731-015-P14-BE-RED-GREEN.md`, `qa/evaluations/EVAL-19-P14.md`, `qa/evidence/p14/analysis-run-1/`, `qa/evidence/p14/analysis-run-2/`.
+
+---
+
 ## 2026-07-31 — Phase P14-A 랜딩 보고서 팝업·CSV·TDD 계약 ✅
 
 - **RED 우선**: 랜딩 `Compare Report` 탭 부재 1 failed, CSV 미생성 1 failed, P14 계획/테스트 계약 부재 3 failed를 구현 전에 확인.

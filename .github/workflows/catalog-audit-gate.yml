@@ -304,6 +304,11 @@ jobs:
           npm --prefix qa run test:report \
             2>&1 | tee "$evidence_dir/compare-report-playwright.log"
 
+          P14_BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir/p14-analysis" \
+          npm --prefix qa run test:p14 \
+            2>&1 | tee "$evidence_dir/p14-analysis-playwright.log"
+
       - name: Upload P0 GitHub Actions evidence
         if: always()
         uses: actions/upload-artifact@v4

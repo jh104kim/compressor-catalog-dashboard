@@ -37,6 +37,7 @@ UI는 직접 비교 후보 목록을 만들기 위해 백엔드의 DIRECT 조건
 - `GET /api/v1/catalog/models`
 - `GET /api/v1/portfolio/{type}/{refrigerant}`
 - `POST /api/v1/compare` — 데이터 변경이 없는 판정 요청
+- `POST /api/v1/compare/report` — 데이터 변경 없이 판정·분석을 반환하는 요청
 - `GET /api/v1/evidence/{modelId}`
 - 원천 PDF를 제공한다면 같은 origin의 읽기 전용 경로
 

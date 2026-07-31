@@ -196,7 +196,8 @@ R290 Re는 GAP, R290 Ro/Sc는 HAVE, R454B Ro/Sc는 HAVE가 회귀 없이 표시�
 | Catalog Checks | `GET /api/v1/releases/active` | validationSummary.issues |
 | 모델 검색·선택 | `GET /api/v1/catalog/models?...` | manufacturer, type, refrigerant, condition, driveClass, specs |
 | 모델 상세 | `GET /api/v1/catalog/models/{modelId}` | item |
-| Compare Lab | `POST /api/v1/compare` | verdict, code, reason, rankingAllowed, deltaPct |
+| Compare Lab 기존 판정 | `POST /api/v1/compare` | verdict, code, reason, rankingAllowed, deltaPct |
+| Compare Lab 판정·분석 | `POST /api/v1/compare/report` | comparison, conditionSafety, performanceInterpretation, evidenceConfidence, evidenceRefs, portfolioImplications, recommendedActions, limitations |
 | Gap 셀 상세 | `GET /api/v1/portfolio/{type}/{refrigerant}` | status, samsungModels, rankingAllowed, evidence |
 | Evidence Drawer | `GET /api/v1/evidence/{modelId}` | evidence, supportingEvidence |
 | 장애 확인 | `GET /api/v1/health` | status, activeReleaseId |

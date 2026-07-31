@@ -162,8 +162,12 @@ function createMonitor(page) {
       }
       const isForbiddenMethod = ["PUT", "PATCH", "DELETE"].includes(method);
       const isPublish = parsed.pathname === "/api/v1/releases/publish";
+      const allowedReadOnlyPosts = new Set([
+        "/api/v1/compare",
+        "/api/v1/compare/report",
+      ]);
       const isUnexpectedPost =
-        method === "POST" && parsed.pathname !== "/api/v1/compare";
+        method === "POST" && !allowedReadOnlyPosts.has(parsed.pathname);
       if (isForbiddenMethod || isPublish || isUnexpectedPost) {
         monitor.forbiddenWrites.push({ method, url });
       }

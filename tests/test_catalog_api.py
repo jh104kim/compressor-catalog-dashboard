@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from backend.catalog_audit.api import create_app
+from backend.catalog_audit.api import PublishedCatalog, create_app
 from backend.catalog_audit.release import FileReleaseStore
 from backend.catalog_audit.validation import CatalogValidator
 
@@ -174,6 +174,70 @@ def test_g1_direct_comparison_api(tmp_path: Path) -> None:
     assert response.json()["code"] == "DIRECT_OK"
     assert response.json()["rankingAllowed"] is True
     assert response.json()["deltaPct"] is not None
+
+
+def test_p14_compare_report_api_returns_analysis_and_evidence(
+    tmp_path: Path,
+) -> None:
+    client = published_client(tmp_path)
+
+    response = client.post(
+        "/api/v1/compare/report",
+        json={
+            "baselineModelId": "model:samsung:DS8LC5040IN",
+            "candidateModelId": "model:gmcc:STDC049N1ULB",
+            "metric": "cop",
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["releaseId"] == "release:2026-07-30:001"
+    assert payload["comparison"]["code"] == "DIRECT_OK"
+    assert payload["analysis"]["conditionSafety"]["status"] == "DIRECT_SAFE"
+    assert payload["analysis"]["performanceInterpretation"]["allowed"] is True
+    assert len(payload["analysis"]["evidenceRefs"]) == 2
+    assert {
+        item["modelId"] for item in payload["analysis"]["evidenceRefs"]
+    } == {
+        "model:samsung:DS8LC5040IN",
+        "model:gmcc:STDC049N1ULB",
+    }
+
+
+def test_p14_compare_models_are_loaded_from_one_release_snapshot(
+    monkeypatch,
+) -> None:
+    catalog = PublishedCatalog(store=object())  # type: ignore[arg-type]
+    calls = 0
+
+    def read_once() -> tuple[dict, dict, dict]:
+        nonlocal calls
+        calls += 1
+        return (
+            {"releaseId": "release:test"},
+            {},
+            {
+                "models": [
+                    {"modelId": "model:samsung:A"},
+                    {"modelId": "model:gmcc:B"},
+                ],
+            },
+        )
+
+    monkeypatch.setattr(catalog, "read", read_once)
+
+    models, release_id = catalog.models(
+        "model:samsung:A",
+        "model:gmcc:B",
+    )
+
+    assert calls == 1
+    assert release_id == "release:test"
+    assert [item["modelId"] for item in models] == [
+        "model:samsung:A",
+        "model:gmcc:B",
+    ]
 
 
 def test_g2_condition_mismatch_api_has_no_rank_or_delta(tmp_path: Path) -> None:

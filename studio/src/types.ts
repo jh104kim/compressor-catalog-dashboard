@@ -111,7 +111,7 @@ export interface ExpansionBatch {
 }
 
 export interface ComparisonResult {
-  releaseId: string;
+  releaseId?: string;
   verdict: Verdict;
   code: string;
   reason: string;
@@ -123,6 +123,66 @@ export interface ComparisonResult {
   rankingAllowed: boolean;
   normalizedBaselineMetric?: number | null;
   normalizedCandidateMetric?: number | null;
+}
+
+export interface ComparisonEvidenceRef {
+  modelId: string;
+  manufacturer: string;
+  model: string;
+  sourcePath: string;
+  authority: string;
+  confidence: string;
+  locator: {
+    kind?: string;
+    page?: number;
+    section?: string;
+    url?: string;
+  };
+  fieldPaths: string[];
+}
+
+export interface ComparisonAnalysis {
+  releaseId: string;
+  baselineModelId: string;
+  candidateModelId: string;
+  metric: "cop" | "eer";
+  executiveSummary: string;
+  conditionSafety: {
+    status: "DIRECT_SAFE" | "REFERENCE_ONLY" | "COMPARISON_BLOCKED";
+    summary: string;
+  };
+  performanceInterpretation: {
+    allowed: boolean;
+    metric: "cop" | "eer";
+    baselineValue: number | null;
+    candidateValue: number | null;
+    capacityDiffPct: number | null;
+    deltaPct: number | null;
+    direction:
+      | "BASELINE_HIGHER"
+      | "CANDIDATE_HIGHER"
+      | "EQUAL"
+      | "NOT_ASSESSED";
+    summary: string;
+  };
+  evidenceConfidence: {
+    level: "High" | "Medium" | "Low" | "Unknown";
+    basis: string;
+    baselineAuthority: string;
+    candidateAuthority: string;
+    baselineConfidence: string;
+    candidateConfidence: string;
+  };
+  portfolioImplications: string[];
+  recommendedActions: string[];
+  limitations: string[];
+  evidenceRefs: ComparisonEvidenceRef[];
+}
+
+export interface ComparisonReport {
+  releaseId: string;
+  comparison: ComparisonResult;
+  analysis: ComparisonAnalysis;
 }
 
 export interface PortfolioStatus {

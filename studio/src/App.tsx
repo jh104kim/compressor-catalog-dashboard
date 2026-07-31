@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import {
-  compareCatalogModels,
+  compareCatalogModelsWithReport,
   getActiveRelease,
   getCriticalGap,
   getEvidence,
@@ -11,7 +11,8 @@ import {
 import type {
   ActiveRelease,
   CatalogModel,
-  ComparisonResult,
+  ComparisonEvidenceRef,
+  ComparisonReport,
   CompressorType,
   EvidenceTrace,
   ExpansionBatch,
@@ -202,6 +203,32 @@ function comparisonResearchTarget(
             modelCapacity * 1.15,
           ).toLocaleString("ko-KR")} W`,
   };
+}
+
+function reportMatchesSelection(
+  report: ComparisonReport,
+  releaseId: string,
+  baselineModelId: string,
+  candidateModelId: string,
+  comparisonMetric: "cop" | "eer",
+) {
+  return (
+    report.releaseId === releaseId &&
+    report.releaseId === report.analysis.releaseId &&
+    report.comparison.baselineModelId === baselineModelId &&
+    report.comparison.candidateModelId === candidateModelId &&
+    report.comparison.metric === comparisonMetric &&
+    report.analysis.baselineModelId === baselineModelId &&
+    report.analysis.candidateModelId === candidateModelId &&
+    report.analysis.metric === comparisonMetric
+  );
+}
+
+function evidenceLocator(ref: ComparisonEvidenceRef) {
+  if (typeof ref.locator.page === "number") return `PDF p.${ref.locator.page}`;
+  if (ref.locator.section) return ref.locator.section;
+  if (ref.locator.url) return ref.locator.url;
+  return ref.locator.kind || "locator 미확인";
 }
 
 function StatusPill({
@@ -664,11 +691,13 @@ function CatalogChecks({
 
 function CompareLab({
   models,
+  releaseId,
   initialBaselineId,
   initialCandidateId,
   initialMetric,
 }: {
   models: CatalogModel[];
+  releaseId: string;
   initialBaselineId?: string | null;
   initialCandidateId?: string | null;
   initialMetric?: "cop" | "eer";
@@ -686,9 +715,12 @@ function CompareLab({
     initialMetric ?? "cop",
   );
   const initialPairAttempted = useRef(false);
-  const [result, setResult] = useState<ComparisonResult | null>(null);
+  const comparisonRevision = useRef(0);
+  const [comparisonReport, setComparisonReport] =
+    useState<ComparisonReport | null>(null);
   const [error, setError] = useState("");
   const [running, setRunning] = useState(false);
+  const result = comparisonReport?.comparison ?? null;
 
   const samsungByType = useMemo(
     () => selectedType ? samsung.filter((item) => item.type === selectedType) : [],
@@ -773,24 +805,39 @@ function CompareLab({
       return;
     }
     let active = true;
+    const requestRevision = ++comparisonRevision.current;
     setRunning(true);
-    compareCatalogModels(
+    compareCatalogModelsWithReport(
       initialBaselineId!,
       initialCandidateId!,
       initialMetric ?? "cop",
     )
-      .then((nextResult) => {
-        if (active) setResult(nextResult);
+      .then((nextReport) => {
+        if (
+          active &&
+          requestRevision === comparisonRevision.current &&
+          reportMatchesSelection(
+            nextReport,
+            releaseId,
+            initialBaselineId!,
+            initialCandidateId!,
+            initialMetric ?? "cop",
+          )
+        ) {
+          setComparisonReport(nextReport);
+        }
       })
       .catch((requestError) => {
-        if (active) {
+        if (active && requestRevision === comparisonRevision.current) {
           setError(
             requestError instanceof Error ? requestError.message : String(requestError),
           );
         }
       })
       .finally(() => {
-        if (active) setRunning(false);
+        if (active && requestRevision === comparisonRevision.current) {
+          setRunning(false);
+        }
       });
     return () => {
       active = false;
@@ -800,7 +847,14 @@ function CompareLab({
     initialBaselineId,
     initialCandidateId,
     initialMetric,
+    releaseId,
   ]);
+
+  function invalidateComparison() {
+    comparisonRevision.current += 1;
+    setComparisonReport(null);
+    setRunning(false);
+  }
 
   function chooseType(type: CompressorType) {
     const typeSamsung = samsung.filter((item) => item.type === type);
@@ -813,46 +867,74 @@ function CompareLab({
       hasDirectFor(comparisonMetric === "cop" ? "eer" : "cop")
         ? comparisonMetric === "cop" ? "eer" : "cop"
         : comparisonMetric;
+    invalidateComparison();
     setSelectedType(type);
     setComparisonMetric(nextMetric);
     setBaselineId("");
     setCandidateId("");
-    setResult(null);
     setError("");
     writeQuery({ view: "compare" });
   }
 
   function chooseBaseline(modelId: string) {
+    invalidateComparison();
     setBaselineId(modelId);
     setCandidateId("");
-    setResult(null);
     setError("");
   }
 
   function chooseMetric(nextMetric: "cop" | "eer") {
+    invalidateComparison();
     setComparisonMetric(nextMetric);
     setCandidateId("");
-    setResult(null);
     setError("");
   }
 
   async function runComparison() {
     if (!baselineId || !candidateId) return;
+    const snapshot = {
+      baselineModelId: baselineId,
+      candidateModelId: candidateId,
+      metric: comparisonMetric,
+    };
+    const requestRevision = ++comparisonRevision.current;
     setRunning(true);
     setError("");
-    setResult(null);
+    setComparisonReport(null);
     try {
-      setResult(await compareCatalogModels(baselineId, candidateId, comparisonMetric));
+      const nextReport = await compareCatalogModelsWithReport(
+        snapshot.baselineModelId,
+        snapshot.candidateModelId,
+        snapshot.metric,
+      );
+      if (requestRevision !== comparisonRevision.current) return;
+      if (
+        !reportMatchesSelection(
+          nextReport,
+          releaseId,
+          snapshot.baselineModelId,
+          snapshot.candidateModelId,
+          snapshot.metric,
+        )
+      ) {
+        setError("분석 응답의 Release·모델·지표가 현재 선택과 일치하지 않습니다.");
+        return;
+      }
+      setComparisonReport(nextReport);
       writeQuery({
         view: "compare",
-        baselineModelId: baselineId,
-        candidateModelId: candidateId,
-        metric: comparisonMetric,
+        baselineModelId: snapshot.baselineModelId,
+        candidateModelId: snapshot.candidateModelId,
+        metric: snapshot.metric,
       });
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : String(requestError));
+      if (requestRevision === comparisonRevision.current) {
+        setError(requestError instanceof Error ? requestError.message : String(requestError));
+      }
     } finally {
-      setRunning(false);
+      if (requestRevision === comparisonRevision.current) {
+        setRunning(false);
+      }
     }
   }
 
@@ -1018,8 +1100,8 @@ function CompareLab({
                   data-testid="competitor-model-option"
                   data-model-id={item.modelId}
                   onClick={() => {
+                    invalidateComparison();
                     setCandidateId(item.modelId);
-                    setResult(null);
                     setError("");
                   }}
                 >
@@ -1063,7 +1145,7 @@ function CompareLab({
               <p className="inline-error" role="alert">API 비교 판정이 안전 규칙과 충돌합니다.</p>
             )}
             {result.verdict !== "DIRECT" && (
-              <div className="safety-note">순위·성능 차이·우열 문구를 표시하지 않습니다.</div>
+              <div className="safety-note">직접 비교 수치를 표시하지 않습니다.</div>
             )}
           </div>
         </section>
@@ -1073,6 +1155,7 @@ function CompareLab({
           <div><h3>두 모델을 선택해 비교 Gate를 실행하세요</h3><p>결과는 DIRECT, REFERENCE, BLOCKED 중 하나로 설명됩니다.</p></div>
         </section>
       )}
+      {comparisonReport && <AnalysisReport report={comparisonReport} />}
       {selectedType && researchTargets.length > 0 && (
         <section
           className="panel research-queue"
@@ -1114,6 +1197,153 @@ function CompareLab({
         </section>
       )}
     </div>
+  );
+}
+
+function AnalysisReport({ report }: { report: ComparisonReport }) {
+  const { analysis, comparison } = report;
+  const performance = analysis.performanceInterpretation;
+  const baselineName =
+    analysis.evidenceRefs.find(
+      (item) => item.modelId === analysis.baselineModelId,
+    )?.model ?? "baseline";
+  const candidateName =
+    analysis.evidenceRefs.find(
+      (item) => item.modelId === analysis.candidateModelId,
+    )?.model ?? "candidate";
+  const fileName = `compare-analysis-${baselineName}-${candidateName}-${analysis.metric}.json`;
+  const downloadHref = `data:application/json;charset=utf-8,${encodeURIComponent(
+    JSON.stringify(report, null, 2),
+  )}`;
+  const confidenceTone =
+    analysis.evidenceConfidence.level === "High"
+      ? "good"
+      : analysis.evidenceConfidence.level === "Medium"
+        ? "warn"
+        : analysis.evidenceConfidence.level === "Low"
+          ? "danger"
+          : "neutral";
+
+  return (
+    <section
+      className="analysis-report panel"
+      data-testid="analysis-report"
+      data-verdict={comparison.verdict}
+      aria-label="비교 분석 리포트"
+    >
+      <div className="analysis-report-head">
+        <div>
+          <p className="section-kicker">COMPARE DECISION REPORT</p>
+          <h3>카탈로그 근거 기반 추가 분석</h3>
+          <p>{analysis.executiveSummary}</p>
+        </div>
+        <div className="analysis-report-actions">
+          <a href={downloadHref} download={fileName}>
+            JSON 내려받기
+          </a>
+          <button type="button" onClick={() => window.print()}>
+            분석 인쇄 / PDF
+          </button>
+        </div>
+      </div>
+
+      <dl className="analysis-trace" data-testid="analysis-trace">
+        <div><dt>Release</dt><dd>{report.releaseId}</dd></div>
+        <div><dt>Samsung modelId</dt><dd>{analysis.baselineModelId}</dd></div>
+        <div><dt>경쟁 modelId</dt><dd>{analysis.candidateModelId}</dd></div>
+        <div><dt>지표</dt><dd>{analysis.metric.toUpperCase()}</dd></div>
+      </dl>
+
+      <div className="analysis-section-grid">
+        <article data-testid="analysis-condition-safety">
+          <div className="analysis-section-title">
+            <span>01</span>
+            <div><small>COMPARISON SAFETY</small><h4>비교 결론과 조건 안전성</h4></div>
+          </div>
+          <StatusPill
+            tone={analysis.conditionSafety.status === "DIRECT_SAFE" ? "good" : "danger"}
+          >
+            {analysis.conditionSafety.status}
+          </StatusPill>
+          <p>{analysis.conditionSafety.summary}</p>
+        </article>
+
+        <article data-testid="analysis-performance">
+          <div className="analysis-section-title">
+            <span>02</span>
+            <div><small>PERFORMANCE CONTEXT</small><h4>용량·효율 차이 해석</h4></div>
+          </div>
+          <p>{performance.summary}</p>
+          {performance.allowed ? (
+            <dl className="analysis-metrics">
+              <div><dt>Samsung</dt><dd>{performance.baselineValue} {performance.metric.toUpperCase()}</dd></div>
+              <div><dt>경쟁 모델</dt><dd>{performance.candidateValue} {performance.metric.toUpperCase()}</dd></div>
+              <div><dt>용량 차이</dt><dd>{performance.capacityDiffPct?.toFixed(2)}%</dd></div>
+              <div><dt>경쟁사 변화율</dt><dd>{performance.deltaPct?.toFixed(2)}%</dd></div>
+            </dl>
+          ) : (
+            <div className="analysis-blocked-note">직접 비교 수치는 제공하지 않습니다.</div>
+          )}
+        </article>
+
+        <article
+          className="analysis-evidence-section"
+          data-testid="analysis-evidence"
+        >
+          <div className="analysis-section-title">
+            <span>03</span>
+            <div><small>EVIDENCE CONFIDENCE</small><h4>데이터 신뢰도와 Evidence</h4></div>
+          </div>
+          <div className="analysis-confidence">
+            <StatusPill tone={confidenceTone}>
+              {analysis.evidenceConfidence.level}
+            </StatusPill>
+            <p>{analysis.evidenceConfidence.basis}</p>
+          </div>
+          <div className="analysis-evidence-grid">
+            {analysis.evidenceRefs.map((ref) => (
+              <div key={ref.modelId}>
+                <strong>{ref.manufacturer} · {ref.model}</strong>
+                <code>{ref.modelId}</code>
+                <span>{ref.sourcePath}</span>
+                <small>{ref.authority} · {ref.confidence} · {evidenceLocator(ref)}</small>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article data-testid="analysis-portfolio">
+          <div className="analysis-section-title">
+            <span>04</span>
+            <div><small>PORTFOLIO SIGNAL</small><h4>포트폴리오 시사점</h4></div>
+          </div>
+          <ul>
+            {analysis.portfolioImplications.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </article>
+
+        <article data-testid="analysis-actions">
+          <div className="analysis-section-title">
+            <span>05</span>
+            <div><small>NEXT ACTION</small><h4>권장 후속 조치와 분석 한계</h4></div>
+          </div>
+          <h5>권장 조치</h5>
+          <ul>
+            {analysis.recommendedActions.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <h5>분석 한계</h5>
+          <ul className="analysis-limitations">
+            {analysis.limitations.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </article>
+      </div>
+    </section>
   );
 }
 
@@ -1413,7 +1643,7 @@ export default function App() {
           {refreshError && <p className="inline-error" role="alert">기존 Published Release를 유지합니다: {refreshError}</p>}
           {view === "overview" && <Overview release={release} models={models} gap={gap} onNavigate={navigate} />}
           {view === "catalog" && <CatalogChecks release={release} models={models} initialModelId={route.modelId} initialEvidence={route.evidence} />}
-          {view === "compare" && <CompareLab models={models} initialBaselineId={route.baselineModelId} initialCandidateId={route.candidateModelId} initialMetric={route.metric} />}
+          {view === "compare" && <CompareLab models={models} releaseId={release.releaseId} initialBaselineId={route.baselineModelId} initialCandidateId={route.candidateModelId} initialMetric={route.metric} />}
           {view === "portfolio" && <PortfolioGaps models={models} gap={gap} />}
           {view === "release" && <ReleaseEvidence release={release} expansionBatch={expansionBatch} />}
         </main>
