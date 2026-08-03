@@ -1,0 +1,6 @@
+{
+  "phase": "P15-E",
+  "status": "FAIL",
+  "retries": 0,
+  "error": "Error: CURVE 페이지 가로 overflow 231px [{\"tag\":\"DIV\",\"testId\":null,\"className\":\"recharts-wrapper\",\"right\":1671,\"width\":1348},{\"tag\":\"svg\",\"testId\":null,\"className\":\"[object SVGAnimatedString]\",\"right\":1671,\"width\":1348},{\"tag\":\"g\",\"testId\":null,\"className\":\"[object SVGAnimatedString]\",\"right\":1658,\"width\":1329},{\"tag\":\"g\",\"testId\":null,\"className\":\"[object SVGAnimatedString]\",\"right\":1658,\"width\":1284},{\"tag\":\"g\",\"testId\":null,\"className\":\"[object SVGAnimatedString]\",\"right\":1658,\"width\":23}]\n    at invariant (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:34:25)\n    at curveScenario (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:306:3)\n    at async main (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:508:21)"
+}

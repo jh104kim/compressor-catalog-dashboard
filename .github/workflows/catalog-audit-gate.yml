@@ -1,0 +1,352 @@
+name: Catalog Audit Gate
+
+on:
+  push:
+    branches:
+      - "codex/**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-audit-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  p0-catalog-audit:
+    name: Contract, Studio, P5, and report Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      PYTHONUTF8: "1"
+      P0_RETRIES: "0"
+      P5_RETRIES: "0"
+      P15_RETRIES: "0"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare P0 evidence directory
+        shell: bash
+        run: |
+          mkdir -p qa/baseline/github-actions
+          mkdir -p qa/evidence/p5/github-actions
+          {
+            echo "repository=${GITHUB_REPOSITORY}"
+            echo "sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "retries=${P0_RETRIES}"
+          } > qa/baseline/github-actions/gate-context.txt
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python gate dependencies
+        run: >-
+          python -m pip install
+          -r backend/requirements.txt
+          pytest==9.1.1
+          httpx==0.28.1
+
+      - name: Run catalog audit Python suite
+        shell: bash
+        run: |
+          python -m pytest -q \
+            2>&1 | tee qa/baseline/github-actions/python-tests.log
+
+      - name: Check Draft 2020-12 catalog schema
+        shell: bash
+        run: |
+          python - <<'PY' 2>&1 | tee qa/baseline/github-actions/schema-check.log
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+
+          schema_path = Path("data/contracts/catalog.schema.json")
+          schema = json.loads(schema_path.read_text(encoding="utf-8"))
+          Draft202012Validator.check_schema(schema)
+          print(f"Draft 2020-12 schema PASS: {schema_path}")
+          PY
+
+      - name: Verify active Published Release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence_dir="$GITHUB_WORKSPACE/qa/evidence/p5/github-actions"
+          mkdir -p "$evidence_dir"
+          python - <<'PY' 2>&1 | tee "$evidence_dir/release-metadata.log"
+          import json
+          import re
+          from pathlib import Path
+
+          from backend.catalog_audit.validation import canonical_json_sha256
+
+          root = Path("catalog/published")
+          active = json.loads(
+              (root / "active-release.json").read_text(encoding="utf-8")
+          )
+          release_match = re.fullmatch(
+              r"release:(\d{4}-\d{2}-\d{2}):(\d{3})",
+              active["releaseId"],
+          )
+          assert release_match is not None
+          release_dir = (
+              root
+              / "releases"
+              / f"release_{release_match.group(1)}_{release_match.group(2)}"
+          )
+          assert release_dir.is_dir()
+          metadata = json.loads(
+              (release_dir / "release.json").read_text(encoding="utf-8")
+          )
+          bundle = json.loads(
+              (release_dir / "bundle.json").read_text(encoding="utf-8")
+          )
+          summary = metadata["validationSummary"]
+
+          assert metadata["status"] == "PUBLISHED"
+          assert metadata["releaseId"] == active["releaseId"]
+          assert metadata["dataSha256"] == active["dataSha256"]
+          assert canonical_json_sha256(bundle) == metadata["dataSha256"]
+          assert summary["status"] == "VALIDATED"
+          assert summary["criticalCount"] == 0
+          assert summary["majorCount"] == 0
+          assert summary["modelCount"] == 76
+          assert bundle["counts"] == {
+              "models": 76,
+              "samsungModels": 27,
+              "competitorModels": 49,
+          }
+          assert metadata["approvedBy"].strip()
+          assert metadata["approvedAt"].strip()
+          assert re.fullmatch(r"[0-9a-f]{40}", metadata["sourceCommit"])
+          assert re.fullmatch(r"[0-9a-f]{40}", metadata["appGitSha"])
+          assert active["appGitSha"] == metadata["appGitSha"]
+
+          from backend.catalog_audit.expansion import load_expansion_batch
+
+          b1 = load_expansion_batch(
+              Path("catalog/expansion/b1-scroll-p92.json")
+          )
+          assert b1["status"] == "SOURCE_VERIFIED"
+          assert b1["publicationStatus"] == "NOT_PUBLISHED"
+          assert b1["counts"] == {
+              "totalRows": 16,
+              "uniqueModels": 16,
+              "overlapModels": 8,
+              "newCandidates": 8,
+              "conditionUnknown": 16,
+          }
+
+          print(
+              json.dumps(
+                  {
+                      "releaseId": metadata["releaseId"],
+                      "status": metadata["status"],
+                      "dataSha256": metadata["dataSha256"],
+                      "sourceCommit": metadata["sourceCommit"],
+                      "appGitSha": metadata["appGitSha"],
+                      "b1Counts": b1["counts"],
+                      "counts": bundle["counts"],
+                      "validationSummary": {
+                          "criticalCount": summary["criticalCount"],
+                          "majorCount": summary["majorCount"],
+                          "warningCount": summary["warningCount"],
+                      },
+                  },
+                  ensure_ascii=False,
+                  indent=2,
+              )
+          )
+          PY
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            qa/package-lock.json
+            studio/package-lock.json
+
+      - name: Install QA dependencies
+        working-directory: qa
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: qa
+        run: npx playwright install --with-deps chromium
+
+      - name: Run P0 Chromium characterization once with retries 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence_dir="$GITHUB_WORKSPACE/qa/baseline/github-actions"
+          mkdir -p "$evidence_dir"
+
+          port="$(python - <<'PY'
+          import socket
+          with socket.socket() as sock:
+              sock.bind(("127.0.0.1", 0))
+              print(sock.getsockname()[1])
+          PY
+          )"
+
+          python -m http.server "$port" \
+            --bind 127.0.0.1 \
+            --directory frontend \
+            >"$evidence_dir/server.log" 2>&1 &
+          server_pid="$!"
+          cleanup() {
+            kill "$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          base_url="http://127.0.0.1:${port}/"
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error "$base_url" >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "P0 HTTP server did not become ready: $base_url" >&2
+            exit 1
+          fi
+
+          test "$P0_RETRIES" = "0"
+          BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir" \
+          npm --prefix qa run test:p0:ci
+
+      - name: Install Studio dependencies
+        working-directory: studio
+        run: npm ci
+
+      - name: Run Studio Vitest
+        working-directory: studio
+        run: npm test
+
+      - name: Generate Compare Lab report
+        run: python scripts/build_compare_lab_report.py
+
+      - name: Build Studio
+        working-directory: studio
+        run: npm run build
+
+      - name: Run P5 same-origin Chromium once with retries 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence_dir="$GITHUB_WORKSPACE/qa/evidence/p5/github-actions"
+          mkdir -p "$evidence_dir"
+          active_release_id="$(python -c 'import json; from pathlib import Path; print(json.loads(Path("catalog/published/active-release.json").read_text(encoding="utf-8"))["releaseId"])')"
+          {
+            echo "repository=${GITHUB_REPOSITORY}"
+            echo "sha=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "release_id=${active_release_id}"
+            echo "retries=${P5_RETRIES}"
+            python --version
+            node --version
+            npx --prefix qa playwright --version
+          } > "$evidence_dir/gate-context.txt"
+
+          port="$(python - <<'PY'
+          import socket
+          with socket.socket() as sock:
+              sock.bind(("127.0.0.1", 0))
+              print(sock.getsockname()[1])
+          PY
+          )"
+
+          python -m uvicorn backend.catalog_audit.main:create_runtime_app \
+            --factory \
+            --host 127.0.0.1 \
+            --port "$port" \
+            >"$evidence_dir/runtime.log" 2>&1 &
+          server_pid="$!"
+          cleanup() {
+            kill "$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          base_url="http://127.0.0.1:${port}/"
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error \
+              "${base_url}api/v1/health" >"$evidence_dir/health.json"; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "FastAPI Runtime did not become ready: $base_url" >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error "$base_url" \
+            >"$evidence_dir/studio-index.html"
+
+          test "$P5_RETRIES" = "0"
+          BASE_URL="$base_url" \
+          E2E_BASE_URL="$base_url" \
+          E2E_APP_PORT="$port" \
+          OUTPUT_DIR="$evidence_dir" \
+          npm --prefix qa run test:p5 \
+            2>&1 | tee "$evidence_dir/playwright.log"
+
+          REPORT_BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir/compare-report" \
+          npm --prefix qa run test:report \
+            2>&1 | tee "$evidence_dir/compare-report-playwright.log"
+
+          P14_BASE_URL="$base_url" \
+          OUTPUT_DIR="$evidence_dir/p14-analysis" \
+          npm --prefix qa run test:p14 \
+            2>&1 | tee "$evidence_dir/p14-analysis-playwright.log"
+
+          test "$P15_RETRIES" = "0"
+          P15_BASE_URL="$base_url" \
+          OUTPUT_DIR="$GITHUB_WORKSPACE/qa/evidence/p15/github-actions" \
+          npm --prefix qa run test:p15 \
+            2>&1 | tee "$evidence_dir/p15-speed-playwright.log"
+
+      - name: Upload P0 GitHub Actions evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-catalog-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/baseline/github-actions/**
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload P5 GitHub Actions evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p5-catalog-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/evidence/p5/github-actions/**
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload P15 GitHub Actions evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p15-speed-performance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/evidence/p15/github-actions/**
+          if-no-files-found: warn
+          retention-days: 14

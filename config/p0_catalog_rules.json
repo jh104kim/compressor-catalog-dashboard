@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "phase": "P0",
+  "authority": {
+    "manufacturer": "Samsung",
+    "catalogYear": 2024,
+    "source": "data/Samsung-Compressor-Catalogue_2024.pdf",
+    "policy": "baseline",
+    "sha256": "8913bee2e757dafbfd0fd34cbcc21759f6a441dc880e9dbe5e486e0990abd1ce"
+  },
+  "layers": {
+    "baseline": "samsung_catalog_2024",
+    "postCatalog": {
+      "name": "post_catalog",
+      "field": "postCatalog",
+      "requiredValue": true,
+      "badge": "2024+ 개발",
+      "policy": "Samsung 2024 공식 카탈로그 이후 확인된 개발·양산 모델을 별도 레이어로 관리한다."
+    },
+    "samsungLegacyResearch": {
+      "name": "samsung_legacy_research",
+      "requiredValue": false,
+      "badge": "공식 PDF 미확정",
+      "policy": "Samsung 모델이지만 2024 공식 PDF 페이지가 확인되지 않은 기존 공개 조사값은 Baseline으로 가장하지 않고 별도 관리한다."
+    },
+    "competitorResearch": "competitor_research"
+  },
+  "portfolio": {
+    "R290": {
+      "Re": "gap",
+      "Ro": "have",
+      "Sc": "have"
+    },
+    "R454B": {
+      "Re": "gap",
+      "Ro": "have",
+      "Sc": "have"
+    }
+  },
+  "canonicalFacts": {
+    "DS4BC7066FVT": {
+      "cop": 3.25,
+      "condition": "ARI",
+      "source": "data/Samsung-Compressor-Catalogue_2024.pdf",
+      "page": 92,
+      "rejectedCop": 3.34
+    },
+    "DS4HD5066FVT": {
+      "cop": 3.43,
+      "condition": "ARI",
+      "status": "양산",
+      "source": "data/Samsung-Compressor-Catalogue_2024.pdf",
+      "page": 92
+    }
+  },
+  "benchmark": {
+    "directComparisonKey": [
+      "type",
+      "refrigerant",
+      "condition",
+      "driveClass"
+    ],
+    "similarityCapacityTolerancePct": 15,
+    "crossGroupRanking": "forbidden",
+    "conditionBadgeRequired": true,
+    "results": [
+      "DIRECT",
+      "REFERENCE",
+      "BLOCKED"
+    ],
+    "conversionPolicy": "reference-only",
+    "conditionFactorsToAri": {
+      "ARI": 1.0,
+      "DOE-A": 0.84,
+      "DOE-B": 0.63,
+      "EN12900": null,
+      "ASHRAE-LBP": null,
+      "ASHRAE-MBP": null,
+      "SEER60": null,
+      "HP-heating": null,
+      "미확인": null
+    }
+  },
+  "e2e": {
+    "status": "passed",
+    "browser": "chromium",
+    "localConsecutivePasses": 2,
+    "githubActionsRuns": 1,
+    "retries": 0,
+    "reuseExistingServer": false,
+    "viewports": [
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 1024
+      },
+      {
+        "id": "mobile",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "tabs": [
+      "kpi",
+      "decision",
+      "analysis",
+      "reporting",
+      "backlog"
+    ],
+    "requiredChecks": [
+      "five-tabs-render",
+      "tab-navigation",
+      "filters-and-search",
+      "no-page-horizontal-overflow",
+      "no-unresolved-template",
+      "no-console-error",
+      "no-page-error",
+      "no-failed-app-request"
+    ],
+    "evidenceRoot": "qa/evidence/p0",
+    "localEvidence": [
+      "qa/evidence/p0/local-run-2/browser-characterization.json",
+      "qa/evidence/p0/local-run-3/browser-characterization.json"
+    ],
+    "githubActionsEvidence": {
+      "runId": 30522200310,
+      "runAttempt": 1,
+      "headSha": "632954df1c1448b1c1f4de0001c007bd1b69c3f2",
+      "status": "PASS",
+      "url": "https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30522200310",
+      "artifact": "p0-catalog-audit-30522200310-1"
+    }
+  },
+  "mvp": {
+    "mode": "view-first",
+    "dataEditing": false,
+    "publishing": false,
+    "approvalRecording": true,
+    "initialSamsungModelScope": 27,
+    "laterCatalogRowExpansion": 362
+  },
+  "releaseGate": {
+    "phaseScoreMinimum": 4.0,
+    "criticalMaximum": 0,
+    "majorMaximum": 0,
+    "visualE2ERequiredBeforeP0Complete": true
+  }
+}

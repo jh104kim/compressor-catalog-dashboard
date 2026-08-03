@@ -1,0 +1,6 @@
+{
+  "phase": "P15-E",
+  "status": "FAIL",
+  "retries": 0,
+  "error": "Error: 속도 상태 undefined\n    at invariant (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:27:25)\n    at validateCurvePayload (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:132:3)\n    at curveScenario (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:203:26)\n    at async main (C:\\ai\\ai_coding_pjt\\2606-Compressor-Catalog-Dashboard\\qa\\scripts\\p15-speed-e2e.cjs:462:21)"
+}

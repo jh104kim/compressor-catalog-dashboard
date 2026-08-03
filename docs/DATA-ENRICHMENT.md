@@ -1,7 +1,10 @@
 # 비교 데이터 보완 브리프 (Reporting 풍부화)
 
+> 상태: 후속 리서치 백로그. 현재 제품은 Published Release와 `performanceMaps`를
+> 사용하며, 아래 필드는 공식 근거·측정조건·Evidence가 확보된 뒤에만 Staging에 추가한다.
+
 > 목적: 당사(Samsung) vs 경쟁사 비교를 단일점 COP/EER을 넘어 **다차원**으로 확장해 연구원 인사이트 극대화.
-> 현재 DB(`compressor-data.js` models)는 cc·용량·입력·COP·EER·조건·상태만 보유. 아래를 리서치로 보완.
+> Legacy DB(`compressor-data.js` models)는 cc·용량·입력·COP·EER·조건·상태를 보유. 기본 Studio는 Published Release 계약을 사용한다.
 > 출처 표기는 기존처럼 `src` 필드 유지, 추정/후속은 `postCatalog`/`confidence`로 구분.
 
 ## 현재 비교의 한계

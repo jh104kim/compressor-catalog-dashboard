@@ -1,0 +1,25 @@
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        app: "index.html",
+        compareReport: "compare-lab-output.html",
+      },
+    },
+  },
+  server: {
+    port: 5174,
+    proxy: {
+      "/api": "http://127.0.0.1:8000",
+    },
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./tests/setup.ts",
+    css: true,
+  },
+});

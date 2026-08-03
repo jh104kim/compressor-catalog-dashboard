@@ -1,0 +1,732 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B1",
+  "title": "Samsung 2024 Scroll p.92",
+  "status": "SOURCE_VERIFIED",
+  "publicationStatus": "NOT_PUBLISHED",
+  "review": {
+    "reviewedAt": "2026-07-30",
+    "method": "PDF p.92 visual review and text extraction",
+    "conditionDecision": "p.92에 측정조건이 없어 16행 모두 UNKNOWN으로 유지"
+  },
+  "source": {
+    "pdfPath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+    "pdfSha256": "8913bee2e757dafbfd0fd34cbcc21759f6a441dc880e9dbe5e486e0990abd1ce",
+    "parsedPath": "data/samsung-catalogue-2024-parsed.md",
+    "parsedSha256": "489801c87c785a7b1c3d1129520c8106b2d0fdce8d4ebe948eee32a4aac206d0",
+    "page": 92
+  },
+  "counts": {
+    "totalRows": 16,
+    "uniqueModels": 16,
+    "overlapModels": 8,
+    "newCandidates": 8,
+    "conditionUnknown": 16
+  },
+  "rows": [
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:001",
+      "model": "DS2GR7046FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS2GR7046FVT",
+      "specs": {
+        "displacementCc": 45.6,
+        "capacityW": 15240,
+        "inputW": 4602,
+        "cop": 3.31,
+        "eer": 11.3
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:002",
+      "model": "DS4GM5052FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 52.0,
+        "capacityW": 17732,
+        "inputW": 5403,
+        "cop": 3.28,
+        "eer": 11.2
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:003",
+      "model": "DS4GR7066FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4GR7066FVT",
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 22098,
+        "inputW": 6670,
+        "cop": 3.31,
+        "eer": 11.3
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:004",
+      "model": "DS4GR5070FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4GR5070FVT",
+      "specs": {
+        "displacementCc": 70.0,
+        "capacityW": 23535,
+        "inputW": 6990,
+        "cop": 3.37,
+        "eer": 11.5
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:005",
+      "model": "DS4GR5080FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 80.0,
+        "capacityW": 26524,
+        "inputW": 8080,
+        "cop": 3.28,
+        "eer": 11.2
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:006",
+      "model": "DS4GM7090FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4GM7090FVT",
+      "specs": {
+        "displacementCc": 90.0,
+        "capacityW": 30305,
+        "inputW": 9230,
+        "cop": 3.28,
+        "eer": 11.2
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:007",
+      "model": "DS2GT7046EVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 45.6,
+        "capacityW": 15240,
+        "inputW": 4602,
+        "cop": 3.31,
+        "eer": 11.3
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:008",
+      "model": "DS4GT5052EVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 52.0,
+        "capacityW": 17732,
+        "inputW": 5354,
+        "cop": 3.31,
+        "eer": 11.3
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:009",
+      "model": "DS4GT5066EVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R410A",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 22284,
+        "inputW": 6667,
+        "cop": 3.34,
+        "eer": 11.4
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:010",
+      "model": "DS2BB5033FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R32",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS2BB5033FVT",
+      "specs": {
+        "displacementCc": 33.0,
+        "capacityW": 11782,
+        "inputW": 3622,
+        "cop": 3.25,
+        "eer": 11.1
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:011",
+      "model": "DS4BC7066FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R32",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4BC7066FVT",
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 23564,
+        "inputW": 7243,
+        "cop": 3.25,
+        "eer": 11.1
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:012",
+      "model": "DS4BC7066EVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R32",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 23564,
+        "inputW": 7243,
+        "cop": 3.25,
+        "eer": 11.1
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:013",
+      "model": "DS4HC5066FNT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R290",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 13042,
+        "inputW": 3803,
+        "cop": 3.43,
+        "eer": 11.7
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:014",
+      "model": "DS4HD5066FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R290",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4HD5066FVT",
+      "specs": {
+        "displacementCc": 65.8,
+        "capacityW": 13042,
+        "inputW": 3803,
+        "cop": 3.43,
+        "eer": 11.7
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:015",
+      "model": "DS4HD5090FNT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R290",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": null,
+      "specs": {
+        "displacementCc": 90.0,
+        "capacityW": 17878,
+        "inputW": 5259,
+        "cop": 3.4,
+        "eer": 11.6
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    },
+    {
+      "catalogRowId": "catalog:samsung:2024:p92:016",
+      "model": "DS4HD5090FVT",
+      "manufacturer": "Samsung",
+      "type": "Sc",
+      "refrigerant": "R290",
+      "condition": "UNKNOWN",
+      "comparisonEligible": false,
+      "sourceLayer": "samsung_catalog_2024",
+      "postCatalog": false,
+      "existingModelId": "model:samsung:DS4HD5090FVT",
+      "specs": {
+        "displacementCc": 90.0,
+        "capacityW": 17878,
+        "inputW": 5259,
+        "cop": 3.4,
+        "eer": 11.6
+      },
+      "evidence": {
+        "sourcePath": "data/Samsung-Compressor-Catalogue_2024.pdf",
+        "authority": "official",
+        "locator": {
+          "kind": "pdf-page",
+          "page": 92
+        },
+        "fieldPaths": [
+          "model",
+          "refrigerant",
+          "specs.displacementCc",
+          "specs.capacityW",
+          "specs.inputW",
+          "specs.cop",
+          "specs.eer"
+        ]
+      },
+      "supportingEvidence": {
+        "sourcePath": "data/samsung-catalogue-2024-parsed.md",
+        "authority": "secondary",
+        "locator": {
+          "kind": "markdown-section",
+          "section": "Scroll (스크롤) — 16개"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,2003 @@
+{
+  "schemaVersion": 1,
+  "runStartedAt": "2026-07-30T10:10:48.143Z",
+  "runFinishedAt": "2026-07-30T10:10:56.609Z",
+  "baseUrl": "http://127.0.0.1:8011/",
+  "outputDir": "qa/evidence/p11/p0-local",
+  "screenshotDir": "qa/evidence/p11/p0-local/screenshots",
+  "status": "PASS",
+  "viewports": [
+    {
+      "id": "desktop-1440x1024",
+      "viewport": {
+        "width": 1440,
+        "height": 1024
+      },
+      "status": "PASS",
+      "navigation": {
+        "requestedUrl": "http://127.0.0.1:8011/",
+        "finalUrl": "http://127.0.0.1:8011/",
+        "status": 200,
+        "ok": true
+      },
+      "tabs": [
+        {
+          "id": "kpi",
+          "label": "KPI 현황",
+          "expectedHeading": "Samsung 압축기 포트폴리오 현황",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/desktop-1440x1024-kpi.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "Samsung 압축기 포트폴리오 현황",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 1
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 1440,
+              "documentClientWidth": 1440,
+              "bodyScrollWidth": 1440,
+              "bodyClientWidth": 1440,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": []
+            }
+          },
+          "assertions": [
+            {
+              "name": "KPI Samsung 27 / 경쟁사 49",
+              "status": "PASS",
+              "details": {
+                "renderedText": "추적 모델 (Samsung) 27 개 +49 경쟁사 비교"
+              }
+            },
+            {
+              "name": "KPI 최고 COP 3.43",
+              "status": "PASS",
+              "details": {
+                "renderedText": "최고 COP 3.43 R290 스크롤 (양산)"
+              }
+            },
+            {
+              "name": "KPI P1 긴급 공백 1건",
+              "status": "PASS",
+              "details": {
+                "renderedText": "P1 긴급 공백 1 건 R290 왕복동"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "decision",
+          "label": "Decision 전략",
+          "expectedHeading": "지금, 무엇을 결정해야 하는가",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/desktop-1440x1024-decision.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "지금, 무엇을 결정해야 하는가",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 1
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 1440,
+              "documentClientWidth": 1440,
+              "bodyScrollWidth": 1440,
+              "bodyClientWidth": 1440,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": []
+            }
+          },
+          "assertions": [
+            {
+              "name": "Decision R290 Re 공백",
+              "status": "PASS",
+              "details": {
+                "gap": "R290 왕복동"
+              }
+            },
+            {
+              "name": "Decision P1~P6 로드맵",
+              "status": "PASS",
+              "details": {
+                "visiblePriorities": [
+                  "P1",
+                  "P2",
+                  "P3",
+                  "P4",
+                  "P5",
+                  "P6"
+                ]
+              }
+            },
+            {
+              "name": "Decision Samsung 최신 동향",
+              "status": "PASS",
+              "details": {
+                "heading": "Samsung 최신 동향"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "analysis",
+          "label": "모델 분석",
+          "expectedHeading": "모델 분석",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/desktop-1440x1024-analysis.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "모델 분석",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 1
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 1440,
+              "documentClientWidth": 1440,
+              "bodyScrollWidth": 1440,
+              "bodyClientWidth": 1440,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": [
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "경쟁사 · 모델 매칭 용량 차이 효율 차이 조건 출처 Panasonic TKF76E25DCH-52RPS R600a · Variable(인버터) 동일 조건 +0.7% -4.4% AS",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "출처",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Panasonic TKF76E25DCH-52RPS R600a · Variable(인버터) 동일 조건 +0.7% -4.4% ASHRAE LBP non-lg-official §2.1 ",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "non-lg-official §2.1 Panasonic Re",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "LG CMA053PJJM R290 · Fixed 동일 유형 +37.2% 직접 비교 보류 ASHRAE LBP r290 §2-2",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "r290 §2-2",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Secop BD35F R134a · Variable(2000-3500rpm) 동일 유형 -65.9% 직접 비교 보류 ASHRAE LBP non-lg-official §2.3 Sec",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "non-lg-official §2.3 Secop Re",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Embraco EMT2121U R290 · Fixed 동일 유형 +82.4% 직접 비교 보류 ASHRAE LBP r290 §2-3",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "r290 §2-3",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "GMCC PA59HMZ R290 · Fixed 동일 유형 +99.3% 직접 비교 보류 ASHRAE LBP r290 §2-4",
+                  "left": 677,
+                  "right": 1457,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "r290 §2-4",
+                  "left": 1321,
+                  "right": 1457,
+                  "width": 136
+                }
+              ]
+            }
+          },
+          "assertions": [
+            {
+              "name": "모델 분석 유형 필터 Sc",
+              "status": "PASS",
+              "details": {
+                "selectedType": "Sc",
+                "firstVisibleModel": "DS2GR7046FVT"
+              }
+            },
+            {
+              "name": "모델 분석 측정조건 필터 DOE-B",
+              "status": "PASS",
+              "details": {
+                "selectedCondition": "DOE-B",
+                "visibleModels": [
+                  "DS8LC5040IN",
+                  "DS8LC5049IN"
+                ]
+              }
+            },
+            {
+              "name": "Samsung 모델 선택 후 TOP 5 갱신",
+              "status": "PASS",
+              "details": {
+                "selectedModel": "DS8LC5049IN",
+                "refreshedCompetitor": "STDC049N1ULB"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "reporting",
+          "label": "Reporting",
+          "expectedHeading": "모델별 경쟁 비교 리포트",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/desktop-1440x1024-reporting.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "모델별 경쟁 비교 리포트",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 1
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 1440,
+              "documentClientWidth": 1440,
+              "bodyScrollWidth": 1440,
+              "bodyClientWidth": 1440,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": []
+            }
+          },
+          "assertions": [
+            {
+              "name": "Reporting R454B Sc Fixed DOE-B 동일조건군",
+              "status": "PASS",
+              "details": {
+                "group": "r454b-sc-fix-doeb",
+                "condition": "DOE-B",
+                "samsungReference": "DS8LC5040IN"
+              }
+            },
+            {
+              "name": "Reporting R32 Ro ARI 직접 비교군",
+              "status": "PASS",
+              "details": {
+                "group": "r32-ro-var",
+                "condition": "ARI",
+                "competitor": "9RL160Z"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "backlog",
+          "label": "보완 과제",
+          "expectedHeading": "데이터 보완 과제",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/desktop-1440x1024-backlog.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "데이터 보완 과제",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 1
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 1440,
+              "documentClientWidth": 1440,
+              "bodyScrollWidth": 1440,
+              "bodyClientWidth": 1440,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": []
+            }
+          },
+          "assertions": [
+            {
+              "name": "Backlog 진행률 수치와 막대 일치",
+              "status": "PASS",
+              "details": {
+                "percent": 56,
+                "done": 5,
+                "total": 9
+              }
+            },
+            {
+              "name": "Backlog 외부 출처 링크",
+              "status": "PASS",
+              "details": {
+                "count": 9,
+                "firstHref": "https://lg.com/global/business/compressor-motor"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        }
+      ],
+      "workflows": [
+        {
+          "id": "header-search-reporting-drilldown",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "헤더 검색 DS4BC7066FVT 결과",
+              "status": "PASS",
+              "details": {
+                "query": "DS4BC7066FVT",
+                "resultCount": 1
+              }
+            },
+            {
+              "name": "검색 모델 선택 후 Reporting 드릴다운",
+              "status": "PASS",
+              "details": {
+                "destination": "reporting",
+                "drilldownModel": "DS4BC7066FVT"
+              }
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "network": [],
+        "externalCdn": []
+      }
+    },
+    {
+      "id": "mobile-390x844",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "navigation": {
+        "requestedUrl": "http://127.0.0.1:8011/",
+        "finalUrl": "http://127.0.0.1:8011/",
+        "status": 200,
+        "ok": true
+      },
+      "tabs": [
+        {
+          "id": "kpi",
+          "label": "KPI 현황",
+          "expectedHeading": "Samsung 압축기 포트폴리오 현황",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/mobile-390x844-kpi.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "Samsung 압축기 포트폴리오 현황",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 1
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 390,
+              "documentClientWidth": 390,
+              "bodyScrollWidth": 390,
+              "bodyClientWidth": 390,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": [
+                {
+                  "tag": "div",
+                  "className": "dc-matrix-grid",
+                  "text": "냉매 GWP 트렌드 Re Ro Sc 주요 경쟁사 R600a A3 3 성장 ● ○ ○ LG·Embraco·GMCC·Secop·Panasonic R134a A1 1,430 감소 ● ●",
+                  "left": 39,
+                  "right": 799,
+                  "width": 760
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Re",
+                  "left": 332,
+                  "right": 441,
+                  "width": 109
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Ro",
+                  "left": 441,
+                  "right": 549,
+                  "width": 109
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Sc",
+                  "left": 549,
+                  "right": 658,
+                  "width": 109
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "주요 경쟁사",
+                  "left": 658,
+                  "right": 799,
+                  "width": 141
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R600a A3 3 성장 ● ○ ○ LG·Embraco·GMCC·Secop·Panasonic",
+                  "left": 39,
+                  "right": 799,
+                  "width": 760
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "●",
+                  "left": 299,
+                  "right": 396,
+                  "width": 96
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "○",
+                  "left": 396,
+                  "right": 492,
+                  "width": 96
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "○",
+                  "left": 429,
+                  "right": 459,
+                  "width": 30
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "○",
+                  "left": 437,
+                  "right": 451,
+                  "width": 14
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "○",
+                  "left": 492,
+                  "right": 589,
+                  "width": 96
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "○",
+                  "left": 525,
+                  "right": 555,
+                  "width": 30
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "○",
+                  "left": 533,
+                  "right": 547,
+                  "width": 14
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic",
+                  "left": 589,
+                  "right": 799,
+                  "width": 210
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic",
+                  "left": 597,
+                  "right": 791,
+                  "width": 194
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic",
+                  "left": 597,
+                  "right": 791,
+                  "width": 194
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R134a A1 1,430 감소 ● ● ○ LG·Embraco·GMCC·Secop·Panasonic·Highly",
+                  "left": 39,
+                  "right": 799,
+                  "width": 760
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "●",
+                  "left": 371,
+                  "right": 460,
+                  "width": 90
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "●",
+                  "left": 401,
+                  "right": 431,
+                  "width": 30
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "●",
+                  "left": 409,
+                  "right": 423,
+                  "width": 14
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "○",
+                  "left": 460,
+                  "right": 550,
+                  "width": 90
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "○",
+                  "left": 490,
+                  "right": 520,
+                  "width": 30
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "○",
+                  "left": 498,
+                  "right": 512,
+                  "width": 14
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic·Highly",
+                  "left": 550,
+                  "right": 799,
+                  "width": 249
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic·Highly",
+                  "left": 558,
+                  "right": 791,
+                  "width": 233
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "LG·Embraco·GMCC·Secop·Panasonic·Highly",
+                  "left": 558,
+                  "right": 791,
+                  "width": 233
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R290 A3 3 성장 ○ ● ● LG·Embraco·GMCC·Secop·Panasonic·Copeland",
+                  "left": 39,
+                  "right": 799,
+                  "width": 760
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "●",
+                  "left": 360,
+                  "right": 447,
+                  "width": 87
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "●",
+                  "left": 389,
+                  "right": 419,
+                  "width": 30
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "●",
+                  "left": 397,
+                  "right": 411,
+                  "width": 14
+                }
+              ]
+            }
+          },
+          "assertions": [
+            {
+              "name": "KPI Samsung 27 / 경쟁사 49",
+              "status": "PASS",
+              "details": {
+                "renderedText": "추적 모델 (Samsung) 27 개 +49 경쟁사 비교"
+              }
+            },
+            {
+              "name": "KPI 최고 COP 3.43",
+              "status": "PASS",
+              "details": {
+                "renderedText": "최고 COP 3.43 R290 스크롤 (양산)"
+              }
+            },
+            {
+              "name": "KPI P1 긴급 공백 1건",
+              "status": "PASS",
+              "details": {
+                "renderedText": "P1 긴급 공백 1 건 R290 왕복동"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "decision",
+          "label": "Decision 전략",
+          "expectedHeading": "지금, 무엇을 결정해야 하는가",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/mobile-390x844-decision.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "지금, 무엇을 결정해야 하는가",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 1
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 390,
+              "documentClientWidth": 390,
+              "bodyScrollWidth": 390,
+              "bodyClientWidth": 390,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": [
+                {
+                  "tag": "div",
+                  "className": "dc-comp-grid",
+                  "text": "제조사 Re / Ro / Sc 핵심 위협 · 모니터링 LG 매우강함 강함 강함 R290 Re 선제, R454B, 카탈로그 갱신 (분기) Copeland 없음 없음 매우강함 R454",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "핵심 위협 · 모니터링",
+                  "left": 289,
+                  "right": 559,
+                  "width": 270
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "LG 매우강함 강함 강함 R290 Re 선제, R454B, 카탈로그 갱신 (분기)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R290 Re 선제, R454B, 카탈로그 갱신 (분기)",
+                  "left": 312,
+                  "right": 559,
+                  "width": 247
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R290 Re 선제, R454B, 카탈로그 갱신 (분기)",
+                  "left": 320,
+                  "right": 531,
+                  "width": 211
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Copeland 없음 없음 매우강함 R454B/R744 스크롤 선도 — Sc 직접 위협 (분기)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R454B/R744 스크롤 선도 — Sc 직접 위협 (분기)",
+                  "left": 326,
+                  "right": 559,
+                  "width": 233
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R454B/R744 스크롤 선도 — Sc 직접 위협 (분기)",
+                  "left": 334,
+                  "right": 543,
+                  "width": 209
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "GMCC 중간 매우강함 중간 세계 최대 로터리, R744 CO2, Two-Stage (반기)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "세계 최대 로터리, R744 CO2, Two-Stage (반기)",
+                  "left": 312,
+                  "right": 559,
+                  "width": 247
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "세계 최대 로터리, R744 CO2, Two-Stage (반기)",
+                  "left": 320,
+                  "right": 521,
+                  "width": 200
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Embraco 매우강함 없음 중간 R290/R1234yf Re 최선두 — Re 직접 위협 (반기)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R290/R1234yf Re 최선두 — Re 직접 위협 (반기)",
+                  "left": 321,
+                  "right": 559,
+                  "width": 238
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R290/R1234yf Re 최선두 — Re 직접 위협 (반기)",
+                  "left": 329,
+                  "right": 540,
+                  "width": 211
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Danfoss 중간 없음 강함 DSH R454B, Turbocor 원심형 (연간)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "DSH R454B, Turbocor 원심형 (연간)",
+                  "left": 298,
+                  "right": 559,
+                  "width": 261
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "DSH R454B, Turbocor 원심형 (연간)",
+                  "left": 306,
+                  "right": 515,
+                  "width": 209
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Panasonic 중간 강함 중간 R454B/R32 로터리, CO2 인버터 (분기)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R454B/R32 로터리, CO2 인버터 (분기)",
+                  "left": 308,
+                  "right": 559,
+                  "width": 251
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R454B/R32 로터리, CO2 인버터 (분기)",
+                  "left": 316,
+                  "right": 537,
+                  "width": 221
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Highly 낮음 중간 중간 R454B/C 로터리, EV 스크롤 (연간)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R454B/C 로터리, EV 스크롤 (연간)",
+                  "left": 298,
+                  "right": 559,
+                  "width": 261
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R454B/C 로터리, EV 스크롤 (연간)",
+                  "left": 306,
+                  "right": 502,
+                  "width": 196
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Secop 중간 없음 없음 R290 소형 Re, DC/의료 (연간)",
+                  "left": 39,
+                  "right": 559,
+                  "width": 520
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "R290 소형 Re, DC/의료 (연간)",
+                  "left": 298,
+                  "right": 559,
+                  "width": 261
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "R290 소형 Re, DC/의료 (연간)",
+                  "left": 306,
+                  "right": 478,
+                  "width": 172
+                }
+              ]
+            }
+          },
+          "assertions": [
+            {
+              "name": "Decision R290 Re 공백",
+              "status": "PASS",
+              "details": {
+                "gap": "R290 왕복동"
+              }
+            },
+            {
+              "name": "Decision P1~P6 로드맵",
+              "status": "PASS",
+              "details": {
+                "visiblePriorities": [
+                  "P1",
+                  "P2",
+                  "P3",
+                  "P4",
+                  "P5",
+                  "P6"
+                ]
+              }
+            },
+            {
+              "name": "Decision Samsung 최신 동향",
+              "status": "PASS",
+              "details": {
+                "heading": "Samsung 최신 동향"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "analysis",
+          "label": "모델 분석",
+          "expectedHeading": "모델 분석",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/mobile-390x844-analysis.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "모델 분석",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 1
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 390,
+              "documentClientWidth": 390,
+              "bodyScrollWidth": 390,
+              "bodyClientWidth": 390,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": [
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "경쟁사 · 모델 매칭 용량 차이 효율 차이 조건 출처 Panasonic TKF76E25DCH-52RPS R600a · Variable(인버터) 동일 조건 +0.7% -4.4% AS",
+                  "left": 47,
+                  "right": 827,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "용량 차이",
+                  "left": 332,
+                  "right": 447,
+                  "width": 115
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "효율 차이",
+                  "left": 447,
+                  "right": 569,
+                  "width": 122
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "조건",
+                  "left": 569,
+                  "right": 691,
+                  "width": 122
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "출처",
+                  "left": 691,
+                  "right": 827,
+                  "width": 136
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Panasonic TKF76E25DCH-52RPS R600a · Variable(인버터) 동일 조건 +0.7% -4.4% ASHRAE LBP non-lg-official §2.1 ",
+                  "left": 47,
+                  "right": 827,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "+0.7%",
+                  "left": 332,
+                  "right": 447,
+                  "width": 115
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "+0.7%",
+                  "left": 403,
+                  "right": 439,
+                  "width": 36
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-4.4%",
+                  "left": 447,
+                  "right": 569,
+                  "width": 122
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "-4.4%",
+                  "left": 529,
+                  "right": 561,
+                  "width": 33
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "ASHRAE LBP",
+                  "left": 569,
+                  "right": 691,
+                  "width": 122
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "ASHRAE LBP",
+                  "left": 591,
+                  "right": 670,
+                  "width": 80
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "ASHRAE LBP",
+                  "left": 599,
+                  "right": 662,
+                  "width": 64
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "non-lg-official §2.1 Panasonic Re",
+                  "left": 691,
+                  "right": 827,
+                  "width": 136
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "non-lg-official §2.1 Panasonic Re",
+                  "left": 699,
+                  "right": 797,
+                  "width": 97
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "LG CMA053PJJM R290 · Fixed 동일 유형 +37.2% 직접 비교 보류 ASHRAE LBP r290 §2-2",
+                  "left": 47,
+                  "right": 827,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "+37.2%",
+                  "left": 332,
+                  "right": 447,
+                  "width": 115
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "+37.2%",
+                  "left": 396,
+                  "right": 439,
+                  "width": 43
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "직접 비교 보류",
+                  "left": 447,
+                  "right": 569,
+                  "width": 122
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "직접 비교 보류",
+                  "left": 481,
+                  "right": 561,
+                  "width": 80
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "ASHRAE LBP",
+                  "left": 569,
+                  "right": 691,
+                  "width": 122
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "ASHRAE LBP",
+                  "left": 591,
+                  "right": 670,
+                  "width": 80
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "ASHRAE LBP",
+                  "left": 599,
+                  "right": 662,
+                  "width": 64
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "r290 §2-2",
+                  "left": 691,
+                  "right": 827,
+                  "width": 136
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "r290 §2-2",
+                  "left": 699,
+                  "right": 748,
+                  "width": 49
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Secop BD35F R134a · Variable(2000-3500rpm) 동일 유형 -65.9% 직접 비교 보류 ASHRAE LBP non-lg-official §2.3 Sec",
+                  "left": 47,
+                  "right": 827,
+                  "width": 780
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-65.9%",
+                  "left": 332,
+                  "right": 447,
+                  "width": 115
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "-65.9%",
+                  "left": 400,
+                  "right": 439,
+                  "width": 39
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "직접 비교 보류",
+                  "left": 447,
+                  "right": 569,
+                  "width": 122
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "직접 비교 보류",
+                  "left": 481,
+                  "right": 561,
+                  "width": 80
+                }
+              ]
+            }
+          },
+          "assertions": [
+            {
+              "name": "모델 분석 유형 필터 Sc",
+              "status": "PASS",
+              "details": {
+                "selectedType": "Sc",
+                "firstVisibleModel": "DS2GR7046FVT"
+              }
+            },
+            {
+              "name": "모델 분석 측정조건 필터 DOE-B",
+              "status": "PASS",
+              "details": {
+                "selectedCondition": "DOE-B",
+                "visibleModels": [
+                  "DS8LC5040IN",
+                  "DS8LC5049IN"
+                ]
+              }
+            },
+            {
+              "name": "Samsung 모델 선택 후 TOP 5 갱신",
+              "status": "PASS",
+              "details": {
+                "selectedModel": "DS8LC5049IN",
+                "refreshedCompetitor": "STDC049N1ULB"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "reporting",
+          "label": "Reporting",
+          "expectedHeading": "모델별 경쟁 비교 리포트",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/mobile-390x844-reporting.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "모델별 경쟁 비교 리포트",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 1
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 0
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 390,
+              "documentClientWidth": 390,
+              "bodyScrollWidth": 390,
+              "bodyClientWidth": 390,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": [
+                {
+                  "tag": "div",
+                  "className": "dc-cmp-grid",
+                  "text": "제조사 · 모델 COP (원본) ARI 환산 Δ vs 당사 상태 Panasonic KKD420Z 4.36 4.36 -26.1% 양산 Panasonic KRD220Z 4.25 4.2",
+                  "left": 47,
+                  "right": 687,
+                  "width": 640
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "ARI 환산",
+                  "left": 354,
+                  "right": 457,
+                  "width": 102
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Δ vs 당사",
+                  "left": 457,
+                  "right": 572,
+                  "width": 115
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "상태",
+                  "left": 572,
+                  "right": 687,
+                  "width": 115
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Panasonic KKD420Z 4.36 4.36 -26.1% 양산",
+                  "left": 47,
+                  "right": 687,
+                  "width": 640
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "4.36",
+                  "left": 354,
+                  "right": 457,
+                  "width": 102
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "4.36",
+                  "left": 424,
+                  "right": 449,
+                  "width": 25
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-26.1%",
+                  "left": 457,
+                  "right": 572,
+                  "width": 115
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-26.1%",
+                  "left": 465,
+                  "right": 564,
+                  "width": 99
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "-26.1%",
+                  "left": 523,
+                  "right": 564,
+                  "width": 41
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 465,
+                  "right": 564,
+                  "width": 99
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 514,
+                  "right": 515,
+                  "width": 1
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 467,
+                  "right": 514,
+                  "width": 48
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "양산",
+                  "left": 572,
+                  "right": 687,
+                  "width": 115
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "양산",
+                  "left": 611,
+                  "right": 648,
+                  "width": 37
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "양산",
+                  "left": 619,
+                  "right": 640,
+                  "width": 21
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Panasonic KRD220Z 4.25 4.25 -24.2% 양산",
+                  "left": 47,
+                  "right": 687,
+                  "width": 640
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "4.25",
+                  "left": 354,
+                  "right": 457,
+                  "width": 102
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "4.25",
+                  "left": 424,
+                  "right": 449,
+                  "width": 25
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-24.2%",
+                  "left": 457,
+                  "right": 572,
+                  "width": 115
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "-24.2%",
+                  "left": 465,
+                  "right": 564,
+                  "width": 99
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "-24.2%",
+                  "left": 523,
+                  "right": 564,
+                  "width": 41
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 465,
+                  "right": 564,
+                  "width": 99
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 514,
+                  "right": 515,
+                  "width": 1
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "",
+                  "left": 467,
+                  "right": 514,
+                  "width": 48
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "양산",
+                  "left": 572,
+                  "right": 687,
+                  "width": 115
+                },
+                {
+                  "tag": "span",
+                  "className": "",
+                  "text": "양산",
+                  "left": 611,
+                  "right": 648,
+                  "width": 37
+                },
+                {
+                  "tag": "span",
+                  "className": "sc-interp",
+                  "text": "양산",
+                  "left": 619,
+                  "right": 640,
+                  "width": 21
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "Samsung UF9BL3180F 3.25 3.25 -0.9% 양산",
+                  "left": 47,
+                  "right": 687,
+                  "width": 640
+                },
+                {
+                  "tag": "div",
+                  "className": "",
+                  "text": "3.25",
+                  "left": 354,
+                  "right": 457,
+                  "width": 102
+                }
+              ]
+            }
+          },
+          "assertions": [
+            {
+              "name": "Reporting R454B Sc Fixed DOE-B 동일조건군",
+              "status": "PASS",
+              "details": {
+                "group": "r454b-sc-fix-doeb",
+                "condition": "DOE-B",
+                "samsungReference": "DS8LC5040IN"
+              }
+            },
+            {
+              "name": "Reporting R32 Ro ARI 직접 비교군",
+              "status": "PASS",
+              "details": {
+                "group": "r32-ro-var",
+                "condition": "ARI",
+                "competitor": "9RL160Z"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        },
+        {
+          "id": "backlog",
+          "label": "보완 과제",
+          "expectedHeading": "데이터 보완 과제",
+          "status": "PASS",
+          "screenshot": "qa/evidence/p11/p0-local/screenshots/mobile-390x844-backlog.png",
+          "checks": {
+            "buttonClicked": true,
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "noHorizontalOverflow": true,
+            "noUnresolvedBindings": true,
+            "noConsoleErrors": true,
+            "noPageErrors": true,
+            "noNetworkFailures": true,
+            "screenshotSaved": true,
+            "domainAssertions": true
+          },
+          "state": {
+            "selectedHeading": "데이터 보완 과제",
+            "headingStates": [
+              {
+                "heading": "Samsung 압축기 포트폴리오 현황",
+                "visibleCount": 0
+              },
+              {
+                "heading": "지금, 무엇을 결정해야 하는가",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델 분석",
+                "visibleCount": 0
+              },
+              {
+                "heading": "모델별 경쟁 비교 리포트",
+                "visibleCount": 0
+              },
+              {
+                "heading": "데이터 보완 과제",
+                "visibleCount": 1
+              }
+            ],
+            "selectedHeadingVisible": true,
+            "onlySelectedHeadingVisible": true,
+            "unresolvedBindings": [],
+            "overflow": {
+              "documentScrollWidth": 390,
+              "documentClientWidth": 390,
+              "bodyScrollWidth": 390,
+              "bodyClientWidth": 390,
+              "overflowPixels": 0,
+              "hasHorizontalOverflow": false,
+              "overflowingElements": []
+            }
+          },
+          "assertions": [
+            {
+              "name": "Backlog 진행률 수치와 막대 일치",
+              "status": "PASS",
+              "details": {
+                "percent": 56,
+                "done": 5,
+                "total": 9
+              }
+            },
+            {
+              "name": "Backlog 외부 출처 링크",
+              "status": "PASS",
+              "details": {
+                "count": 9,
+                "firstHref": "https://lg.com/global/business/compressor-motor"
+              }
+            }
+          ],
+          "errors": {
+            "interaction": [],
+            "console": [],
+            "page": [],
+            "network": []
+          }
+        }
+      ],
+      "workflows": [
+        {
+          "id": "header-search-reporting-drilldown",
+          "status": "PASS",
+          "assertions": [
+            {
+              "name": "헤더 검색 DS4BC7066FVT 결과",
+              "status": "PASS",
+              "details": {
+                "query": "DS4BC7066FVT",
+                "resultCount": 1
+              }
+            },
+            {
+              "name": "검색 모델 선택 후 Reporting 드릴다운",
+              "status": "PASS",
+              "details": {
+                "destination": "reporting",
+                "drilldownModel": "DS4BC7066FVT"
+              }
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "network": [],
+        "externalCdn": []
+      }
+    }
+  ],
+  "summary": {
+    "viewportCount": 2,
+    "tabCount": 10,
+    "passedTabs": 10,
+    "failedTabs": 0,
+    "workflowCount": 2,
+    "passedWorkflows": 2,
+    "failedWorkflows": 0
+  }
+}

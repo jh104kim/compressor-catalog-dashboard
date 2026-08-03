@@ -4,7 +4,114 @@
 
 ---
 
-## 2026-06-23 (최신)
+## 2026-08-03 — Phase P18 Published Release 변경 Diff ✅
+
+- **TDD 계약**: `REQ-P18-001~006`과 synthetic/실제 Release/API/UI/E2E 테스트를 먼저 작성하고 엔진·API·화면 부재 RED를 확인.
+- **Diff 엔진·API**: `modelId` 기준 추가·삭제·변경과 leaf field path를 결정론적으로 계산. 배열은 경로와 item count만 제공하고 현재·직전 Bundle SHA를 모두 검증.
+- **Release UI**: `release:2026-07-30:005 → release:2026-08-03:001`의 추가 0, 삭제 0, 변경 2, 성능맵 2를 표시. 변경 모델은 `ENV4A5DL2B`, `TKF76E25DCH-52RPS`이며 경로는 `performanceMaps`.
+- **안전 경계**: 최초 Release는 `FIRST_RELEASE`, 직전 Bundle 누락·변조는 503. 과거 Release 편집·복원 기능은 제공하지 않음.
+- **전체 검증**: Python 99 passed, Vitest 38/38, build 583 modules, P5 16/16을 2회 연속 PASS. 보고서 2/2, P14 6/6, P15/P16 8/8 PASS. retries·오류·외부요청·금지쓰기·overflow 0.
+- **시각 검수**: 1440×1024와 390×844 Release 화면에서 6개 요약·2개 변경 모델·경로를 확인했고 모바일 가로 넘침 0.
+- **평가**: Task 100/100, 품질 환산 99.2/100, Critical 0·Major 0으로 로컬 PASS.
+- **증거**: `docs/15-release-diff-tdd-plan.md`, `tests/p18-release-diff-contract.md`, `qa/test-runs/RUN-20260803-018-P18-RED-GREEN.md`, `qa/evaluations/EVAL-21-P18.md`, `qa/evidence/p18/local-run-2/`.
+
+---
+
+## 2026-08-03 — Phase P17 README·프로젝트 문서·폴더 정비 ✅
+
+- **README 개편**: 현재 Studio 기준 빠른 실행, 5개 앱 뷰+Compare Report 검수 순서, 안전 비교 판정, RPM/RPS 차트, 데이터 발행, 테스트, Legacy 경계를 상세화.
+- **문서 연결**: `docs/README.md`, `qa/README.md`, `tests/README.md`를 추가하고 운영·UI·CI·P14~P16 문서의 활성 Release·수량·경로를 최신화. 과거 RED/GREEN 수치는 역사 기록으로 보존.
+- **실행 정비**: `run.bat`을 Legacy 정적 서버에서 현재 Compare Report 생성 → Studio build → FastAPI same-origin 실행 흐름으로 변경.
+- **폴더 정비**: 최종 Evidence로 대체된 P0/P15/P16 중간 실행·디버그 파일만 제거하고 `.gitignore`에 로컬 scratch 경계를 명시. P16 최종 desktop/mobile 증거 유지.
+- **문서 품질**: 프로젝트 Markdown 60개 감사, 로컬 링크 36개 검사에서 누락 0, `git diff --check` PASS.
+- **전체 검증**: 보고서 8모델/9쌍/15판정 생성, Python 94 passed, Vitest 37/37, build 583 modules, P5 16/16, 보고서 2/2, P14 6/6, P15/P16 8/8 PASS. retries·오류·외부요청·금지쓰기·overflow 0.
+
+---
+
+## 2026-08-03 — Phase P16 Compare Report 직접 비교 상세화 ✅
+
+- **표시 정리**: Samsung 27개 전체 점검은 유지하되, 보고서 본문·매트릭스는 직접 비교 가능 8개 모델과 `DIRECT_OK` 15건만 표시. 조사 필요 모델·빈 COP/EER 섹션·DATA_REQUIRED 속도쌍은 제외.
+- **상세 Recharts**: 유형·COP/EER 필터, 양사 원값, 경쟁사 Δ%, Samsung/경쟁사 우위 건수, 평균 용량 차이와 직접 비교 상세 카드를 추가.
+- **안전성**: 각 행을 독립 직접 비교쌍으로 표시하고 조건군·COP/EER 교차 순위를 금지. RPM/RPS는 공식 성능점이 양쪽에 있는 1쌍만 유지.
+- **검증**: Python 94, Vitest 37/37, build 583 modules, desktop/mobile Playwright 8/8과 정적 보고서 회귀 2/2 PASS. 오류·외부요청·금지쓰기·overflow 0.
+- **E2E 개선**: 이름 있는 팝업의 1440x960 고정 크기를 발견해, 모바일 검증 시 실제 390x844 viewport를 강제하고 재검수.
+- **증거**: `docs/14-compare-report-detail-plan.md`, `qa/test-runs/RUN-20260803-017-P16-RED-GREEN.md`, `qa/evidence/p16/local-run-3/`.
+
+---
+
+## 2026-08-03 — Phase P15 RPM/RPS 성능 맵·Recharts ✅ 로컬 완료
+
+- **계약 고정**: `REQ-P15-001~007`, 속도 성능점 Evidence·RPM/RPS 60배·Hz 금지·eligible 전용 차트·DATA_REQUIRED·stale·정적 보고서 회귀를 정의.
+- **E2E 선작성**: desktop `1440×1024`, mobile `390×844`, retries 0의 P15 Playwright와 CI Gate를 추가.
+- **RED 확인**: 활성 Release 005에서 `speedAnalysis` 부재로 `속도 상태 undefined` 실패를 재현하고 `qa/evidence/p15/red-contract/p15-speed-e2e.json`에 기록.
+- **문제/결정**: Release 번호는 동적 조회, Re Golden은 정확히 겹치는 속도점이 없어 ranking 불허, 미검증 Ro/Sc는 DATA_REQUIRED·차트 0으로 고정.
+- **지표 안전성**: Panasonic 공개 속도점에 inputW/EER가 없어 가짜 파생을 금지하고, 현재 양쪽 완결 지표인 용량·COP만 노출하도록 계약을 수정.
+- **구현/Release**: `release:2026-08-03:001`, commit `0f0d126fd40cfca4c6222358fa54be9c03304e0e`. Compare Lab과 정적 보고서에 eligible Re RPM/RPS Recharts·원시점 표·Evidence·속도 CSV·print를 반영.
+- **GREEN**: Python 94 passed(warning 1), Vitest 35/35, build 581 modules, P15 desktop/mobile 8/8을 retries 0으로 2회 연속 PASS. API/차트/표 8=8=8, Evidence 100%, DATA_REQUIRED chart 0, stale 0, 오류·외부요청·쓰기·overflow 0.
+- **회귀**: P5 16/16, 정적 보고서 2/2, P14 6/6, P0 characterization PASS.
+- **오탐 개선**: 최초 print→screen 직후 Recharts 1-frame reflow를 overflow 231px로 감지. offender 진단 후 2 rAF 뒤 측정하도록 보완하고 후속 2회 overflow 0을 확인.
+- **독립 Judge**: Task 100/100, 품질축 `5.0/5.0/5.0/4.9/4.9`, 환산 99.2/100, Critical 0·Major 0으로 로컬 PASS.
+- **현재 상태**: 로컬 Goal과 GitHub Actions push Gate를 완료. commit `bc0bb70`의 run [30804663489](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30804663489) **PASS**.
+- **증거**: `docs/13-speed-performance-map-tdd-plan.md`, `tests/p15-speed-performance-contract.md`, `qa/test-runs/RUN-20260803-016-P15-RED-GREEN.md`, `qa/evaluations/EVAL-20-P15.md`.
+
+---
+
+## 2026-07-31 — Phase P14-B~E 안전 비교 추가 분석·레포팅 ✅
+
+- **P14-B 분석 API**: `POST /api/v1/compare/report`와 결정론적 분석 엔진을 추가. DIRECT만 수치 해석하며 REFERENCE/BLOCKED는 직접 성능 판단을 생성하지 않음.
+- **P14-C 레포트 UI**: 조건 안전성·용량/효율·Evidence 신뢰도·포트폴리오·후속 조치/한계 5개 섹션, Release/두 modelId/지표 추적, JSON·인쇄/PDF 반영.
+- **P14-D 비동기 안전**: `comparisonRevision`과 요청 snapshot으로 선택 변경 뒤 도착한 지연 비교·분석 응답을 폐기. 두 모델은 서버에서 단일 Release snapshot으로 읽고, 화면 Active Release와 다른 응답도 차단.
+- **P14-E 검증**: Python 82, Vitest 33/33, build, 기존 P5 16/16, 정적 보고서 2/2, P14 분석 E2E 6/6을 retries 0으로 PASS.
+- **점수**: Task `100/100`, 독립 Gate 품질축 `5.0/5.0/5.0/4.9/4.9`, 환산 `99.2/100`, Critical 0·Major 0.
+- **증거**: `qa/test-runs/RUN-20260731-015-P14-BE-RED-GREEN.md`, `qa/evaluations/EVAL-19-P14.md`, `qa/evidence/p14/analysis-run-1/`, `qa/evidence/p14/analysis-run-2/`.
+
+---
+
+## 2026-07-31 — Phase P14-A 랜딩 보고서 팝업·CSV·TDD 계약 ✅
+
+- **RED 우선**: 랜딩 `Compare Report` 탭 부재 1 failed, CSV 미생성 1 failed, P14 계획/테스트 계약 부재 3 failed를 구현 전에 확인.
+- **랜딩 탭**: 사이드바 6번째 `Compare Report` 탭을 사용자 클릭형 명명 팝업(`compareLabReport`)으로 구현.
+- **추가 제안 반영**: 정적 HTML과 동일한 DIRECT_OK 15건을 `compare-lab-output.csv`로 동시 생성하고 보고서 상단에 내려받기 추가. CI도 HTML+CSV를 재생성.
+- **P14 후속 계약**: 안전 비교 후 결정론적 추가 분석·5개 레포트 섹션·Evidence·stale 응답 차단을 `REQ-P14-001~006`과 Unit/API/E2E ID로 고정.
+- **현재 점수**: P14-A `15/15`. P14 전체는 `15/100` 진행 상태이며 P14-B~E 구현 후 `96/100`, 품질축별 `4.8/5`, Critical 0/Major 0을 완료 Gate로 사용.
+- **회귀 검증**: Python 76, Vitest 29/29, 기존 Compare Lab E2E 16/16, 보고서 팝업 E2E 2/2를 retries 0으로 2회 연속 PASS. 같은 서버를 사용하는 브라우저 E2E는 순차 실행.
+- **증거**: `qa/test-runs/RUN-20260731-014-P14-RED-GREEN.md`, `qa/evidence/p14/report-popup/compare-report-e2e.json`, `qa/evidence/p14/report-popup-run-2/compare-report-e2e.json`.
+
+---
+
+## 2026-07-30 — Phase P13 Compare Lab 전 모델 HTML 보고서 ✅
+
+- **전체 범위**: 활성 Release 005의 Samsung 27개(Re 4, Ro 12, Sc 11)와 경쟁사 49개를 백엔드 비교 엔진으로 전수 판정.
+- **직접 비교 결과**: Samsung 직접 비교 가능 8개, 고유 모델쌍 9개, COP/EER `DIRECT_OK` 15건. 직접 후보가 없는 19개 모델은 사유·용량 목표·우선 조사사를 함께 표시.
+- **보고서 UI**: `compare-lab-output.html`에 KPI, 유형별 준비도, 안전 비교 규칙, 27개 전체 매트릭스, 모델별 상세 표, Compare Lab 딥링크, 인쇄/PDF 기능 반영.
+- **재생성**: `python scripts/build_compare_lab_report.py` 실행 후 `npm --prefix studio run build`.
+- **검증**: 보고서 pytest 3 passed · 비교 엔진 포함 15 passed · Chromium 데스크톱/모바일 2/2 PASS · 모델 27/27 · 직접 판정 15/15 · 가로 overflow/콘솔/페이지/네트워크/외부 요청 0.
+- **증거**: `qa/evidence/p13/report-e2e/compare-report-e2e.json`, `qa/evidence/p13/report-e2e/screenshots/`.
+
+---
+
+## 2026-07-30 — Phase P12 Compare Lab 로딩 복구·선택 UX 개선 ✅
+
+- **고착 원인 수정**: 비교 딥링크 복원 효과가 자체 상태 변경으로 정리(cleanup)되어 느린 `/compare` 응답을 무시하던 문제를 일회성 `useRef` 가드로 교체.
+- **선택 UX 개선**: `Re · Ro · Sc 유형 먼저 선택` 안내를 강조하고, Samsung·경쟁 모델을 드롭다운 대신 조건·용량·지표가 보이는 선택 카드로 변경. 선택 불가 단계에는 다음 행동을 명확히 표시.
+- **회귀 방지**: 지연된 비교 응답에서도 loading 해제와 결과 복구를 검증하는 Vitest·Playwright 시나리오 추가.
+- **검증**: Vitest 28 passed · build 통과 · Release 005 Studio E2E 16/16을 데스크톱·모바일에서 2회 연속 통과 · 콘솔/페이지/네트워크 오류 0.
+- **증거**: `qa/evidence/p12/local-run-1/p5-e2e.json`, `qa/evidence/p12/local-run-2/p5-e2e.json`.
+
+---
+
+## 2026-07-30 — Phase P11 공식 경쟁사 카탈로그 확장 ✅
+
+- **공식 자료 우선 조사**: LG 외 Embraco·Secop·Panasonic·GMCC·Highly·Danfoss·Copeland의 Re/Ro/Sc 후보를 재점검.
+- **DB 반영**: Panasonic 7개(Re 1, Ro 6)와 Secop Re 1개를 직접 비교 가능 모델로 승인. 전체 76개(Samsung 27 + 경쟁사 49).
+- **조건 정합성 보정**: Danfoss DSH090/184/240을 공식 60 Hz ARI·Fixed-speed 값으로 정정. 동일 조건이 확인되지 않은 후보는 DB에 억지로 넣지 않고 Research Queue에 유지.
+- **Release 005 발행**: `release:2026-07-30:005`, 데이터 SHA-256 `9f6ff238e0ee7c2869fe3c5073fd829de568c0f3a330be24ae1599586d17e8b7`.
+- **검증**: Validator `VALIDATED`(Critical 0/Major 0) · Python 69 passed · Vitest 27 passed · build 통과 · Studio E2E 14/14를 2회 연속 통과 · 기존 대시보드 P0 탭 10/10 및 워크플로 2/2 통과.
+- **증거**: `qa/evidence/p11/local-run-1/p5-e2e.json`, `qa/evidence/p11/local-run-2/p5-e2e.json`, `qa/evidence/p11/p0-local/browser-characterization.json`.
+
+---
+
+## 2026-06-23
 
 ### 단계 B+C Phase 1~4 — UI/UX 개선 완료 ✅
 
