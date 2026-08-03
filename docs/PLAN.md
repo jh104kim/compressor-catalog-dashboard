@@ -19,6 +19,7 @@ Samsung Re/Ro/Sc 모델을 기준으로 공개 카탈로그를 검증하고, 같
 | P15 | RPM/RPS 원천 성능점 계약·API·Recharts | 완료 |
 | P16 | 직접 비교 가능한 항목만 상세 Recharts 보고서에 표시 | 완료 |
 | P17 | README·운영 문서·QA 인덱스·폴더 정비 | 완료 |
+| P18 | 직전 Published Release 대비 모델·필드 변경 Diff | 완료 |
 
 ## 현재 제품 범위
 
@@ -27,6 +28,7 @@ Samsung Re/Ro/Sc 모델을 기준으로 공개 카탈로그를 검증하고, 같
 - 76모델(Samsung 27, 경쟁사 49), 13개 비교군
 - 직접 비교 가능한 Samsung 8모델, DIRECT_OK 15건
 - 공식 성능점이 있는 쌍만 RPM/RPS 차트 제공
+- 직전 Release 대비 추가·삭제·수치·Evidence·성능맵 변경 추적
 - Published Release 조회 전용 UI; 편집·발행 UI 없음
 - Legacy DC는 `/legacy/` 회귀 기준선으로 유지
 
@@ -59,9 +61,9 @@ Samsung Re/Ro/Sc 모델을 기준으로 공개 카탈로그를 검증하고, 같
 
 | 우선순위 | 아이디어 | 시작 조건 |
 |---|---|---|
-| P1 | Release 간 모델·수치·Evidence 변경 Diff | 이전/현재 Release 비교 계약 확정 |
-| P2 | 동일 비교군 용량-효율 산점도 | 군별 표본 수와 축 단위 검증 |
+| P1 | 동일 비교군 용량-효율 산점도 | 군별 표본 수와 축 단위 검증 |
 | P2 | 공식 카탈로그 변경 감지 큐 | URL·파일 해시와 승인 흐름 확정 |
+| P2 | Release Diff CSV 내보내기 | 변경 검토·승인 업무의 실제 수요 확인 |
 
 다음 Phase도 테스트 계약과 RED 증거를 먼저 만들고, 구현 후 독립 평가 기준으로
 완료 여부를 판정한다.

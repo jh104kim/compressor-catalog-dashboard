@@ -396,6 +396,39 @@ describe("Catalog Audit Studio", () => {
       "fetch",
       vi.fn((input: RequestInfo | URL) => {
         const url = String(input);
+        if (url.includes("/releases/active/diff")) {
+          return jsonResponse({
+            status: "CHANGES",
+            fromReleaseId: "release:2026-07-30:005",
+            toReleaseId: "release:2026-07-30:001",
+            summary: {
+              addedModels: 0,
+              removedModels: 0,
+              changedModels: 2,
+              specChangedModels: 0,
+              evidenceChangedModels: 0,
+              performanceMapChangedModels: 2,
+            },
+            addedModels: [],
+            removedModels: [],
+            changedModels: [
+              {
+                modelId: "model:panasonic:TKF76E25DCH-52RPS",
+                manufacturer: "Panasonic",
+                model: "TKF76E25DCH-52RPS",
+                type: "Re",
+                changes: [{ fieldPath: "performanceMaps", before: null, after: { itemCount: 1 } }],
+              },
+              {
+                modelId: "model:samsung:ENV4A5DL2B",
+                manufacturer: "Samsung",
+                model: "ENV4A5DL2B",
+                type: "Re",
+                changes: [{ fieldPath: "performanceMaps", before: null, after: { itemCount: 1 } }],
+              },
+            ],
+          });
+        }
         if (url.includes("/releases/active")) {
           if (failActiveRelease) {
             return Promise.resolve(new Response("release unavailable", { status: 503 }));
@@ -408,6 +441,7 @@ describe("Catalog Audit Studio", () => {
             dataSha256: "abc123",
             sourceCommit: "f142bca",
             appGitSha: "3c1de57f8b6c95cdbf2181e6889b0ebc4e811834",
+            previousReleaseId: "release:2026-07-30:005",
             asOf: "2026-07-30",
             counts: { models: 76, samsungModels: 27, competitorModels: 49 },
             validationSummary: {
@@ -974,6 +1008,21 @@ describe("Catalog Audit Studio", () => {
 
     expect(screen.queryByRole("button", { name: /저장|발행|Publish|편집/ })).not.toBeInTheDocument();
     expect(screen.getByTestId("read-only-notice")).toHaveTextContent("View-only");
+  });
+
+  it("P18-UT-UI-001 직전 Release 대비 변경 모델과 성능맵 보강을 표시한다", async () => {
+    await renderReady();
+    await openView(/Release \/ Evidence/);
+
+    const diff = await screen.findByTestId("release-diff");
+    expect(diff).toHaveTextContent("release:2026-07-30:005");
+    expect(diff).toHaveTextContent("release:2026-07-30:001");
+    expect(diff).toHaveTextContent("변경 모델2");
+    expect(diff).toHaveTextContent("성능맵2");
+    expect(diff).toHaveTextContent("TKF76E25DCH-52RPS");
+    expect(diff).toHaveTextContent("ENV4A5DL2B");
+    expect(diff).toHaveTextContent("performanceMaps");
+    expect(within(diff).queryByRole("button", { name: /복원|롤백|수정/ })).not.toBeInTheDocument();
   });
 
   it("P5-UT-G5-003 재조회 실패 시 마지막 Published Release를 유지한다", async () => {

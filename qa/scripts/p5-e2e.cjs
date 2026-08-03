@@ -640,6 +640,28 @@ const SCENARIOS = [
         await requireHidden(forbidden, "편집·발행 버튼");
         return { forbiddenControls: 0 };
       });
+      await assertion(log, "P18 직전 Release 대비 변경 Diff", async () => {
+        const diff = page.getByTestId("release-diff");
+        await requireVisible(diff, "Release 변경 Diff");
+        invariant(
+          (await page.getByTestId("release-diff-to").innerText()).trim() === activeReleaseId,
+          "Diff 대상 Release가 활성 Release와 다릅니다.",
+        );
+        invariant(
+          (await page.getByTestId("release-diff-from").innerText()).trim() ===
+            "release:2026-07-30:005",
+          "Diff 기준 Release가 005가 아닙니다.",
+        );
+        invariant((await page.getByTestId("release-diff-added").innerText()).trim() === "0", "추가 모델 수 불일치");
+        invariant((await page.getByTestId("release-diff-removed").innerText()).trim() === "0", "삭제 모델 수 불일치");
+        invariant((await page.getByTestId("release-diff-changed").innerText()).trim() === "2", "변경 모델 수 불일치");
+        invariant((await page.getByTestId("release-diff-performance").innerText()).trim() === "2", "성능맵 변경 수 불일치");
+        const text = await diff.innerText();
+        invariant(text.includes("ENV4A5DL2B"), "Samsung 성능맵 변경 모델 누락");
+        invariant(text.includes("TKF76E25DCH-52RPS"), "Panasonic 성능맵 변경 모델 누락");
+        invariant(text.match(/performanceMaps/g)?.length === 2, "performanceMaps 변경 경로 불일치");
+        return { fromReleaseId: "release:2026-07-30:005", changedModels: 2, performanceMapChangedModels: 2 };
+      });
       await assertion(log, "G5 새로고침 후 활성 Release 불변", async () => {
         await page.reload({ waitUntil: "domcontentloaded" });
         await requireVisible(page.getByTestId("app-shell"), "새로고침 후 앱");

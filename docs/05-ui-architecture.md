@@ -158,6 +158,8 @@ R290 Re는 GAP, R290 Ro/Sc는 HAVE, R454B Ro/Sc는 HAVE가 회귀 없이 표시�
   `모델 → 활성 Release → sourcePath → PDF page/Markdown section → fieldPaths`
 - 공식/보조/조사 출처 구분
 - 경로 복사와 허용된 내부 원본 열기
+- 직전 불변 Release 대비 추가·삭제·수치·Evidence·성능맵 변경 수
+- 변경 모델과 field path; 배열은 전체 원문 대신 item count만 표시
 
 예: `DS4BC7066FVT COP 3.25 → releaseId → Samsung-Compressor-Catalogue_2024.pdf → p.92`.
 
@@ -204,6 +206,7 @@ R290 Re는 GAP, R290 Ro/Sc는 HAVE, R454B Ro/Sc는 HAVE가 회귀 없이 표시�
 | 뷰/컴포넌트 | API | 사용 필드 |
 |---|---|---|
 | `ReleaseBar`, Overview | `GET /api/v1/releases/active` | releaseId, approvedBy, activatedAt, counts, validationSummary, sourceCommit, appGitSha |
+| `Release / Evidence` Diff | `GET /api/v1/releases/active/diff` | fromReleaseId, toReleaseId, summary, changes, integrity |
 | `Release / Evidence` B1 | `GET /api/v1/expansion/batches/B1` | 16행, 기존 연결 8, 신규 후보 8, 조건 UNKNOWN 16, NOT_PUBLISHED |
 | Overview 모델 수 | `GET /api/v1/catalog/models` | count, items |
 | Catalog Checks | `GET /api/v1/releases/active` | validationSummary.issues |

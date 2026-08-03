@@ -12,6 +12,7 @@ import {
 import {
   compareCatalogModelsWithReport,
   getActiveRelease,
+  getActiveReleaseDiff,
   getCriticalGap,
   getEvidence,
   getExpansionBatch,
@@ -26,6 +27,7 @@ import type {
   EvidenceTrace,
   ExpansionBatch,
   PortfolioStatus,
+  ReleaseDiff,
 } from "./types";
 
 type ViewId = "overview" | "catalog" | "compare" | "portfolio" | "release";
@@ -1474,9 +1476,11 @@ function PortfolioGaps({
 
 function ReleaseEvidence({
   release,
+  releaseDiff,
   expansionBatch,
 }: {
   release: ActiveRelease;
+  releaseDiff: ReleaseDiff;
   expansionBatch: ExpansionBatch;
 }) {
   return (
@@ -1523,6 +1527,57 @@ function ReleaseEvidence({
           </div>
         </article>
       </section>
+      <section className="panel release-diff-card" data-testid="release-diff">
+        <div className="panel-title-row">
+          <div>
+            <p className="section-kicker">RELEASE CHANGE DIFF</p>
+            <h3>직전 Release 대비 변경</h3>
+          </div>
+          <StatusPill tone={releaseDiff.status === "CHANGES" ? "accent" : "good"}>
+            {releaseDiff.status}
+          </StatusPill>
+        </div>
+        {releaseDiff.status === "FIRST_RELEASE" ? (
+          <p className="empty-copy">최초 Release이므로 비교할 직전 Release가 없습니다.</p>
+        ) : (
+          <>
+            <div className="release-diff-lineage">
+              <code data-testid="release-diff-from">{releaseDiff.fromReleaseId}</code>
+              <span>→</span>
+              <code data-testid="release-diff-to">{releaseDiff.toReleaseId}</code>
+              <small>양쪽 Bundle SHA 검증 완료</small>
+            </div>
+            <div className="release-diff-stats">
+              <div><span>추가 모델</span><strong data-testid="release-diff-added">{releaseDiff.summary.addedModels}</strong></div>
+              <div><span>삭제 모델</span><strong data-testid="release-diff-removed">{releaseDiff.summary.removedModels}</strong></div>
+              <div><span>변경 모델</span><strong data-testid="release-diff-changed">{releaseDiff.summary.changedModels}</strong></div>
+              <div><span>수치</span><strong>{releaseDiff.summary.specChangedModels}</strong></div>
+              <div><span>Evidence</span><strong>{releaseDiff.summary.evidenceChangedModels}</strong></div>
+              <div><span>성능맵</span><strong data-testid="release-diff-performance">{releaseDiff.summary.performanceMapChangedModels}</strong></div>
+            </div>
+            {releaseDiff.changedModels.length ? (
+              <div className="release-change-list">
+                {releaseDiff.changedModels.map((item) => (
+                  <article key={item.modelId} data-testid="release-diff-model">
+                    <div>
+                      <strong>{item.model}</strong>
+                      <span>{item.manufacturer} · {item.type}</span>
+                    </div>
+                    <code>{item.modelId}</code>
+                    <div className="release-field-paths">
+                      {(item.changes ?? []).map((change) => (
+                        <span key={change.fieldPath}>{change.fieldPath}</span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-copy">모델 의사결정 필드 변경이 없습니다.</p>
+            )}
+          </>
+        )}
+      </section>
       <section className="panel expansion-card" data-testid="expansion-batch">
         <div className="panel-title-row">
           <div>
@@ -1560,6 +1615,7 @@ export default function App() {
   const [route, setRoute] = useState(readQuery);
   const [view, setView] = useState<ViewId>(route.view);
   const [release, setRelease] = useState<ActiveRelease | null>(null);
+  const [releaseDiff, setReleaseDiff] = useState<ReleaseDiff | null>(null);
   const [models, setModels] = useState<CatalogModel[]>([]);
   const [gap, setGap] = useState<PortfolioStatus | null>(null);
   const [expansionBatch, setExpansionBatch] = useState<ExpansionBatch | null>(null);
@@ -1570,12 +1626,17 @@ export default function App() {
     setRefreshError("");
     return Promise.all([
       getActiveRelease(),
+      getActiveReleaseDiff(),
       getModels(),
       getCriticalGap(),
       getExpansionBatch(),
     ])
-      .then(([nextRelease, nextModels, nextGap, nextExpansionBatch]) => {
+      .then(([nextRelease, nextReleaseDiff, nextModels, nextGap, nextExpansionBatch]) => {
+        if (nextReleaseDiff.toReleaseId !== nextRelease.releaseId) {
+          throw new Error("Release Diff가 현재 활성 Release와 일치하지 않습니다.");
+        }
         setRelease(nextRelease);
+        setReleaseDiff(nextReleaseDiff);
         setModels(nextModels);
         setGap(nextGap);
         setExpansionBatch(nextExpansionBatch);
@@ -1629,7 +1690,7 @@ export default function App() {
   }
 
   if (error) return <ErrorState message={error} />;
-  if (!release || !gap || !expansionBatch) return <LoadingState />;
+  if (!release || !releaseDiff || !gap || !expansionBatch) return <LoadingState />;
 
   return (
     <div className="app-shell" data-testid="app-shell">
@@ -1685,7 +1746,7 @@ export default function App() {
           {view === "catalog" && <CatalogChecks release={release} models={models} initialModelId={route.modelId} initialEvidence={route.evidence} />}
           {view === "compare" && <CompareLab models={models} releaseId={release.releaseId} initialBaselineId={route.baselineModelId} initialCandidateId={route.candidateModelId} initialMetric={route.metric} />}
           {view === "portfolio" && <PortfolioGaps models={models} gap={gap} />}
-          {view === "release" && <ReleaseEvidence release={release} expansionBatch={expansionBatch} />}
+          {view === "release" && <ReleaseEvidence release={release} releaseDiff={releaseDiff} expansionBatch={expansionBatch} />}
         </main>
       </div>
     </div>

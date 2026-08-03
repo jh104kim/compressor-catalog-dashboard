@@ -26,17 +26,17 @@ npm --prefix qa run test:p15
 | 러너 | 범위 | 기본 Evidence |
 |---|---|---|
 | `test:p0` | Legacy 5탭 기준선 | `qa/baseline/`, `qa/evidence/p0/` |
-| `test:p5` | Studio G1~G8 desktop/mobile | 지정 `OUTPUT_DIR` 또는 timestamp 폴더 |
+| `test:p5` | Studio G1~G8와 P18 Release Diff desktop/mobile | 지정 `OUTPUT_DIR` 또는 timestamp 폴더 |
 | `test:report` | 정적 보고서 popup·CSV 회귀 | 지정 `OUTPUT_DIR` |
 | `test:p14` | 안전 비교 분석·출력 | 지정 `OUTPUT_DIR` |
 | `test:p15` | RPM/RPS와 P16 직접 비교 상세 | 지정 `OUTPUT_DIR` |
 
-현재 최종 P16 증거:
+현재 최종 P18 증거:
 
-- `qa/evidence/p16/local-run-3/p15-speed-e2e.json`
-- `qa/evidence/p16/local-run-3/screenshots/`
-- `qa/evidence/p16/report-regression/compare-report-e2e.json`
-- `qa/test-runs/RUN-20260803-017-P16-RED-GREEN.md`
+- `qa/evidence/p18/local-run-2/p5-e2e.json`
+- `qa/evidence/p18/local-run-2/screenshots/`
+- `qa/test-runs/RUN-20260803-018-P18-RED-GREEN.md`
+- `qa/evaluations/EVAL-21-P18.md`
 
 공통 Gate는 retries 0, 외부 요청·console/page 오류·HTTP 400+·금지 쓰기·페이지
 전체 overflow 0이다. 중간 디버그 캡처는 `.gitignore`로 제외하고 최종 증거만

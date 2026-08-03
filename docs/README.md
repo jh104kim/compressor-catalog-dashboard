@@ -29,6 +29,7 @@
 | [12 P14 TDD](12-compare-analysis-report-tdd-plan.md) | 안전 비교 분석·보고서 계약 |
 | [13 P15 TDD](13-speed-performance-map-tdd-plan.md) | RPM/RPS 성능점과 차트 계약 |
 | [14 P16 계획](14-compare-report-detail-plan.md) | 직접 비교 전용 상세 보고서 결과 |
+| [15 P18 TDD](15-release-diff-tdd-plan.md) | 불변 Release 간 모델·필드 변경 Diff 계약 |
 
 ## 문서 유지 규칙
 

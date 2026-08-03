@@ -74,6 +74,8 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 - `POST /api/v1/releases/publish`는 존재하지 않는다.
 - `GET /api/v1/expansion/batches/B1`은 검토 후보만 반환하며 Published
   모델 API에 합치지 않는다.
+- `GET /api/v1/releases/active/diff`는 현재·직전 Published Bundle의 해시를
+  모두 검증하고 읽기 전용 변경 요약만 반환한다.
 
 ## 검증
 

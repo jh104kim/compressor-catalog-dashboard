@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -140,6 +141,83 @@ def test_active_release_and_filtered_catalog_are_read_only(tmp_path: Path) -> No
     assert models.json()["count"] == 1
     assert models.json()["items"][0]["model"] == "DS8LC5040IN"
     assert client.post("/api/v1/releases/publish").status_code == 404
+
+
+def test_p18_first_release_returns_empty_diff(tmp_path: Path) -> None:
+    client = published_client(tmp_path)
+
+    response = client.get("/api/v1/releases/active/diff")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "FIRST_RELEASE"
+    assert payload["fromReleaseId"] is None
+    assert payload["toReleaseId"] == "release:2026-07-30:001"
+    assert payload["summary"]["changedModels"] == 0
+
+
+def test_p18_active_diff_verifies_real_release_lineage() -> None:
+    client = TestClient(
+        create_app(
+            release_root=ROOT / "catalog" / "published",
+            rules_path=ROOT / "config" / "p0_catalog_rules.json",
+            expansion_root=ROOT / "catalog" / "expansion",
+        )
+    )
+
+    response = client.get("/api/v1/releases/active/diff")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["fromReleaseId"] == "release:2026-07-30:005"
+    assert payload["toReleaseId"] == "release:2026-08-03:001"
+    assert payload["integrity"] == {
+        "currentVerified": True,
+        "previousVerified": True,
+    }
+    assert payload["summary"]["changedModels"] == 2
+    assert payload["summary"]["performanceMapChangedModels"] == 2
+
+
+def test_p18_tampered_previous_release_is_blocked(tmp_path: Path) -> None:
+    published_client(tmp_path)
+    store = FileReleaseStore(tmp_path)
+    first_bundle_path = (
+        store.release_path("release:2026-07-30:001") / "bundle.json"
+    )
+    second_bundle = json.loads(first_bundle_path.read_text(encoding="utf-8"))
+    second_bundle["asOf"] = "2026-07-31"
+    validator = CatalogValidator(
+        schema_path=ROOT / "data" / "contracts" / "catalog.schema.json",
+        rules_path=ROOT / "config" / "p0_catalog_rules.json",
+    )
+    report = validator.validate(second_bundle)
+    assert report.status == "VALIDATED"
+    store.publish(
+        bundle=second_bundle,
+        validation=report,
+        release_id="release:2026-07-30:002",
+        approved_by="catalog-owner",
+        approved_at="2026-07-30T17:00:00+09:00",
+        source_commit="a" * 40,
+    )
+    tampered = json.loads(first_bundle_path.read_text(encoding="utf-8"))
+    tampered["models"][0]["model"] = "TAMPERED"
+    first_bundle_path.write_text(
+        json.dumps(tampered, ensure_ascii=False), encoding="utf-8"
+    )
+    client = TestClient(
+        create_app(
+            release_root=tmp_path,
+            rules_path=ROOT / "config" / "p0_catalog_rules.json",
+            expansion_root=ROOT / "catalog" / "expansion",
+        )
+    )
+
+    response = client.get("/api/v1/releases/active/diff")
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == "직전 Release 무결성 검증에 실패했습니다."
 
 
 def test_b1_expansion_batch_is_review_only_and_condition_blocked(

@@ -6,6 +6,7 @@ import type {
   EvidenceTrace,
   ExpansionBatch,
   PortfolioStatus,
+  ReleaseDiff,
 } from "./types";
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
@@ -18,6 +19,10 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
 
 export function getActiveRelease(): Promise<ActiveRelease> {
   return requestJson<ActiveRelease>("/api/v1/releases/active");
+}
+
+export function getActiveReleaseDiff(): Promise<ReleaseDiff> {
+  return requestJson<ReleaseDiff>("/api/v1/releases/active/diff");
 }
 
 export function getExpansionBatch(): Promise<ExpansionBatch> {

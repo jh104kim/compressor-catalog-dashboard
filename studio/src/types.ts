@@ -77,6 +77,41 @@ export interface ActiveRelease {
   };
 }
 
+export interface ReleaseDiffChange {
+  fieldPath: string;
+  before: unknown;
+  after: unknown;
+}
+
+export interface ReleaseDiffModel {
+  modelId: string;
+  manufacturer?: string | null;
+  model?: string | null;
+  type?: CompressorType | null;
+  changes?: ReleaseDiffChange[];
+}
+
+export interface ReleaseDiff {
+  status: "FIRST_RELEASE" | "NO_CHANGES" | "CHANGES";
+  fromReleaseId: string | null;
+  toReleaseId: string;
+  summary: {
+    addedModels: number;
+    removedModels: number;
+    changedModels: number;
+    specChangedModels: number;
+    evidenceChangedModels: number;
+    performanceMapChangedModels: number;
+  };
+  addedModels: ReleaseDiffModel[];
+  removedModels: ReleaseDiffModel[];
+  changedModels: ReleaseDiffModel[];
+  integrity: {
+    currentVerified: boolean;
+    previousVerified: boolean | null;
+  };
+}
+
 export interface ExpansionBatch {
   batchId: "B1";
   title: string;

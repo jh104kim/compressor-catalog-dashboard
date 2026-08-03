@@ -4,6 +4,19 @@
 
 ---
 
+## 2026-08-03 — Phase P18 Published Release 변경 Diff ✅
+
+- **TDD 계약**: `REQ-P18-001~006`과 synthetic/실제 Release/API/UI/E2E 테스트를 먼저 작성하고 엔진·API·화면 부재 RED를 확인.
+- **Diff 엔진·API**: `modelId` 기준 추가·삭제·변경과 leaf field path를 결정론적으로 계산. 배열은 경로와 item count만 제공하고 현재·직전 Bundle SHA를 모두 검증.
+- **Release UI**: `release:2026-07-30:005 → release:2026-08-03:001`의 추가 0, 삭제 0, 변경 2, 성능맵 2를 표시. 변경 모델은 `ENV4A5DL2B`, `TKF76E25DCH-52RPS`이며 경로는 `performanceMaps`.
+- **안전 경계**: 최초 Release는 `FIRST_RELEASE`, 직전 Bundle 누락·변조는 503. 과거 Release 편집·복원 기능은 제공하지 않음.
+- **전체 검증**: Python 99 passed, Vitest 38/38, build 583 modules, P5 16/16을 2회 연속 PASS. 보고서 2/2, P14 6/6, P15/P16 8/8 PASS. retries·오류·외부요청·금지쓰기·overflow 0.
+- **시각 검수**: 1440×1024와 390×844 Release 화면에서 6개 요약·2개 변경 모델·경로를 확인했고 모바일 가로 넘침 0.
+- **평가**: Task 100/100, 품질 환산 99.2/100, Critical 0·Major 0으로 로컬 PASS.
+- **증거**: `docs/15-release-diff-tdd-plan.md`, `tests/p18-release-diff-contract.md`, `qa/test-runs/RUN-20260803-018-P18-RED-GREEN.md`, `qa/evaluations/EVAL-21-P18.md`, `qa/evidence/p18/local-run-2/`.
+
+---
+
 ## 2026-08-03 — Phase P17 README·프로젝트 문서·폴더 정비 ✅
 
 - **README 개편**: 현재 Studio 기준 빠른 실행, 5개 앱 뷰+Compare Report 검수 순서, 안전 비교 판정, RPM/RPS 차트, 데이터 발행, 테스트, Legacy 경계를 상세화.

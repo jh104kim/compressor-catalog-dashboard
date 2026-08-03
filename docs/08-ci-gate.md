@@ -15,7 +15,7 @@
 7. 기존 P0 Characterization 1회
 8. Studio `npm ci → Vitest → Compare Report 생성 → build`
 9. FastAPI same-origin Runtime을 동적 포트로 기동
-10. P5, Compare Report, P14 분석, P15/P16 속도·상세 보고서 E2E 1회
+10. P5/P18 Release Diff, Compare Report, P14 분석, P15/P16 속도·상세 보고서 E2E 1회
 11. P0·P5·P15 Evidence artifact 업로드
 
 Job 제한시간은 30분이며 `P0_RETRIES=0`, `P5_RETRIES=0`, `P15_RETRIES=0`이다. 실패 테스트를 재시도로 통과시키지 않는다.
@@ -53,7 +53,7 @@ E2E에 전달하는 환경변수:
 - P5: `p5-catalog-audit-<run_id>-<attempt>`
 - P15/P16: `p15-speed-performance-<run_id>-<attempt>`
 
-P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, P5·정적 보고서·P14 로그와 결과·스크린샷을 포함한다. P15/P16 artifact는 속도·상세 보고서 결과를 보존한다. 실패해도 `if: always()`로 업로드한다.
+P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, P5/P18 Diff·정적 보고서·P14 로그와 결과·스크린샷을 포함한다. P15/P16 artifact는 속도·상세 보고서 결과를 보존한다. 실패해도 `if: always()`로 업로드한다.
 
 ## 과거 Release 003 실행 증거
 

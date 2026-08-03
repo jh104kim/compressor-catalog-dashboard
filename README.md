@@ -6,6 +6,7 @@ Samsung(당사) 관점에서 공개 카탈로그와 리서치 데이터를 점�
 - 기본 화면: FastAPI + React 기반 **Catalog Audit Studio**
 - 데이터 기준: 검증 후 발행된 불변 **Published Release**
 - 비교 원칙: 유형·냉매·측정조건·구동·용량 범위를 통과한 모델만 직접 비교
+- 변경 추적: 활성 Release와 직전 Release의 모델·수치·Evidence·성능맵 Diff
 - 보조 화면: 기존 DC 대시보드는 `/legacy/`에서 조회 가능
 
 저장소: [jh104kim/compressor-catalog-dashboard](https://github.com/jh104kim/compressor-catalog-dashboard)
@@ -80,12 +81,20 @@ curl.exe --noproxy "*" http://127.0.0.1:8000/api/v1/health
 | 2 | **Catalog Checks** | Warning을 코드·제조사·모델별로 필터하고 원본 Evidence를 확인한다. |
 | 3 | **Compare Lab** | Re/Ro/Sc → COP/EER → Samsung → 경쟁사 순으로 고르고 안전 비교를 실행한다. |
 | 4 | **Portfolio Gaps** | 냉매×유형별 HAVE/IN_PROGRESS/GAP/UNKNOWN과 추가 조사 대상을 확인한다. |
-| 5 | **Release / Evidence** | 승인자, 데이터 SHA, 앱 Git SHA, 원본 PDF·Markdown 위치를 추적한다. |
+| 5 | **Release / Evidence** | 승인자·SHA·원본 위치와 직전 Release 대비 변경 모델·필드를 추적한다. |
 | 6 | **Compare Report** | 직접 비교 가능한 결과와 차트를 별도 팝업에서 검토·CSV·인쇄한다. |
 
 권장 검수 흐름은 `Overview → Catalog Checks → Compare Lab → Compare Report →
-Release / Evidence`다. 숫자가 의심되면 마지막 화면에서 모델 → Release →
-sourcePath → PDF page/Markdown section 순으로 확인한다.
+Release / Evidence`다. 숫자가 의심되면 마지막 화면에서 직전 Release Diff를 먼저
+확인하고, 모델 → Release → sourcePath → PDF page/Markdown section 순으로 추적한다.
+
+### Release Diff 보는 법
+
+`Release / Evidence`의 **직전 Release 대비 변경** 영역은 두 불변 Bundle의 해시를
+검증한 뒤 모델 ID별 차이를 보여준다. 추가·삭제·변경 모델과 수치·Evidence·성능맵
+변경 수를 분리하며, 배열 원문 전체 대신 변경 필드와 항목 수만 표시한다. 현재
+Release는 직전 `release:2026-07-30:005` 대비 성능맵이 추가된 2모델만 변경됐다.
+이 화면은 조회 전용이며 과거 Release 편집·복원 기능은 없다.
 
 ## Compare Lab 사용법
 
@@ -197,8 +206,9 @@ npm --prefix qa run test:p14
 npm --prefix qa run test:p15
 ```
 
-P16 최종 로컬 기준은 Python 94 passed, Vitest 37 passed, P15/P16 E2E 8/8,
-정적 보고서 회귀 2/2, 콘솔·페이지·외부요청·가로 overflow 0이다. 실행할 때마다
+P18 최종 로컬 기준은 Python 99 passed, Vitest 38 passed, P5 E2E 16/16,
+P15/P16 E2E 8/8, 정적 보고서 회귀 2/2, 콘솔·페이지·외부요청·가로 overflow
+0이다. 실행할 때마다
 현재 결과와 [`docs/PROGRESS.md`](docs/PROGRESS.md)를 함께 확인한다.
 
 ## 프로젝트 폴더
@@ -225,6 +235,7 @@ tests/     Python 및 UI 테스트 계약
 - [Runtime 실행](docs/06-runtime.md)
 - [운영·발행·롤백](docs/07-operations-and-362-expansion.md)
 - [CI Gate](docs/08-ci-gate.md)
+- [P18 Release Diff TDD](docs/15-release-diff-tdd-plan.md)
 - [QA 인덱스](qa/README.md)
 - [테스트 계약 인덱스](tests/README.md)
 

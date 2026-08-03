@@ -12,6 +12,7 @@ from .comparison import compare_models
 from .expansion import ExpansionBatchError, load_expansion_batch
 from .performance_map import build_speed_analysis
 from .release import FileReleaseStore, ReleaseIntegrityError
+from .release_diff import build_release_diff
 
 
 class CompareRequest(BaseModel):
@@ -100,6 +101,61 @@ def create_app(
             "validationSummary": release["validationSummary"],
             "counts": bundle["counts"],
             "asOf": bundle.get("asOf"),
+        }
+
+    @app.get("/api/v1/releases/active/diff")
+    def active_release_diff() -> dict[str, Any]:
+        active, release, current_bundle = catalog.read()
+        current_release_id = active["releaseId"]
+        previous_release_id = active.get("rollbackFromReleaseId") or release.get(
+            "previousReleaseId"
+        )
+        empty_summary = {
+            "addedModels": 0,
+            "removedModels": 0,
+            "changedModels": 0,
+            "specChangedModels": 0,
+            "evidenceChangedModels": 0,
+            "performanceMapChangedModels": 0,
+        }
+        if not previous_release_id:
+            return {
+                "status": "FIRST_RELEASE",
+                "fromReleaseId": None,
+                "toReleaseId": current_release_id,
+                "summary": empty_summary,
+                "addedModels": [],
+                "removedModels": [],
+                "changedModels": [],
+                "integrity": {
+                    "currentVerified": True,
+                    "previousVerified": None,
+                },
+            }
+        try:
+            store.verify_release(previous_release_id)
+            previous_bundle = json.loads(
+                (
+                    store.release_path(previous_release_id) / "bundle.json"
+                ).read_text(encoding="utf-8")
+            )
+        except (ReleaseIntegrityError, json.JSONDecodeError, OSError) as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="직전 Release 무결성 검증에 실패했습니다.",
+            ) from exc
+        result = build_release_diff(
+            from_release_id=previous_release_id,
+            from_bundle=previous_bundle,
+            to_release_id=current_release_id,
+            to_bundle=current_bundle,
+        )
+        return {
+            **result,
+            "integrity": {
+                "currentVerified": True,
+                "previousVerified": True,
+            },
         }
 
     @app.get("/api/v1/expansion/batches/{batch_id}")
