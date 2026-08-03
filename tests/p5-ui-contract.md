@@ -49,7 +49,7 @@ UI는 직접 비교 후보 목록을 만들기 위해 백엔드의 DIRECT 조건
 
 | 목적 | 고정값 |
 |---|---|
-| 활성 Release | `release:2026-07-30:005`, `status=PUBLISHED` |
+| 활성 Release | `catalog/published/active-release.json`과 일치, `status=PUBLISHED` |
 | G1 Samsung | `model:samsung:DS8LC5040IN`, Sc/R454B/DOE-B/Fixed |
 | G1 경쟁사 | `model:gmcc:STDA031N1ULB`, 같은 비교키, 용량차 `6.21%` |
 | G1 판정 | EER 기준 `DIRECT`, `DIRECT_OK`, `rankingAllowed=true`, `deltaPct` 숫자 |
@@ -133,7 +133,7 @@ in-memory adapter로 격리하며 실제 네트워크를 사용하지 않는다.
 
 ### Vitest 합격 기준
 
-- 현재 구현된 Vitest 28개 모두 PASS.
+- 현재 구현된 전체 Vitest 모두 PASS.
 - BLOCKED/GAP 테스트에서 순위·Δ·우열 표현이 0개.
 - `3.34`, 편집·발행 control이 0개.
 - 테스트 중 실제 `fetch`가 mock되지 않은 주소로 나가면 즉시 FAIL.

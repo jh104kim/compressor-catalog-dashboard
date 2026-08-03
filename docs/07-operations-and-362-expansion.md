@@ -14,21 +14,21 @@
 
 ## 2. 현재 운영 기준
 
-2026-07-30 기준 활성 Release는 다음과 같다.
+2026-08-03 기준 활성 Release는 다음과 같다.
 
 | 항목 | 값 |
 |---|---|
-| Release | `release:2026-07-30:005` |
-| 전체 모델 | 68 |
-| Samsung / 경쟁사 | 27 / 41 |
+| Release | `release:2026-08-03:001` |
+| 전체 모델 | 76 |
+| Samsung / 경쟁사 | 27 / 49 |
 | 상태 | `PUBLISHED` |
-| 승인자 | `project-owner:user-requested-direct-first-research` |
-| Source Commit | `d413cfa2037438f025edeb1111812289a489889e` |
-| Application SHA | `5f61d1df7358c5c1873a1779a80b1770b9fd3370` |
-| Bundle SHA-256 | `5c532241c74768528412550f0139b820dda651ee3aefb321aa2fecdee1c77524` |
+| 승인자 | `project-owner:user-requested-p15-speed-map` |
+| Source Commit | `0f0d126fd40cfca4c6222358fa54be9c03304e0e` |
+| Application SHA | `0f0d126fd40cfca4c6222358fa54be9c03304e0e` |
+| Bundle SHA-256 | `866cbb1e5a84cc297317c0768065cd71f84e915a439dfde8758f9fa39c9c1664` |
 | Validation | Critical 0, Major 0, Warning 2 |
 
-현재 승인자는 `project-owner:user-requested-direct-first-research`이며, Warning은
+현재 승인자는 `project-owner:user-requested-p15-speed-map`이며, Warning은
 `UB9TK2150F`의 EER 계산 오차 2.02%와 `NLE12.6CNL`의 COP 계산 오차
 8.62%다. Warning은 발행 가능하지만 승인자가 내용을 확인해야 한다.
 
@@ -161,16 +161,17 @@ PASS 기준:
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = "d413cfa2037438f025edeb1111812289a489889e"
+$sourceCommit = (git rev-parse HEAD).Trim()
 $appGitSha = (git rev-parse HEAD).Trim()
 $approvedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
+$nextReleaseId = "release:YYYY-MM-DD:NNN"
 
 python scripts/publish_catalog.py `
   --approved-by "실제-승인자" `
   --approved-at $approvedAt `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:005"
+  --release-id $nextReleaseId
 
 if ($LASTEXITCODE -ne 0) {
   throw "운영 발행 실패"
@@ -179,9 +180,11 @@ if ($LASTEXITCODE -ne 0) {
 Get-Content "catalog/published/active-release.json"
 ```
 
-Release ID는 `release:YYYY-MM-DD:NNN` 형식이며 기존 ID를 재사용할 수 없다. 발행 성공 후 Runtime을 시작한다.
+Release ID는 `release:YYYY-MM-DD:NNN` 형식이며 기존 ID를 재사용할 수 없다. 현재 활성 ID를 예제에 넣지 말고 항상 새 번호를 사용한다. 발행 성공 후 보고서를 재생성하고 Runtime을 시작한다.
 
 ```powershell
+python scripts/build_compare_lab_report.py
+npm --prefix studio run build
 python -m uvicorn backend.catalog_audit.main:create_runtime_app `
   --factory `
   --host 127.0.0.1 `

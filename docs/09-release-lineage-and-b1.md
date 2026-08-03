@@ -1,15 +1,19 @@
 # Release 계보와 B1 Scroll 검토 결과
 
-## 적용 결과
+## 최초 적용 결과(역사 기록)
 
 - `sourceCommit`: Published 데이터가 생성된 입력 커밋
 - `appGitSha`: API·Studio·검증 코드의 구현 커밋
 - 두 SHA는 Release metadata, 활성 포인터, API, Release / Evidence 화면,
   CI Gate에서 각각 확인한다.
 
-현재 `release:2026-07-30:002`는 데이터 입력 SHA
+최초 계보 분리 증거인 `release:2026-07-30:002`는 데이터 입력 SHA
 `d413cfa2037438f025edeb1111812289a489889e`와 앱 구현 SHA
 `cd33149ba577d8c27e37ce5dbc2bd3808154495d`를 기록한다.
+
+현재 운영 기준은 `catalog/published/active-release.json`이 가리키는
+`release:2026-08-03:001`이다. 화면에서는 `/?view=release`의 Data source SHA와
+Application SHA를 확인한다.
 
 ## B1 Scroll p.92
 

@@ -111,7 +111,7 @@
   <header class="topbar">
     <div class="brand"><i>S</i> Samsung Compressor Compare Lab</div>
     <nav aria-label="보고서 목차">
-      <a href="#summary">요약</a><a href="#speed-report">속도 분석</a><a href="#matrix">전체 매트릭스</a>
+      <a href="#summary">요약</a><a href="#direct-charts">상세 차트</a><a href="#speed-report">속도 분석</a><a href="#matrix">비교 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
     <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
@@ -122,8 +122,8 @@
     <section class="hero">
       <div class="container">
         <p class="eyebrow">COMPRESSOR INTELLIGENCE · COMPARE LAB OUTPUT</p>
-        <h1>Samsung Re · Ro · Sc<br>전 모델 비교 보고서</h1>
-        <p class="hero-copy">활성 Published Release의 27개 Samsung 모델을 전수 점검하고, Compare Lab의 동일 비교 규칙으로 허용된 경쟁 모델과 COP/EER 결과만 수록했습니다.</p>
+        <h1>Samsung Re · Ro · Sc<br>직접 비교 상세 보고서</h1>
+        <p class="hero-copy">활성 Published Release의 27개 Samsung 모델을 전수 점검한 뒤, Compare Lab 안전 규칙을 통과한 8개 모델과 COP/EER 직접 비교 결과만 선별했습니다.</p>
         <div class="release-line">
           <span>release:2026-08-03:001</span>
           <span>PUBLISHED</span>
@@ -135,10 +135,9 @@
 
     <div class="container">
       <section class="kpi-grid" aria-label="보고서 핵심 수치">
-        <div class="kpi"><span>Samsung 전 모델</span><strong>27</strong><small>Re 4 · Ro 12 · Sc 11</small></div>
+        <div class="kpi"><span>카탈로그 점검</span><strong>27</strong><small>Samsung 전체 모델</small></div>
         <div class="kpi"><span>경쟁사 모델 풀</span><strong>49</strong><small>Published Release 수록</small></div>
-        <div class="kpi"><span>직접 비교 가능</span><strong>8</strong><small>Samsung 모델 기준</small></div>
-        <div class="kpi"><span>공식자료 보완</span><strong>19</strong><small>직접 후보 0개</small></div>
+        <div class="kpi"><span>보고서 표시</span><strong>8</strong><small>직접 비교 가능 모델만</small></div>
         <div class="kpi"><span>고유 모델쌍</span><strong>9</strong><small>Samsung ↔ 경쟁사</small></div>
         <div class="kpi"><span>Compare Lab 판정</span><strong>15</strong><small>COP/EER 합계</small></div>
       </section>
@@ -152,21 +151,21 @@
             <a class="type-summary type-Re" href="#type-Re">
               <span>Re</span>
               <strong>왕복동</strong>
-              <p>4개 모델 · 비교 가능 1개</p>
+              <p>비교 모델 1개</p>
               <small>직접 판정 1건</small>
             </a>
-            
+
             <a class="type-summary type-Ro" href="#type-Ro">
               <span>Ro</span>
               <strong>로터리</strong>
-              <p>12개 모델 · 비교 가능 6개</p>
+              <p>비교 모델 6개</p>
               <small>직접 판정 12건</small>
             </a>
-            
+
             <a class="type-summary type-Sc" href="#type-Sc">
               <span>Sc</span>
               <strong>스크롤</strong>
-              <p>11개 모델 · 비교 가능 1개</p>
+              <p>비교 모델 1개</p>
               <small>직접 판정 2건</small>
             </a>
             </div>
@@ -187,6 +186,15 @@
         <p class="method-note"><strong>Δ 해석:</strong> 경쟁사 Δ = (경쟁사 지표 − Samsung 지표) ÷ Samsung 지표. 양수는 경쟁사 우위, 음수는 Samsung 우위입니다. 모든 표 행은 백엔드 판정 <code>DIRECT_OK</code>만 포함합니다.</p>
       </section>
 
+      <section class="report-section" id="direct-charts"
+               data-testid="direct-comparison-chart-shell">
+        <div class="section-title">
+          <div><span>DIRECT COMPARISON DETAIL</span><h2>COP · EER 상세 차트</h2></div>
+          <p>유형과 지표를 선택해 양사 원값, 경쟁사 Δ%, 용량 차이를 함께 확인합니다.</p>
+        </div>
+        <div id="direct-comparison-chart-root"><p>직접 비교 차트를 불러오는 중입니다.</p></div>
+      </section>
+
       <section class="report-section" id="speed-report"
                data-testid="speed-report-shell"
                data-chart-eligible="true">
@@ -194,17 +202,17 @@
           <div><span>RPM · RPS PERFORMANCE MAP</span><h2>속도별 성능 분석</h2></div>
           <p>공식 Evidence가 연결된 원천점만 표시하며 임의 보간·외삽과 Hz 속도 변환은 사용하지 않습니다.</p>
         </div>
-        <p class="method-note">차트 가능 1쌍 · 전체 직접 비교 고유 모델쌍 9쌍. 데이터가 없는 모델쌍은 수치 대신 조사 필요 상태로 유지합니다.</p>
+        <p class="method-note">공식 RPM/RPS 성능점이 양쪽에 있는 1쌍만 표시합니다. 속도 데이터가 없는 모델쌍은 이 보고서에서 제외했습니다.</p>
         <p><a class="top-action" href="/compare-lab-speed-output.csv" download>속도 성능 CSV 내려받기</a></p>
         <div id="speed-report-root"><p>속도 성능 지도를 불러오는 중입니다.</p></div>
       </section>
 
       <section class="report-section" id="matrix">
         <div class="section-title">
-          <div><span>FULL COVERAGE</span><h2>Samsung 27개 모델 전체 매트릭스</h2></div>
-          <p>COP와 EER 후보를 분리했습니다. ‘없음’ 모델은 아래 상세 영역에서 조사 사유와 목표조건을 확인할 수 있습니다.</p>
+          <div><span>DIRECT COVERAGE</span><h2>직접 비교 가능 모델 매트릭스</h2></div>
+          <p>COP 또는 EER 직접 후보가 존재하는 Samsung 모델만 표시합니다.</p>
         </div>
-        
+
       <div class="table-wrap summary-table">
         <table>
           <thead>
@@ -219,17 +227,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><span class="type-tag type-Re">Re</span></td>
-              <td><a href="#model-model%3Asamsung%3ACD124K-S1ZA">CD124K-S1ZA</a></td>
-              <td>R134a</td>
-              <td>ASHRAE-LBP · Fixed</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Re">Re</span></td>
               <td><a href="#model-model%3Asamsung%3AENV4A5DL2B">ENV4A5DL2B</a></td>
               <td>R600a</td>
@@ -238,58 +236,8 @@
               <td>없음</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Re">Re</span></td>
-              <td><a href="#model-model%3Asamsung%3AMSA143K-S1B">MSA143K-S1B</a></td>
-              <td>R134a</td>
-              <td>ASHRAE-MBP · Fixed</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Re">Re</span></td>
-              <td><a href="#model-model%3Asamsung%3AMSA170K-S1G">MSA170K-S1G</a></td>
-              <td>R134a</td>
-              <td>ASHRAE-MBP · Fixed</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUB5TN5450F">UB5TN5450F</a></td>
-              <td>R32</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUB8TA8265F">UB8TA8265F</a></td>
-              <td>R32</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUB8TN8300F">UB8TN8300F</a></td>
-              <td>R32</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUB9TK2150F">UB9TK2150F</a></td>
               <td>R32</td>
@@ -298,8 +246,8 @@
               <td>Panasonic 9RL160Z</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUF5LB3520F">UF5LB3520F</a></td>
               <td>R454B</td>
@@ -308,8 +256,8 @@
               <td>Panasonic KKD420Z</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUF8LB3265F">UF8LB3265F</a></td>
               <td>R454B</td>
@@ -318,28 +266,8 @@
               <td>Panasonic KRD220Z</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUF8LB3360F">UF8LB3360F</a></td>
-              <td>R454B</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUF9BL3180F">UF9BL3180F</a></td>
-              <td>R454B</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUG4T200FUA">UG4T200FUA</a></td>
               <td>R410A</td>
@@ -348,8 +276,8 @@
               <td>Panasonic 5KD184XAA21</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUG5TM5520F">UG5TM5520F</a></td>
               <td>R410A</td>
@@ -358,8 +286,8 @@
               <td>Panasonic 5VD550ZD</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Ro">Ro</span></td>
               <td><a href="#model-model%3Asamsung%3AUG8TH8265F">UG8TH8265F</a></td>
               <td>R410A</td>
@@ -368,108 +296,8 @@
               <td>Panasonic 5KD240XAA21</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Ro">Ro</span></td>
-              <td><a href="#model-model%3Asamsung%3AUG9C050HS">UG9C050HS</a></td>
-              <td>R410A</td>
-              <td>ARI · Fixed</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS2BB5033FVT">DS2BB5033FVT</a></td>
-              <td>R32</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS2GR7046FVT">DS2GR7046FVT</a></td>
-              <td>R410A</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS2LD5046F">DS2LD5046F</a></td>
-              <td>R454B</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4BC7066FVT">DS4BC7066FVT</a></td>
-              <td>R32</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4GM7090FVT">DS4GM7090FVT</a></td>
-              <td>R410A</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4GR5070FVT">DS4GR5070FVT</a></td>
-              <td>R410A</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4GR7066FVT">DS4GR7066FVT</a></td>
-              <td>R410A</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4HD5066FVT">DS4HD5066FVT</a></td>
-              <td>R290</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS4HD5090FVT">DS4HD5090FVT</a></td>
-              <td>R290</td>
-              <td>ARI · Variable</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
-            
-            <tr>
+
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-Sc">Sc</span></td>
               <td><a href="#model-model%3Asamsung%3ADS8LC5040IN">DS8LC5040IN</a></td>
               <td>R454B</td>
@@ -478,104 +306,23 @@
               <td>GMCC STDA029N1ULB, GMCC STDA031N1ULB</td>
               <td><span class="matrix-state ready">가능</span></td>
             </tr>
-            
-            <tr>
-              <td><span class="type-tag type-Sc">Sc</span></td>
-              <td><a href="#model-model%3Asamsung%3ADS8LC5049IN">DS8LC5049IN</a></td>
-              <td>R454B</td>
-              <td>DOE-B · Fixed</td>
-              <td>없음</td>
-              <td>없음</td>
-              <td><span class="matrix-state gap">보완</span></td>
-            </tr>
             </tbody>
         </table>
       </div>
-    
+
       </section>
 
-      
+
             <section class="report-section type-section" id="type-Re"
                      data-type-section="Re">
               <div class="section-title">
                 <div>
                   <span>TYPE Re</span>
-                  <h2>왕복동 전체 모델</h2>
+                  <h2>왕복동 직접 비교 모델</h2>
                 </div>
-                <p>4개 중 직접 비교 가능 1개 · 고유 모델쌍 1개 · 지표 판정 1건</p>
+                <p>비교 가능 1개 · 고유 모델쌍 1개 · 지표 판정 1건</p>
               </div>
               <div class="model-stack">
-      <article id="model-model%3Asamsung%3ACD124K-S1ZA" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Re" data-model="CD124K-S1ZA">
-        <header class="model-head">
-          <div>
-            <p>Re · 왕복동</p>
-            <h3>CD124K-S1ZA</h3>
-            <span>냉장고 LBP</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ACD124K-S1ZA">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R134a</strong></div>
-          <div><span>측정조건</span><strong>ASHRAE-LBP</strong></div>
-          <div><span>구동</span><strong>Fixed</strong></div>
-          <div><span>용량</span><strong>49 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>공식 PDF 미확정</strong></div>
-        </div>
-        <p class="source-line">근거: data/compressor_deep_research_report.md</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>0.76</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Fixed 구동 분류의 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>42~56 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>2.61</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Fixed 구동 분류의 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>42~56 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
       <article id="model-model%3Asamsung%3AENV4A5DL2B" class="model-card ready" data-testid="samsung-model-card"
                data-type="Re" data-model="ENV4A5DL2B">
         <header class="model-head">
@@ -598,7 +345,7 @@
           <div><span>출처층</span><strong>공식 PDF 미확정</strong></div>
         </div>
         <p class="source-line">근거: data/compressor_deep_research_report.md</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -607,7 +354,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -643,401 +390,23 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>6.72</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>EER 또는 용량 공식값이 누락됐습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>126~170 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AMSA143K-S1B" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Re" data-model="MSA143K-S1B">
-        <header class="model-head">
-          <div>
-            <p>Re · 왕복동</p>
-            <h3>MSA143K-S1B</h3>
-            <span>냉장고 MBP</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AMSA143K-S1B">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R134a</strong></div>
-          <div><span>측정조건</span><strong>ASHRAE-MBP</strong></div>
-          <div><span>구동</span><strong>Fixed</strong></div>
-          <div><span>용량</span><strong>112 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>1.45</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ASHRAE-MBP 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>95~129 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>4.95</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ASHRAE-MBP 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>95~129 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AMSA170K-S1G" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Re" data-model="MSA170K-S1G">
-        <header class="model-head">
-          <div>
-            <p>Re · 왕복동</p>
-            <h3>MSA170K-S1G</h3>
-            <span>냉장고 MBP</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AMSA170K-S1G">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R134a</strong></div>
-          <div><span>측정조건</span><strong>ASHRAE-MBP</strong></div>
-          <div><span>구동</span><strong>Fixed</strong></div>
-          <div><span>용량</span><strong>201 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>1.52</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ASHRAE-MBP 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>171~231 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>5.2</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ASHRAE-MBP 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>171~231 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Secop</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
+
       </article>
     </div>
             </section>
-            
+
             <section class="report-section type-section" id="type-Ro"
                      data-type-section="Ro">
               <div class="section-title">
                 <div>
                   <span>TYPE Ro</span>
-                  <h2>로터리 전체 모델</h2>
+                  <h2>로터리 직접 비교 모델</h2>
                 </div>
-                <p>12개 중 직접 비교 가능 6개 · 고유 모델쌍 6개 · 지표 판정 12건</p>
+                <p>비교 가능 6개 · 고유 모델쌍 6개 · 지표 판정 12건</p>
               </div>
               <div class="model-stack">
-      <article id="model-model%3Asamsung%3AUB5TN5450F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UB5TN5450F">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UB5TN5450F</h3>
-            <span>에어컨</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUB5TN5450F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R32</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>13,950 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.28</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 68.4%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>11,858~16,042 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.2</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 68.4%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>11,858~16,042 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AUB8TA8265F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UB8TA8265F">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UB8TA8265F</h3>
-            <span>에어컨</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUB8TA8265F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R32</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>8,440 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.31</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 47.7%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>7,174~9,706 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.3</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 47.7%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>7,174~9,706 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AUB8TN8300F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UB8TN8300F">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UB8TN8300F</h3>
-            <span>에어컨</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUB8TN8300F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R32</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>9,636 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.31</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 54.2%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>8,191~11,081 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.3</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 54.2%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>8,191~11,081 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>GMCC, Highly, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
       <article id="model-model%3Asamsung%3AUB9TK2150F" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UB9TK2150F">
         <header class="model-head">
@@ -1060,7 +429,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1069,7 +438,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1105,9 +474,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1116,7 +485,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1152,11 +521,11 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
       </article>
-    
+
       <article id="model-model%3Asamsung%3AUF5LB3520F" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UF5LB3520F">
         <header class="model-head">
@@ -1179,7 +548,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1188,7 +557,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1224,9 +593,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1235,7 +604,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1271,11 +640,11 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
       </article>
-    
+
       <article id="model-model%3Asamsung%3AUF8LB3265F" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UF8LB3265F">
         <header class="model-head">
@@ -1298,7 +667,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1307,7 +676,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1343,9 +712,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1354,7 +723,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1390,153 +759,11 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
       </article>
-    
-      <article id="model-model%3Asamsung%3AUF8LB3360F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UF8LB3360F">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UF8LB3360F</h3>
-            <span>Unitary AC</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUF8LB3360F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R454B</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>10,668 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.22</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 24.4%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>9,068~12,268 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 24.4%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>9,068~12,268 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AUF9BL3180F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UF9BL3180F">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UF9BL3180F</h3>
-            <span>Unitary AC</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUF9BL3180F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R454B</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>5,188 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.25</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 55.6%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>4,410~5,966 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.1</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 55.6%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>4,410~5,966 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
+
       <article id="model-model%3Asamsung%3AUG4T200FUA" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UG4T200FUA">
         <header class="model-head">
@@ -1559,7 +786,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1568,7 +795,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1604,9 +831,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1615,7 +842,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1651,11 +878,11 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
       </article>
-    
+
       <article id="model-model%3Asamsung%3AUG5TM5520F" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UG5TM5520F">
         <header class="model-head">
@@ -1678,7 +905,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1687,7 +914,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1723,9 +950,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1734,7 +961,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1770,11 +997,11 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
       </article>
-    
+
       <article id="model-model%3Asamsung%3AUG8TH8265F" class="model-card ready" data-testid="samsung-model-card"
                data-type="Ro" data-model="UG8TH8265F">
         <header class="model-head">
@@ -1797,7 +1024,7 @@
           <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
         </div>
         <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1806,7 +1033,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1842,9 +1069,9 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -1853,7 +1080,7 @@
                 </div>
                 <span>1개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1889,733 +1116,23 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3AUG9C050HS" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Ro" data-model="UG9C050HS">
-        <header class="model-head">
-          <div>
-            <p>Ro · 로터리</p>
-            <h3>UG9C050HS</h3>
-            <span>에어컨</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3AUG9C050HS">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R410A</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Fixed</strong></div>
-          <div><span>용량</span><strong>1,465 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>2.96</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Fixed 구동 분류의 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>1,245~1,685 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>LG, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>10.1</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Fixed 구동 분류의 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>1,245~1,685 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>LG, Panasonic</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
+
       </article>
     </div>
             </section>
-            
+
             <section class="report-section type-section" id="type-Sc"
                      data-type-section="Sc">
               <div class="section-title">
                 <div>
                   <span>TYPE Sc</span>
-                  <h2>스크롤 전체 모델</h2>
+                  <h2>스크롤 직접 비교 모델</h2>
                 </div>
-                <p>11개 중 직접 비교 가능 1개 · 고유 모델쌍 2개 · 지표 판정 2건</p>
+                <p>비교 가능 1개 · 고유 모델쌍 2개 · 지표 판정 2건</p>
               </div>
               <div class="model-stack">
-      <article id="model-model%3Asamsung%3ADS2BB5033FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS2BB5033FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS2BB5033FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS2BB5033FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R32</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>11,782 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.25</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R32) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>10,015~13,549 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.1</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R32) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>10,015~13,549 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS2GR7046FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS2GR7046FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS2GR7046FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS2GR7046FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R410A</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>15,240 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.31</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>12,954~17,526 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.3</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>12,954~17,526 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS2LD5046F" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS2LD5046F">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS2LD5046F</h3>
-            <span>Unitary AC</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS2LD5046F">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R454B</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>15,000 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>2024+ 개발</strong></div>
-        </div>
-        <p class="source-line">근거: data/20260617-perplexity-r454b-scroll-normalization.md</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.37</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>COP 또는 용량 공식값이 누락됐습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>12,750~17,250 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.5</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>EER 또는 용량 공식값이 누락됐습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>12,750~17,250 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4BC7066FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4BC7066FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4BC7066FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4BC7066FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R32</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>23,564 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.25</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R32) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>20,029~27,099 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.1</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R32) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>20,029~27,099 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4GM7090FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4GM7090FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4GM7090FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4GM7090FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R410A</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>30,305 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.28</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>25,759~34,851 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.2</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>25,759~34,851 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4GR5070FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4GR5070FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4GR5070FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4GR5070FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R410A</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>23,535 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.37</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>20,005~27,065 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.5</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>20,005~27,065 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4GR7066FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4GR7066FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4GR7066FVT</h3>
-            <span>에어컨/히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4GR7066FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R410A</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>22,098 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.31</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>18,783~25,413 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.3</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P3</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 냉매(R410A) 경쟁 모델 공식 성능값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>18,783~25,413 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4HD5066FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4HD5066FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4HD5066FVT</h3>
-            <span>히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4HD5066FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R290</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>13,042 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.43</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>용량이 근접하지만 ARI 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>11,086~14,998 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.7</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>용량이 근접하지만 ARI 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>11,086~14,998 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS4HD5090FVT" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS4HD5090FVT">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS4HD5090FVT</h3>
-            <span>히트펌프</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS4HD5090FVT">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R290</strong></div>
-          <div><span>측정조건</span><strong>ARI</strong></div>
-          <div><span>구동</span><strong>Variable</strong></div>
-          <div><span>용량</span><strong>17,878 W</strong></div>
-          <div><span>상태</span><strong>양산</strong></div>
-          <div><span>출처층</span><strong>Samsung 2024 공식</strong></div>
-        </div>
-        <p class="source-line">근거: data/Samsung-Compressor-Catalogue_2024.pdf</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>3.4</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ARI 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>15,196~20,560 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>11.6</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P2</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>ARI 측정조건의 공식값이 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>15,196~20,560 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-      </article>
-    
       <article id="model-model%3Asamsung%3ADS8LC5040IN" class="model-card ready" data-testid="samsung-model-card"
                data-type="Sc" data-model="DS8LC5040IN">
         <header class="model-head">
@@ -2638,30 +1155,7 @@
           <div><span>출처층</span><strong>2024+ 개발</strong></div>
         </div>
         <p class="source-line">근거: data/20260617-perplexity-r454b-scroll-normalization.md</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>미확보</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Samsung 기준 COP 값이 없어 비교를 실행할 수 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>11,220~15,180 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
+
             <section class="metric-section">
               <div class="metric-heading">
                 <div>
@@ -2670,7 +1164,7 @@
                 </div>
                 <span>2개 직접 비교</span>
               </div>
-              
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -2703,7 +1197,7 @@
                 <a class="open-lab" href="/?view=compare&amp;baselineModelId=model%3Asamsung%3ADS8LC5040IN&amp;candidateModelId=model%3Agmcc%3ASTDA029N1ULB&amp;metric=eer">Compare Lab 열기</a>
               </td>
             </tr>
-            
+
             <tr data-testid="direct-comparison-row"
                 data-baseline-id="model:samsung:DS8LC5040IN"
                 data-candidate-id="model:gmcc:STDA031N1ULB"
@@ -2725,84 +1219,13 @@
             </tbody>
         </table>
       </div>
-    
+
             </section>
-            
-      </article>
-    
-      <article id="model-model%3Asamsung%3ADS8LC5049IN" class="model-card gap" data-testid="samsung-model-card"
-               data-type="Sc" data-model="DS8LC5049IN">
-        <header class="model-head">
-          <div>
-            <p>Sc · 스크롤</p>
-            <h3>DS8LC5049IN</h3>
-            <span>Unitary AC</span>
-          </div>
-          <div class="model-actions">
-            <span class="model-state gap">공식자료 보완 필요</span>
-            <a href="/?view=model&amp;modelId=model%3Asamsung%3ADS8LC5049IN">모델 근거 보기</a>
-          </div>
-        </header>
-        <div class="model-meta">
-          <div><span>냉매</span><strong>R454B</strong></div>
-          <div><span>측정조건</span><strong>DOE-B</strong></div>
-          <div><span>구동</span><strong>Fixed</strong></div>
-          <div><span>용량</span><strong>15,700 W</strong></div>
-          <div><span>상태</span><strong>개발중</strong></div>
-          <div><span>출처층</span><strong>2024+ 개발</strong></div>
-        </div>
-        <p class="source-line">근거: data/20260617-perplexity-r454b-scroll-normalization.md</p>
-        
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>COP 기준값</span>
-                  <strong>미확보</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>Samsung 기준 COP 값이 없어 비교를 실행할 수 없습니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>13,345~18,055 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
-            <section class="metric-section">
-              <div class="metric-heading">
-                <div>
-                  <span>EER 기준값</span>
-                  <strong>6.67</strong>
-                </div>
-                <span>0개 직접 비교</span>
-              </div>
-              
-      <div class="research-note" data-testid="research-gap">
-        <div>
-          <span class="priority">P1</span>
-          <strong>직접 비교 없음</strong>
-        </div>
-        <p>동일 비교 키 후보는 있으나 최근접 용량 차이 21.1%로 ±15%를 벗어납니다.</p>
-        <dl>
-          <div><dt>용량 목표</dt><dd>13,345~18,055 W</dd></div>
-          <div><dt>우선 조사사</dt><dd>Copeland, Danfoss, GMCC</dd></div>
-        </dl>
-      </div>
-    
-            </section>
-            
+
       </article>
     </div>
             </section>
-            
+
     </div>
   </main>
 

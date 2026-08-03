@@ -81,7 +81,10 @@ async function main() {
       const page = await popupPromise;
       attachGuards(page);
       await page.waitForLoadState("networkidle");
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
       invariant(page.url() === reportUrl, `팝업 URL 불일치: ${page.url()}`);
+      const directReport = page.getByTestId("direct-comparison-report");
+      await directReport.waitFor({ state: "visible" });
 
       const reportResponse = await context.request.get(reportUrl);
       invariant(reportResponse.status() === 200, "보고서 응답이 200이 아닙니다.");
@@ -92,8 +95,14 @@ async function main() {
       const comparisonCount = await page
         .locator('[data-testid="direct-comparison-row"]')
         .count();
-      invariant(modelCount === 27, `Samsung 모델 카드 ${modelCount}/27`);
+      invariant(modelCount === 8, `Samsung 직접 비교 모델 카드 ${modelCount}/8`);
       invariant(comparisonCount === 15, `직접 비교 행 ${comparisonCount}/15`);
+      invariant(Number(await directReport.getAttribute("data-total-count")) === 15, "상세 차트 직접 비교 수 불일치");
+      invariant((await page.getByTestId("direct-raw-chart").count()) === 1, "원값 상세 차트 누락");
+      invariant((await page.getByTestId("direct-delta-chart").count()) === 1, "Delta 상세 차트 누락");
+      invariant((await page.getByTestId("comparison-matrix-row").count()) === 8, "직접 비교 매트릭스 8행 불일치");
+      invariant((await page.getByTestId("research-gap").count()) === 0, "비교 불가 모델이 노출됨");
+      invariant((await page.getByTestId("speed-data-gap").count()) === 0, "비교 불가 속도쌍이 노출됨");
 
       const typeCounts = {};
       for (const type of ["Re", "Ro", "Sc"]) {
@@ -102,7 +111,7 @@ async function main() {
           .count();
       }
       invariant(
-        typeCounts.Re === 4 && typeCounts.Ro === 12 && typeCounts.Sc === 11,
+        typeCounts.Re === 1 && typeCounts.Ro === 6 && typeCounts.Sc === 1,
         `유형별 모델 수 불일치 ${JSON.stringify(typeCounts)}`,
       );
       const overflow = await page.evaluate(
@@ -147,6 +156,9 @@ async function main() {
         landingPopup: true,
         modelCount,
         comparisonCount,
+        directChartCount: 2,
+        matrixRowCount: 8,
+        excludedGapCount: 0,
         csvComparisonRows: 15,
         typeCounts,
         overflowPx: overflow,

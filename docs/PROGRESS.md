@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-08-03 — Phase P17 README·프로젝트 문서·폴더 정비 ✅
+
+- **README 개편**: 현재 Studio 기준 빠른 실행, 5개 앱 뷰+Compare Report 검수 순서, 안전 비교 판정, RPM/RPS 차트, 데이터 발행, 테스트, Legacy 경계를 상세화.
+- **문서 연결**: `docs/README.md`, `qa/README.md`, `tests/README.md`를 추가하고 운영·UI·CI·P14~P16 문서의 활성 Release·수량·경로를 최신화. 과거 RED/GREEN 수치는 역사 기록으로 보존.
+- **실행 정비**: `run.bat`을 Legacy 정적 서버에서 현재 Compare Report 생성 → Studio build → FastAPI same-origin 실행 흐름으로 변경.
+- **폴더 정비**: 최종 Evidence로 대체된 P0/P15/P16 중간 실행·디버그 파일만 제거하고 `.gitignore`에 로컬 scratch 경계를 명시. P16 최종 desktop/mobile 증거 유지.
+- **문서 품질**: 프로젝트 Markdown 60개 감사, 로컬 링크 36개 검사에서 누락 0, `git diff --check` PASS.
+- **전체 검증**: 보고서 8모델/9쌍/15판정 생성, Python 94 passed, Vitest 37/37, build 583 modules, P5 16/16, 보고서 2/2, P14 6/6, P15/P16 8/8 PASS. retries·오류·외부요청·금지쓰기·overflow 0.
+
+---
+
+## 2026-08-03 — Phase P16 Compare Report 직접 비교 상세화 ✅
+
+- **표시 정리**: Samsung 27개 전체 점검은 유지하되, 보고서 본문·매트릭스는 직접 비교 가능 8개 모델과 `DIRECT_OK` 15건만 표시. 조사 필요 모델·빈 COP/EER 섹션·DATA_REQUIRED 속도쌍은 제외.
+- **상세 Recharts**: 유형·COP/EER 필터, 양사 원값, 경쟁사 Δ%, Samsung/경쟁사 우위 건수, 평균 용량 차이와 직접 비교 상세 카드를 추가.
+- **안전성**: 각 행을 독립 직접 비교쌍으로 표시하고 조건군·COP/EER 교차 순위를 금지. RPM/RPS는 공식 성능점이 양쪽에 있는 1쌍만 유지.
+- **검증**: Python 94, Vitest 37/37, build 583 modules, desktop/mobile Playwright 8/8과 정적 보고서 회귀 2/2 PASS. 오류·외부요청·금지쓰기·overflow 0.
+- **E2E 개선**: 이름 있는 팝업의 1440x960 고정 크기를 발견해, 모바일 검증 시 실제 390x844 viewport를 강제하고 재검수.
+- **증거**: `docs/14-compare-report-detail-plan.md`, `qa/test-runs/RUN-20260803-017-P16-RED-GREEN.md`, `qa/evidence/p16/local-run-3/`.
+
+---
+
 ## 2026-08-03 — Phase P15 RPM/RPS 성능 맵·Recharts ✅ 로컬 완료
 
 - **계약 고정**: `REQ-P15-001~007`, 속도 성능점 Evidence·RPM/RPS 60배·Hz 금지·eligible 전용 차트·DATA_REQUIRED·stale·정적 보고서 회귀를 정의.

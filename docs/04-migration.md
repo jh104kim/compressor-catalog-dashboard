@@ -2,7 +2,7 @@
 
 ## 목적
 
-`frontend/compressor-data.js`의 68개 모델을 값 변경 없이 검토 가능한 Canonical Staging Bundle로 옮긴다. 이 단계는 발행이 아니며 UI는 계속 기존 SSOT를 읽는다.
+이 문서는 **최초 P2 이관 당시의 재현 가능한 기준선**이다. `frontend/compressor-data.js`의 68개 모델을 값 변경 없이 Canonical Staging Bundle로 옮겼으며, 이후 공식 경쟁사 8개가 승인·발행되어 현재 활성 Release는 76개다.
 
 비교 프로젝트 `2608-comp-set-costsaving`의 다음 원칙만 가져왔다.
 
@@ -73,7 +73,7 @@ python -m pytest -q tests/test_catalog_migration.py
 
 모든 locator는 저장소 내부의 실제 파일을 가리킨다.
 
-## RED/GREEN 수락조건
+## 최초 P2 RED/GREEN 수락조건
 
 - 68개 = Samsung 27 + 경쟁사 41
 - `modelId` 중복 0, 정렬 고정

@@ -1,5 +1,412 @@
 {
   "releaseId": "release:2026-08-03:001",
+  "directComparisons": [
+    {
+      "comparisonKey": "model:samsung:ENV4A5DL2B::model:panasonic:TKF76E25DCH-52RPS::cop",
+      "compressorType": "Re",
+      "refrigerant": "R600a",
+      "conditionLabel": "ASHRAE-LBP · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:ENV4A5DL2B",
+        "manufacturer": "Samsung",
+        "model": "ENV4A5DL2B",
+        "value": 1.97,
+        "capacityW": 148.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:TKF76E25DCH-52RPS",
+        "manufacturer": "Panasonic",
+        "model": "TKF76E25DCH-52RPS",
+        "value": 2.06,
+        "capacityW": 149.0
+      },
+      "capacityDiffPct": 0.6756756756756757,
+      "deltaPct": 4.56852791878173,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AENV4A5DL2B&candidateModelId=model%3Apanasonic%3ATKF76E25DCH-52RPS&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UB9TK2150F::model:panasonic:9RL160Z::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R32",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UB9TK2150F",
+        "manufacturer": "Samsung",
+        "model": "UB9TK2150F",
+        "value": 3.16,
+        "capacityW": 4689.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:9RL160Z",
+        "manufacturer": "Panasonic",
+        "model": "9RL160Z",
+        "value": 2.56,
+        "capacityW": 4414.0
+      },
+      "capacityDiffPct": 5.864789933887823,
+      "deltaPct": -18.9873417721519,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUB9TK2150F&candidateModelId=model%3Apanasonic%3A9RL160Z&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UB9TK2150F::model:panasonic:9RL160Z::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R32",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UB9TK2150F",
+        "manufacturer": "Samsung",
+        "model": "UB9TK2150F",
+        "value": 11.0,
+        "capacityW": 4689.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:9RL160Z",
+        "manufacturer": "Panasonic",
+        "model": "9RL160Z",
+        "value": 8.73,
+        "capacityW": 4414.0
+      },
+      "capacityDiffPct": 5.864789933887823,
+      "deltaPct": -20.636363636363633,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUB9TK2150F&candidateModelId=model%3Apanasonic%3A9RL160Z&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:UF5LB3520F::model:panasonic:KKD420Z::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R454B",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UF5LB3520F",
+        "manufacturer": "Samsung",
+        "model": "UF5LB3520F",
+        "value": 3.25,
+        "capacityW": 14712.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KKD420Z",
+        "manufacturer": "Panasonic",
+        "model": "KKD420Z",
+        "value": 4.36,
+        "capacityW": 16185.0
+      },
+      "capacityDiffPct": 10.012234910277325,
+      "deltaPct": 34.15384615384616,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUF5LB3520F&candidateModelId=model%3Apanasonic%3AKKD420Z&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UF5LB3520F::model:panasonic:KKD420Z::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R454B",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UF5LB3520F",
+        "manufacturer": "Samsung",
+        "model": "UF5LB3520F",
+        "value": 11.1,
+        "capacityW": 14712.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KKD420Z",
+        "manufacturer": "Panasonic",
+        "model": "KKD420Z",
+        "value": 14.88,
+        "capacityW": 16185.0
+      },
+      "capacityDiffPct": 10.012234910277325,
+      "deltaPct": 34.05405405405407,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUF5LB3520F&candidateModelId=model%3Apanasonic%3AKKD420Z&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:UF8LB3265F::model:panasonic:KRD220Z::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R454B",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UF8LB3265F",
+        "manufacturer": "Samsung",
+        "model": "UF8LB3265F",
+        "value": 3.22,
+        "capacityW": 7532.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KRD220Z",
+        "manufacturer": "Panasonic",
+        "model": "KRD220Z",
+        "value": 4.25,
+        "capacityW": 8070.0
+      },
+      "capacityDiffPct": 7.142857142857142,
+      "deltaPct": 31.987577639751546,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUF8LB3265F&candidateModelId=model%3Apanasonic%3AKRD220Z&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UF8LB3265F::model:panasonic:KRD220Z::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R454B",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UF8LB3265F",
+        "manufacturer": "Samsung",
+        "model": "UF8LB3265F",
+        "value": 11.0,
+        "capacityW": 7532.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KRD220Z",
+        "manufacturer": "Panasonic",
+        "model": "KRD220Z",
+        "value": 14.49,
+        "capacityW": 8070.0
+      },
+      "capacityDiffPct": 7.142857142857142,
+      "deltaPct": 31.72727272727273,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUF8LB3265F&candidateModelId=model%3Apanasonic%3AKRD220Z&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:UG4T200FUA::model:panasonic:5KD184XAA21::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UG4T200FUA",
+        "manufacturer": "Samsung",
+        "model": "UG4T200FUA",
+        "value": 3.31,
+        "capacityW": 5920.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD184XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD184XAA21",
+        "value": 3.01,
+        "capacityW": 5440.0
+      },
+      "capacityDiffPct": 8.108108108108109,
+      "deltaPct": -9.063444108761336,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG4T200FUA&candidateModelId=model%3Apanasonic%3A5KD184XAA21&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UG4T200FUA::model:panasonic:5KD184XAA21::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UG4T200FUA",
+        "manufacturer": "Samsung",
+        "model": "UG4T200FUA",
+        "value": 11.3,
+        "capacityW": 5920.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD184XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD184XAA21",
+        "value": 10.27,
+        "capacityW": 5440.0
+      },
+      "capacityDiffPct": 8.108108108108109,
+      "deltaPct": -9.115044247787619,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG4T200FUA&candidateModelId=model%3Apanasonic%3A5KD184XAA21&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:UG5TM5520F::model:panasonic:5VD550ZD::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UG5TM5520F",
+        "manufacturer": "Samsung",
+        "model": "UG5TM5520F",
+        "value": 3.28,
+        "capacityW": 15445.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5VD550ZD",
+        "manufacturer": "Panasonic",
+        "model": "5VD550ZD",
+        "value": 3.17,
+        "capacityW": 17250.0
+      },
+      "capacityDiffPct": 11.686629977338944,
+      "deltaPct": -3.3536585365853626,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG5TM5520F&candidateModelId=model%3Apanasonic%3A5VD550ZD&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UG5TM5520F::model:panasonic:5VD550ZD::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UG5TM5520F",
+        "manufacturer": "Samsung",
+        "model": "UG5TM5520F",
+        "value": 11.2,
+        "capacityW": 15445.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5VD550ZD",
+        "manufacturer": "Panasonic",
+        "model": "5VD550ZD",
+        "value": 10.82,
+        "capacityW": 17250.0
+      },
+      "capacityDiffPct": 11.686629977338944,
+      "deltaPct": -3.3928571428571344,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG5TM5520F&candidateModelId=model%3Apanasonic%3A5VD550ZD&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:UG8TH8265F::model:panasonic:5KD240XAA21::cop",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "cop",
+      "baseline": {
+        "modelId": "model:samsung:UG8TH8265F",
+        "manufacturer": "Samsung",
+        "model": "UG8TH8265F",
+        "value": 3.43,
+        "capacityW": 7825.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD240XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD240XAA21",
+        "value": 3.03,
+        "capacityW": 7280.0
+      },
+      "capacityDiffPct": 6.964856230031949,
+      "deltaPct": -11.661807580174937,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG8TH8265F&candidateModelId=model%3Apanasonic%3A5KD240XAA21&metric=cop"
+    },
+    {
+      "comparisonKey": "model:samsung:UG8TH8265F::model:panasonic:5KD240XAA21::eer",
+      "compressorType": "Ro",
+      "refrigerant": "R410A",
+      "conditionLabel": "ARI · Variable",
+      "driveClass": "Variable",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:UG8TH8265F",
+        "manufacturer": "Samsung",
+        "model": "UG8TH8265F",
+        "value": 11.7,
+        "capacityW": 7825.0
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD240XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD240XAA21",
+        "value": 10.35,
+        "capacityW": 7280.0
+      },
+      "capacityDiffPct": 6.964856230031949,
+      "deltaPct": -11.538461538461537,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3AUG8TH8265F&candidateModelId=model%3Apanasonic%3A5KD240XAA21&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA029N1ULB::eer",
+      "compressorType": "Sc",
+      "refrigerant": "R454B",
+      "conditionLabel": "DOE-B · Fixed",
+      "driveClass": "Fixed",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:DS8LC5040IN",
+        "manufacturer": "Samsung",
+        "model": "DS8LC5040IN",
+        "value": 6.64,
+        "capacityW": 13200.0
+      },
+      "candidate": {
+        "modelId": "model:gmcc:STDA029N1ULB",
+        "manufacturer": "GMCC",
+        "model": "STDA029N1ULB",
+        "value": 6.4,
+        "capacityW": 11575.0
+      },
+      "capacityDiffPct": 12.31060606060606,
+      "deltaPct": -3.6144578313252915,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3ADS8LC5040IN&candidateModelId=model%3Agmcc%3ASTDA029N1ULB&metric=eer"
+    },
+    {
+      "comparisonKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA031N1ULB::eer",
+      "compressorType": "Sc",
+      "refrigerant": "R454B",
+      "conditionLabel": "DOE-B · Fixed",
+      "driveClass": "Fixed",
+      "metric": "eer",
+      "baseline": {
+        "modelId": "model:samsung:DS8LC5040IN",
+        "manufacturer": "Samsung",
+        "model": "DS8LC5040IN",
+        "value": 6.64,
+        "capacityW": 13200.0
+      },
+      "candidate": {
+        "modelId": "model:gmcc:STDA031N1ULB",
+        "manufacturer": "GMCC",
+        "model": "STDA031N1ULB",
+        "value": 6.43,
+        "capacityW": 12380.0
+      },
+      "capacityDiffPct": 6.212121212121212,
+      "deltaPct": -3.1626506024096384,
+      "verdict": "DIRECT",
+      "code": "DIRECT_OK",
+      "compareUrl": "/?view=compare&baselineModelId=model%3Asamsung%3ADS8LC5040IN&candidateModelId=model%3Agmcc%3ASTDA031N1ULB&metric=eer"
+    }
+  ],
   "comparisons": [
     {
       "pairKey": "model:samsung:ENV4A5DL2B::model:panasonic:TKF76E25DCH-52RPS",
@@ -277,382 +684,6 @@
                 }
               }
             ]
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UB9TK2150F::model:panasonic:9RL160Z",
-      "baseline": {
-        "modelId": "model:samsung:UB9TK2150F",
-        "manufacturer": "Samsung",
-        "model": "UB9TK2150F"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:9RL160Z",
-        "manufacturer": "Panasonic",
-        "model": "9RL160Z"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UB9TK2150F",
-            "manufacturer": "Samsung",
-            "model": "UB9TK2150F",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:9RL160Z",
-            "manufacturer": "Panasonic",
-            "model": "9RL160Z",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UF5LB3520F::model:panasonic:KKD420Z",
-      "baseline": {
-        "modelId": "model:samsung:UF5LB3520F",
-        "manufacturer": "Samsung",
-        "model": "UF5LB3520F"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:KKD420Z",
-        "manufacturer": "Panasonic",
-        "model": "KKD420Z"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UF5LB3520F",
-            "manufacturer": "Samsung",
-            "model": "UF5LB3520F",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:KKD420Z",
-            "manufacturer": "Panasonic",
-            "model": "KKD420Z",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UF8LB3265F::model:panasonic:KRD220Z",
-      "baseline": {
-        "modelId": "model:samsung:UF8LB3265F",
-        "manufacturer": "Samsung",
-        "model": "UF8LB3265F"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:KRD220Z",
-        "manufacturer": "Panasonic",
-        "model": "KRD220Z"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UF8LB3265F",
-            "manufacturer": "Samsung",
-            "model": "UF8LB3265F",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:KRD220Z",
-            "manufacturer": "Panasonic",
-            "model": "KRD220Z",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UG4T200FUA::model:panasonic:5KD184XAA21",
-      "baseline": {
-        "modelId": "model:samsung:UG4T200FUA",
-        "manufacturer": "Samsung",
-        "model": "UG4T200FUA"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:5KD184XAA21",
-        "manufacturer": "Panasonic",
-        "model": "5KD184XAA21"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UG4T200FUA",
-            "manufacturer": "Samsung",
-            "model": "UG4T200FUA",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:5KD184XAA21",
-            "manufacturer": "Panasonic",
-            "model": "5KD184XAA21",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UG5TM5520F::model:panasonic:5VD550ZD",
-      "baseline": {
-        "modelId": "model:samsung:UG5TM5520F",
-        "manufacturer": "Samsung",
-        "model": "UG5TM5520F"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:5VD550ZD",
-        "manufacturer": "Panasonic",
-        "model": "5VD550ZD"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UG5TM5520F",
-            "manufacturer": "Samsung",
-            "model": "UG5TM5520F",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:5VD550ZD",
-            "manufacturer": "Panasonic",
-            "model": "5VD550ZD",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:UG8TH8265F::model:panasonic:5KD240XAA21",
-      "baseline": {
-        "modelId": "model:samsung:UG8TH8265F",
-        "manufacturer": "Samsung",
-        "model": "UG8TH8265F"
-      },
-      "candidate": {
-        "modelId": "model:panasonic:5KD240XAA21",
-        "manufacturer": "Panasonic",
-        "model": "5KD240XAA21"
-      },
-      "conditionLabel": "ARI · Variable",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:UG8TH8265F",
-            "manufacturer": "Samsung",
-            "model": "UG8TH8265F",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:panasonic:5KD240XAA21",
-            "manufacturer": "Panasonic",
-            "model": "5KD240XAA21",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA029N1ULB",
-      "baseline": {
-        "modelId": "model:samsung:DS8LC5040IN",
-        "manufacturer": "Samsung",
-        "model": "DS8LC5040IN"
-      },
-      "candidate": {
-        "modelId": "model:gmcc:STDA029N1ULB",
-        "manufacturer": "GMCC",
-        "model": "STDA029N1ULB"
-      },
-      "conditionLabel": "DOE-B · Fixed",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:DS8LC5040IN",
-            "manufacturer": "Samsung",
-            "model": "DS8LC5040IN",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:gmcc:STDA029N1ULB",
-            "manufacturer": "GMCC",
-            "model": "STDA029N1ULB",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          }
-        ],
-        "safeguards": {
-          "interpolation": false,
-          "extrapolation": false,
-          "hzAsSpeed": false
-        }
-      }
-    },
-    {
-      "pairKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA031N1ULB",
-      "baseline": {
-        "modelId": "model:samsung:DS8LC5040IN",
-        "manufacturer": "Samsung",
-        "model": "DS8LC5040IN"
-      },
-      "candidate": {
-        "modelId": "model:gmcc:STDA031N1ULB",
-        "manufacturer": "GMCC",
-        "model": "STDA031N1ULB"
-      },
-      "conditionLabel": "DOE-B · Fixed",
-      "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
-        "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
-        "series": [
-          {
-            "role": "baseline",
-            "modelId": "model:samsung:DS8LC5040IN",
-            "manufacturer": "Samsung",
-            "model": "DS8LC5040IN",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
-          },
-          {
-            "role": "candidate",
-            "modelId": "model:gmcc:STDA031N1ULB",
-            "manufacturer": "GMCC",
-            "model": "STDA031N1ULB",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
           }
         ],
         "safeguards": {

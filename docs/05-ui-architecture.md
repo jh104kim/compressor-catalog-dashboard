@@ -15,6 +15,7 @@ P5는 새 조사나 데이터 편집 도구가 아니다. UI 판단은 FastAPI�
 - Compare Lab
 - Portfolio Gaps
 - Release / Evidence
+- Compare Report 명명 팝업
 - 승인자·승인시각·Release ID·Git SHA·데이터 SHA 추적
 - 390px 모바일과 1440px 데스크톱
 - 기존 DC 대시보드와 신규 `studio/` 공존
@@ -45,15 +46,16 @@ React UI와 API는 같은 FastAPI 주소에서 제공한다. 브라우저는 상
 
 | 경로 | 역할 |
 |---|---|
-| `/studio/` | 신규 Catalog Audit Studio |
-| `/studio/checks` | Catalog Checks |
-| `/studio/compare` | Compare Lab |
-| `/studio/gaps` | Portfolio Gaps |
-| `/studio/evidence` | Release / Evidence |
+| `/?view=overview` | Overview |
+| `/?view=checks` | Catalog Checks |
+| `/?view=compare` | Compare Lab |
+| `/?view=gaps` | Portfolio Gaps |
+| `/?view=release` | Release / Evidence |
+| `/compare-lab-output.html` | Compare Report 정적 팝업 |
 | `/api/v1/*` | 현재 P4 View-first API |
 | `/legacy/` | 변경하지 않은 기존 `frontend/` DC 대시보드 |
 
-SPA fallback은 `/studio/*`에만 적용한다. `/api/*`와 `/legacy/*` 요청을 React가 가로채면 안 된다. 전환 기간에는 기존 `/` 동작을 유지하고, P5 parity 확인 후 기본 진입점을 `/studio/`로 바꿀지는 별도로 결정한다.
+현재 `/`는 Studio를 제공하고 query parameter로 뷰를 전환한다. `/api/*`, `/legacy/*`, 확장자가 있는 정적 파일 요청을 React fallback이 가로채면 안 된다.
 
 권장 구현은 `studio/` 아래 React + TypeScript + Vite다. 전역 상태 라이브러리는 추가하지 않고, 작은 `ReleaseContext`와 공통 `apiClient`만 사용한다.
 
@@ -61,7 +63,7 @@ SPA fallback은 `/studio/*`에만 적용한다. `/api/*`와 `/legacy/*` 요청�
 
 ### 데스크톱 1440px
 
-- 왼쪽 240px 내비게이션: 5개 뷰와 기존 DC 링크
+- 왼쪽 240px 내비게이션: 5개 앱 뷰, Compare Report 팝업, 기존 DC 링크
 - 상단 64px Release Bar: 활성 Release, 승인자, 검증 상태
 - 본문 최대 폭 1200px, 12열 그리드
 - 모델 상세와 Evidence는 오른쪽 Drawer로 열어 목록 맥락을 유지
@@ -69,7 +71,7 @@ SPA fallback은 `/studio/*`에만 적용한다. `/api/*`와 `/legacy/*` 요청�
 ### 모바일 390px
 
 - 상단에 앱명, 활성 Release, 메뉴 버튼
-- 메뉴 버튼은 5개 뷰를 표시하는 전체 폭 Drawer를 연다.
+- 메뉴 버튼은 5개 앱 뷰와 Compare Report를 표시하는 전체 폭 Drawer를 연다.
 - 본문은 1열이며 카드 간격 12px, 좌우 여백 16px
 - 비교 모델 선택은 위아래로 배치
 - 넓은 표는 카드 목록으로 바꾼다. 꼭 필요한 표만 이름이 있는 내부 가로 스크롤을 허용한다.
@@ -77,7 +79,7 @@ SPA fallback은 `/studio/*`에만 적용한다. `/api/*`와 `/legacy/*` 요청�
 
 모든 터치 대상은 최소 44×44px로 한다. 390px에서 페이지 전체 가로 넘침은 0이어야 한다.
 
-## 5. 5개 뷰
+## 5. 5개 앱 뷰 + 1개 보고서 팝업
 
 ### 5.1 Overview
 
@@ -160,6 +162,17 @@ R290 Re는 GAP, R290 Ro/Sc는 HAVE, R454B Ro/Sc는 HAVE가 회귀 없이 표시�
 예: `DS4BC7066FVT COP 3.25 → releaseId → Samsung-Compressor-Catalogue_2024.pdf → p.92`.
 
 이 화면에는 Publish·Rollback 버튼을 두지 않는다.
+
+### 5.6 Compare Report
+
+사이드바의 6번째 항목은 앱 내부 라우트가 아니라 이름이 있는
+`compareLabReport` 팝업으로 `/compare-lab-output.html`을 연다.
+
+- 직접 비교 가능한 Samsung 8모델과 `DIRECT_OK` 15건만 표시
+- 유형·COP/EER 필터, 양사 원값·경쟁사 Δ Recharts, 상세 카드 제공
+- 공식 속도점이 양쪽에 있는 eligible 쌍만 RPM/RPS 차트 제공
+- 비교 불가 모델과 `DATA_REQUIRED` 속도쌍은 보고서에서 제외
+- 전체 비교 CSV, 속도 CSV, 인쇄/PDF, Compare Lab 복귀 링크 유지
 
 ## 6. 컴포넌트
 
@@ -246,14 +259,14 @@ API 오류 처리:
 
 ## 10. 구현 순서
 
-1. `studio/` 기본 구조, AppShell, 5개 경로, ReleaseContext
+1. `studio/` 기본 구조, AppShell, 5개 뷰, ReleaseContext
 2. API Client와 503·404·Release 불일치 처리
 3. Overview와 Catalog Checks
 4. Compare Lab 및 `VerdictPanel`
 5. Portfolio Gaps와 Evidence Drawer
 6. 390px·1440px 반응형과 접근성 보완
 7. Vitest 및 Playwright Golden E2E
-8. 기존 `/legacy/` 기준선과 신규 `/studio/` 동시 검증
+8. Compare Report 팝업과 기존 `/legacy/` 기준선 동시 검증
 
 ## 11. 테스트와 완료기준
 
@@ -275,7 +288,7 @@ API 오류 처리:
 
 ### P5 Done
 
-- 5개 뷰가 활성 Published Release만 읽는다.
+- 5개 앱 뷰와 Compare Report가 같은 활성 Published Release를 읽는다.
 - 모든 뷰에 같은 Release ID와 승인자가 표시된다.
 - BLOCKED와 REFERENCE에서 순위·Delta·승패 문구가 0건이다.
 - 390×844와 1440×1024에서 페이지 가로 넘침 0, 핵심 기능 누락 0이다.

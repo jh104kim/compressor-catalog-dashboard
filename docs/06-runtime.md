@@ -28,26 +28,26 @@ Runtime은 다음 두 대상만 읽는다.
 
 ```powershell
 $env:PYTHONUTF8='1'
-$sourceCommit = "2f490beee2acec6d8cc024dd65b13cdab4cf7bd4"
+$sourceCommit = (git rev-parse HEAD).Trim()
 $appGitSha = (git rev-parse HEAD).Trim()
+$nextReleaseId = "release:YYYY-MM-DD:NNN"
 python scripts/publish_catalog.py `
   --approved-by "catalog-owner" `
-  --approved-at "2026-07-30T19:00:10+09:00" `
+  --approved-at "YYYY-MM-DDThh:mm:ss+09:00" `
   --source-commit $sourceCommit `
   --app-git-sha $appGitSha `
-  --release-id "release:2026-07-30:005"
+  --release-id $nextReleaseId
 ```
 
 기본 입력은 `catalog/staging/catalog-bundle.json`, 기본 출력은 `catalog/published`이다. 테스트에서는 `--bundle`, `--output-root`, `--schema`, `--rules`로 임시 경로를 사용한다.
 
 ## Runtime 실행
 
-먼저 Studio를 빌드한 후 Uvicorn factory를 실행한다.
+먼저 Compare Report를 생성하고 Studio를 빌드한 후 Uvicorn factory를 실행한다.
 
 ```powershell
-cd studio
-npm run build
-cd ..
+python scripts/build_compare_lab_report.py
+npm --prefix studio run build
 python -m uvicorn backend.catalog_audit.main:create_runtime_app `
   --factory `
   --host 127.0.0.1 `
@@ -58,6 +58,8 @@ python -m uvicorn backend.catalog_audit.main:create_runtime_app `
 
 - API: `http://127.0.0.1:8000/api/v1/`
 - Studio: `http://127.0.0.1:8000/`
+- Compare Lab: `http://127.0.0.1:8000/?view=compare`
+- Compare Report: `http://127.0.0.1:8000/compare-lab-output.html`
 - Published: `catalog/published`
 - Studio build: `studio/dist`
 

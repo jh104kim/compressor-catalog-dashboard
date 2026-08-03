@@ -9,22 +9,22 @@
 1. Python 3.12 의존성 1회 설치
 2. 전체 pytest
 3. Draft 2020-12 Schema 검사
-4. 실제 `release:2026-07-30:005`의 상태·해시·승인·76/27/49·B1 검증
+4. 활성 포인터가 가리키는 실제 Release의 상태·해시·승인·76/27/49·B1 검증
 5. Node 24 설정과 QA 의존성 1회 설치
 6. Playwright Chromium 1회 설치
 7. 기존 P0 Characterization 1회
-8. Studio `npm ci → Vitest → build`
+8. Studio `npm ci → Vitest → Compare Report 생성 → build`
 9. FastAPI same-origin Runtime을 동적 포트로 기동
-10. `npm --prefix qa run test:p5` 1회
-11. P0·P5 Evidence artifact 업로드
+10. P5, Compare Report, P14 분석, P15/P16 속도·상세 보고서 E2E 1회
+11. P0·P5·P15 Evidence artifact 업로드
 
-Job 제한시간은 30분이며 `P0_RETRIES=0`, `P5_RETRIES=0`이다. 실패 테스트를 재시도로 통과시키지 않는다.
+Job 제한시간은 30분이며 `P0_RETRIES=0`, `P5_RETRIES=0`, `P15_RETRIES=0`이다. 실패 테스트를 재시도로 통과시키지 않는다.
 
 ## Release Gate
 
 CI는 Release를 새로 발행하지 않고 저장소의 실제 활성 Release를 읽기만 한다.
 
-- Release ID: `release:2026-07-30:005`
+- Release ID: `catalog/published/active-release.json`에서 동적 조회
 - 상태: `PUBLISHED`
 - Validation: Critical 0, Major 0
 - 모델: 전체 76, Samsung 27, 경쟁사 49
@@ -45,15 +45,17 @@ E2E에 전달하는 환경변수:
 - `E2E_APP_PORT`: 선택된 동적 포트
 - `OUTPUT_DIR`: `qa/evidence/p5/github-actions`
 - `P5_RETRIES=0`
+- `REPORT_BASE_URL`, `P14_BASE_URL`, `P15_BASE_URL`: 같은 Runtime URL
 
 ## Artifact
 
 - P0: `p0-catalog-audit-<run_id>-<attempt>`
 - P5: `p5-catalog-audit-<run_id>-<attempt>`
+- P15/P16: `p15-speed-performance-<run_id>-<attempt>`
 
-P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, Playwright 로그와 QA 스크립트가 생성한 결과·스크린샷을 포함한다. 실패해도 `if: always()`로 업로드하며 Evidence가 전혀 없으면 Gate가 실패한다.
+P5 artifact에는 Release 검사 로그, Runtime 로그, health 응답, P5·정적 보고서·P14 로그와 결과·스크린샷을 포함한다. P15/P16 artifact는 속도·상세 보고서 결과를 보존한다. 실패해도 `if: always()`로 업로드한다.
 
-## 이전 Release 003 실행 증거
+## 과거 Release 003 실행 증거
 
 - 대상 SHA: `cf95c93dc59f9422881353dbff5154be7efbac0d`
 - Actions Run: [30523905496](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30523905496)

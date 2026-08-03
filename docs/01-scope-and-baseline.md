@@ -1,5 +1,8 @@
 # P0 범위와 현재 기준선
 
+> 이 문서의 5개 탭·10장 캡처는 `frontend/` Legacy DC 기준선이다. 현재 기본
+> Studio와 Compare Report 검수는 `docs/05-ui-architecture.md`와 `qa/README.md`를 따른다.
+
 ## 목표
 
 현재 정적 대시보드를 바로 교체하지 않고, GitHub 스냅샷과 데이터 계약 및 화면 동작을 재현 가능한 기준선으로 고정한다. 이후 Phase에서 조사 데이터를 검증하고 발행하는 Catalog Audit Studio로 확장해도 현재 76개 모델과 Samsung 권위값이 조용히 바뀌지 않게 하는 것이 목적이다.
@@ -85,10 +88,10 @@
 5. Reporting에서 동일조건 R454B Sc Fixed DOE-B 비교군과 저신뢰 R32 Ro 경고를 각각 확인한다.
 6. 보완 과제 탭으로 이동하고 진행률 및 외부 출처 링크가 렌더된다.
 7. 헤더 검색으로 모델을 찾고 결과 선택 후 해당 모델의 Reporting 드릴다운으로 이동한다.
-8. 5개 탭 모두 두 viewport에서 페이지 전체 가로 넘침이 없어야 한다. 넓은 표 내부의 의도된 가로 스크롤은 허용한다.
+8. Legacy 5개 탭 모두 두 viewport에서 페이지 전체 가로 넘침이 없어야 한다. 넓은 표 내부의 의도된 가로 스크롤은 허용한다.
 9. 미해결 `{{ }}` 보간, console error, page error, 실패한 앱 리소스 요청이 각각 0건이어야 한다.
 
-두 viewport에서 5개 탭의 기준 캡처 10장을 `qa/evidence/p0/` 아래에 저장한다. 로컬 실행 결과와 GitHub Actions 결과에는 실행 SHA, 브라우저 버전, viewport, 테스트 결과를 함께 남긴다.
+두 viewport에서 Legacy 5개 탭의 기준 캡처 10장을 `qa/evidence/p0/` 아래에 저장한다. 로컬 실행 결과와 GitHub Actions 결과에는 실행 SHA, 브라우저 버전, viewport, 테스트 결과를 함께 남긴다.
 
 ### 로컬 실행 증거
 
@@ -113,7 +116,7 @@
 - `config/p0_catalog_rules.json`과 `qa/baseline/current_snapshot.json`이 유효한 JSON이며 계약 테스트를 통과한다.
 - 스냅샷 SSOT SHA-256이 실제 파일과 일치한다.
 - 76/27/49/13 수량과 핵심 권위값이 자동 테스트로 고정된다.
-- 5개 탭의 Characterization E2E가 로컬 2회 연속 및 GitHub Actions 1회 PASS한다.
+- Legacy 5개 탭의 Characterization E2E가 로컬 2회 연속 및 GitHub Actions 1회 PASS한다.
 - 데스크톱·모바일 기준 캡처 10장과 실행 증거가 저장된다.
 - Critical 0건, Major 0건이다.
 - P0 평가점수는 5점 만점 중 4.0 이상이다.

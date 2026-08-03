@@ -2,7 +2,7 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
-Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프로젝트. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·모델 분석·Reporting·보완 과제 뷰로 시각화한다.
+Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프로젝트. 현재 기본 제품은 Published Release만 읽는 FastAPI + React **Catalog Audit Studio**다. 기존 DC 화면은 `/legacy/` 회귀 기준선으로 유지한다.
 
 ## 디렉토리 구조
 
@@ -10,9 +10,12 @@ Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프�
 2606-Compressor-Catalog-Dashboard/
 ├── AGENTS.md
 ├── README.md
-├── data/      ← 리서치 원천 데이터 (Markdown) = 콘텐츠의 1차 출처
-├── docs/      ← 작업 문서 (아키텍처/계획/진행 스냅샷)
-└── frontend/  ← 대시보드 (Design Component HTML + 런타임 + 데이터 단일소스)
+├── backend/   ← Published Release 조회·비교 FastAPI
+├── catalog/   ← Staging, 확장 검토, 불변 Published Release
+├── data/      ← 리서치 원천 데이터 = 콘텐츠의 1차 출처
+├── docs/      ← 아키텍처·운영·TDD·진행 스냅샷
+├── studio/    ← React 19 + Vite 기본 앱과 Compare Report
+└── frontend/  ← 기존 Design Component 대시보드(Legacy)
 ```
 
 ### data/ — 리서치 자료 (모든 대시보드 콘텐츠의 1차 출처)
@@ -28,14 +31,14 @@ Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프�
 | `r290_reciprocating_benchmark.md` | R290 Re 벤치마크 표(축약본) |
 | `r454b_scroll_manufacturer_comparison.md` | R454B 스크롤 조건별 비교·정규화 순위·근접 경쟁모델 매칭 |
 
-### frontend/ — Design Component (DC) 대시보드
+### frontend/ — Legacy Design Component (DC) 대시보드
 - **`index.html`** — 기본 진입점. `/` 접근 시 `Compressor Dashboard.dc.html`로 자동 이동.
 - **`compressor-data.js`** — **데이터 단일 진실 소스(SSOT)**. `data/*.md`를 Samsung 기준으로 구조화해 `window.COMPRESSOR_DATA`에 노출. 모든 탭이 이 객체만 읽는다. 수치 변경은 반드시 여기서. `.dc.html`의 `<head>`에서 `support.js`보다 **먼저** 로드되어야 함(동기 실행으로 렌더 전 준비됨).
 - `Compressor Dashboard.dc.html` — 대시보드 본체. 파일명에 공백 있음. 하단 `<script type="text/x-dc" data-dc-script>` 의 `class Component extends DCLogic`가 `window.COMPRESSOR_DATA`를 읽어 `renderVals()`로 바인딩. (데이터를 여기 하드코딩하지 말 것 — SSOT 사용)
 - `support.js` — `dc-runtime` (자동 생성됨, **직접 편집 금지**). `{{ }}` 보간·디렉티브를 React 18로 컴파일. React/ReactDOM 18.3.1을 unpkg CDN에서 로드.
 
 ### `window.COMPRESSOR_DATA` 스키마 (compressor-data.js)
-`meta` · `tokens`(색상) · `conditions`(측정조건+환산계수) · `refrigerants` · `manufacturers` · `models`(68개: Samsung 27 + 경쟁사 41, 모델별 cc·용량·COP·EER·`condition`·status·gap·src) · `benchmarkGroups`(동일 비교군 12개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `catalogSources` · `kpi`.
+`meta` · `tokens`(색상) · `conditions`(측정조건+환산계수) · `refrigerants` · `manufacturers` · `models`(76개: Samsung 27 + 경쟁사 49) · `benchmarkGroups`(동일 비교군 13개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `catalogSources` · `kpi`.
 
 ## DC 프레임워크 사용법 (support.js 런타임)
 
@@ -51,15 +54,25 @@ Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프�
 
 ## 실행 / 미리보기 (E2E 검증)
 
+기본 Studio는 정적 보고서 생성과 production build 후 same-origin으로 실행한다.
+
+```powershell
+python scripts/build_compare_lab_report.py
+npm --prefix studio run build
+python -m uvicorn backend.catalog_audit.main:create_runtime_app --factory --host 127.0.0.1 --port 8000
+# http://127.0.0.1:8000/
+```
+
+Legacy DC만 확인할 때는 별도 8001 포트를 사용한다.
+
 정적 파일이지만 런타임이 `fetch(location.href)` + CDN 로드를 하므로 **로컬 HTTP 서버 필요** (`file://` 직접 열기는 fetch 실패). 인터넷 연결 필요(React unpkg).
 
 ```bash
-cd frontend
-python -m http.server 8000     # 또는: npx serve .
-# 브라우저: http://localhost:8000/
+python -m http.server 8001 --directory frontend
+# 브라우저: http://127.0.0.1:8001/
 ```
 
-빌드 단계 없음. `index.html`은 대시보드 본체로 자동 이동한다. `.dc.html`/`compressor-data.js` 편집 후 새로고침이면 끝. 단계별 E2E는 서버 실행 후 브라우저/프리뷰로 각 탭 렌더·전환·필터를 실제 확인한다.
+Legacy는 빌드 단계가 없다. 기본 Studio 작업은 활성 Published Release, API, React UI, 정적 Compare Report를 함께 검증한다.
 
 ## 도메인 핵심 개념
 
@@ -81,6 +94,7 @@ python -m http.server 8000     # 또는: npx serve .
 ## 작업 원칙
 
 - `support.js`는 직접 수정 금지(생성물).
-- 데이터 변경은 `compressor-data.js`에서만. 출처(`data/` md)와 대조하고 `src` 필드 유지.
+- 기본 Studio 데이터 변경은 `catalog/staging` → Validator → 새 Published Release 절차를 따른다. Published Release를 직접 편집하지 않는다.
+- Legacy 데이터 변경만 `compressor-data.js`에서 수행하며 출처(`data/` md)와 `src` 필드를 유지한다.
 - 색상 토큰(`COMPRESSOR_DATA.tokens`): accent `#FF385C`, Re `#FF385C`, Ro `#00A699`, Sc `#FC642D`, 양산 `#067647`, 개발중 `#E8A100`/`#B25E00`, 공백 `#C4C4C4`.
 - 작업 진행은 `docs/`에 단계별 스냅샷으로 기록하고, 단계마다 E2E로 검증 후 개선.

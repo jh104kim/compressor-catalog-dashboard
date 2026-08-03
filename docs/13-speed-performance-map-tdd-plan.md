@@ -1,5 +1,7 @@
 # P15 RPM/RPS 성능 맵·Recharts TDD 개발안
 
+> 상태: 완료. P16 정적 보고서는 `DATA_REQUIRED` 쌍을 숨기고 eligible 차트만 표시한다.
+
 ## Goal
 
 Compare Lab과 정적 Compare Report에서 **속도별 원천 성능점이 검증된 직접 비교쌍만**
@@ -14,7 +16,7 @@ Ro/Sc 비교쌍에는 곡선을 만들지 않고 `DATA_REQUIRED`와 확보해야
   반환한다.
 - Compare Lab은 유형 → Samsung 모델 → 직접 비교 가능 경쟁 모델 → 지표 순으로
   선택하고 `comparisonRevision`으로 지연 응답을 폐기한다.
-- RED 기준 Published 005에는 직접 비교 지표행 15개·고유 모델쌍 9개가 있었지만
+- RED 기준이었던 Published 005에는 직접 비교 지표행 15개·고유 모델쌍 9개가 있었지만
   속도별 성능점은 구조화돼 있지 않았다. 구현 결과는 활성
   `release:2026-08-03:001`의 별도 `performanceMaps`로 발행한다.
 - 원천 후보 중 Samsung `ENV4A5DL2B`와 Panasonic

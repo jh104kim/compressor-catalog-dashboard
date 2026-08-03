@@ -2,7 +2,7 @@
 
 ## 1. 현재 기준
 
-활성 Release `release:2026-07-30:005`의 Samsung 27모델 중 현재 데이터로
+활성 Release `release:2026-08-03:001`의 Samsung 27모델 중 현재 데이터로
 직접 비교 가능한 모델은 8개다. 기존 Sc 1개에 Panasonic 공식 Re 1개와
 Ro 6개가 추가됐다.
 
@@ -82,7 +82,7 @@ Published Release를 발행한다.
 
 ## 4. 이번 조사 결과
 
-비-LG 공식 자료를 조사해 다음을 Release 005에 반영했다.
+비-LG 공식 자료를 조사해 Release 005에 반영했고, 그 결과는 현재 Release 001에도 계승됐다.
 
 - Panasonic: Re 1개, Ro 6개 신규 등록
 - Secop: R134a Re 1개 유사 모델 신규 등록
@@ -103,14 +103,14 @@ Published Release를 발행한다.
 
 ## 6. 구현·검증 스냅샷
 
-- 앱·데이터 입력 SHA: `2f490beee2acec6d8cc024dd65b13cdab4cf7bd4`
-- 활성 Release: `release:2026-07-30:005`
+- 활성 Release: `release:2026-08-03:001`
 - Published 데이터: 76개(Samsung 27, 경쟁사 49)
 - 직접 비교 가능 Samsung: 8개
-- Vitest: 28/28 PASS
-- Python: 69/69 PASS
+- 정적 Compare Report: 직접 비교 15건, 비교 불가 모델 표시 0
+- Vitest: 37/37 PASS
+- Python: 94/94 PASS
 - Studio build: PASS
-- Playwright: Release 005 desktop/mobile 16/16 PASS, 2회 연속
+- Playwright: P15/P16 desktop/mobile 8/8, 보고서 회귀 2/2 PASS
 - Evidence:
-  - `qa/evidence/p12/local-run-1/p5-e2e.json`
-  - `qa/evidence/p12/local-run-2/p5-e2e.json`
+  - `qa/evidence/p16/local-run-3/p15-speed-e2e.json`
+  - `qa/evidence/p16/report-regression/compare-report-e2e.json`

@@ -2,7 +2,7 @@
 
 ## 목적
 
-조사 데이터를 화면에 바로 노출하지 않고, 동일한 규칙으로 검증한 모델만 Release에 포함한다. 현재 `compressor-data.js`의 68개 모델은 값 변경 없이 이 계약으로 이관한다.
+조사 데이터를 화면에 바로 노출하지 않고, 동일한 규칙으로 검증한 모델만 Release에 포함한다. 최초 P2에서는 `compressor-data.js`의 68개 모델을 값 변경 없이 이관했고, 현재 활성 Release는 공식 경쟁사 8개를 추가한 76개(Samsung 27, 경쟁사 49)다.
 
 ## 권위와 레이어
 
@@ -13,7 +13,7 @@
 | `post_catalog` | 2024년 이후 Samsung 개발·양산 정보 | Samsung만 허용, `postCatalog:true` |
 | `competitor_research` | 경쟁사 공개 조사 데이터 | Samsung 금지, `postCatalog:false` |
 
-Baseline, Legacy Research, Post-catalog는 덮어쓰지 않고 함께 유지한다. `postCatalog:true`는 “미검증”이 아니라 “2024 공식 카탈로그 이후 정보”라는 뜻이다. Legacy Research는 모델을 삭제하지 않고 68개 이관 parity를 지키기 위한 레이어이며, PDF 위치가 확인되기 전에는 공식 Baseline으로 승격하지 않는다.
+Baseline, Legacy Research, Post-catalog는 덮어쓰지 않고 함께 유지한다. `postCatalog:true`는 “미검증”이 아니라 “2024 공식 카탈로그 이후 정보”라는 뜻이다. Legacy Research는 최초 68개 이관 parity를 보존하기 위한 레이어이며, PDF 위치가 확인되기 전에는 공식 Baseline으로 승격하지 않는다.
 
 고정 권위값은 다음과 같다.
 
@@ -138,6 +138,6 @@ Published Release는 수정하지 않는다. 실패하거나 중단되면 이전
 ## P1 완료기준
 
 - Draft 2020-12 Schema가 유효하다.
-- 68개 모델을 표현할 필드와 이관표가 있다.
+- 최초 68개 이관과 현재 76개 확장을 모두 표현할 필드와 이관표가 있다.
 - 레이어·Evidence·비교·GAP/UNKNOWN·Release 규칙이 문서와 테스트에서 동일하다.
 - 확정 권위값과 군 교차 순위 금지가 자동 테스트로 고정된다.

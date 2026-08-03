@@ -26,7 +26,7 @@
 
 ```json
 {
-  "releaseId": "release:2026-07-30:005",
+  "releaseId": "release:<active>",
   "comparison": {
     "verdict": "DIRECT",
     "code": "DIRECT_OK",
@@ -72,7 +72,7 @@ REFERENCE/BLOCKED에서는 `performanceInterpretation`이 승패를 말하지 �
 | Test ID | 사용자 흐름 | 합격 기준 |
 |---|---|---|
 | `P14-E2E-POPUP-001` | 랜딩 → Compare Report 탭 | 새 팝업 URL이 `/compare-lab-output.html` |
-| `P14-E2E-CSV-001` | 보고서 → CSV 내려받기 | HTTP 200, 헤더+15행, Release 005, 코드 DIRECT_OK |
+| `P14-E2E-CSV-001` | 보고서 → CSV 내려받기 | HTTP 200, 헤더+15행, 활성 Release ID, 코드 DIRECT_OK |
 | `P14-E2E-ANALYSIS-001` | Sc → EER → 직접 pair → 안전 비교 | DIRECT 결과와 분석 5개 섹션, 수치 일치 |
 | `P14-E2E-BLOCK-001` | 조건 불일치 API fixture | BLOCKED, 순위·Δ·승패 0개, 확보 필요 데이터 표시 |
 | `P14-E2E-TRACE-001` | 분석 Evidence 열기 → 출력 | Release·두 모델·원천 locator가 출력물에도 유지 |

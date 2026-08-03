@@ -1,5 +1,7 @@
 # P14 Compare Lab 추가 분석·레포팅 TDD 개발안
 
+> 상태: 완료. 현재 활성 Release와 보고서 수치는 동적으로 조회한다.
+
 ## Goal
 
 1. 랜딩 사이드바에 `Compare Report` 탭을 추가하고, 사용자 클릭으로
@@ -15,8 +17,8 @@
 - `backend/catalog_audit/comparison.py`: DIRECT/REFERENCE/BLOCKED 판정과 Δ 계산.
 - `backend/catalog_audit/api.py`: 활성 Release 조회 및 `/api/v1/compare`.
 - `studio/src/App.tsx`: Compare Lab 유형·모델·지표 선택과 결과 표시.
-- `scripts/build_compare_lab_report.py`: Release 005 기준 전체 HTML 보고서 생성.
-- `studio/public/compare-lab-output.html`: 배포되는 정적 전체 보고서.
+- `scripts/build_compare_lab_report.py`: 활성 Release 기준 HTML·CSV·속도 JSON 생성.
+- `studio/compare-lab-output.html`: 생성 원본. Vite build 후 `studio/dist/compare-lab-output.html`로 배포.
 - `qa/scripts/p5-e2e.cjs`: 기존 Compare Lab 데스크톱·모바일 16개 시나리오.
 - `qa/scripts/compare-report-e2e.cjs`: 전체 보고서와 Compare Lab 연결 검증.
 

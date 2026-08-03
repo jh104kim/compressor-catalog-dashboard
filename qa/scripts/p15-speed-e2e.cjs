@@ -423,7 +423,34 @@ async function staticReportScenario(context, landingPage, viewport, activeReleas
   await reportTab.click();
   const reportPage = await popupPromise;
   await reportPage.waitForLoadState("networkidle");
+  await reportPage.setViewportSize({ width: viewport.width, height: viewport.height });
+  await waitForLayout(reportPage);
   invariant(reportPage.url() === reportUrl, `정적 보고서 popup URL ${reportPage.url()}`);
+
+  const directReport = reportPage.getByTestId("direct-comparison-report");
+  await directReport.waitFor({ state: "visible" });
+  const directComparisonCount = Number(await directReport.getAttribute("data-total-count"));
+  invariant(
+    directComparisonCount === 15,
+    "정적 보고서 직접 비교 데이터 누락",
+  );
+  invariant((await reportPage.getByTestId("direct-raw-chart").count()) === 1, "원값 Recharts 누락");
+  invariant((await reportPage.getByTestId("direct-delta-chart").count()) === 1, "Delta Recharts 누락");
+  invariant((await reportPage.getByTestId("research-gap").count()) === 0, "비교 불가 항목이 보고서에 노출됨");
+  invariant((await reportPage.getByTestId("speed-data-gap").count()) === 0, "속도 비교 불가 항목이 보고서에 노출됨");
+  invariant((await reportPage.getByTestId("samsung-model-card").count()) === 8, "직접 비교 가능 Samsung 모델 수 불일치");
+  invariant((await reportPage.getByTestId("comparison-matrix-row").count()) === 8, "직접 비교 매트릭스 수 불일치");
+  const typeToggle = reportPage.getByTestId("direct-type-toggle");
+  const metricToggle = reportPage.getByTestId("direct-metric-toggle");
+  await typeToggle.getByRole("button", { name: "Sc", exact: true }).click();
+  invariant((await metricToggle.getByRole("button").count()) === 1, "Sc에 값 없는 지표가 노출됨");
+  invariant(await metricToggle.getByRole("button", { name: "EER", exact: true }).isVisible(), "Sc EER 필터 누락");
+  invariant(Number(await directReport.getAttribute("data-comparison-count")) === 2, "Sc EER 비교 건수 불일치");
+  invariant((await reportPage.getByTestId("direct-comparison-item").count()) === 2, "Sc EER 상세 카드 수 불일치");
+  await typeToggle.getByRole("button", { name: "Ro", exact: true }).click();
+  invariant((await metricToggle.getByRole("button").count()) === 2, "Ro COP/EER 필터 누락");
+  invariant(Number(await directReport.getAttribute("data-comparison-count")) === 6, "Ro COP 비교 건수 불일치");
+  await typeToggle.getByRole("button", { name: "전체", exact: true }).click();
 
   const speedSections = reportPage.getByTestId("speed-report-section");
   const speedSectionCount = await speedSections.count();
@@ -459,6 +486,11 @@ async function staticReportScenario(context, landingPage, viewport, activeReleas
   invariant((await reportPage.getByRole("link", { name: "CSV 내려받기", exact: true }).count()) === 1, "기존 전체 CSV 회귀");
   invariant((await reportPage.locator(".open-lab").count()) >= 1, "Compare Lab 왕복 링크 회귀");
 
+  await directReport.scrollIntoViewIfNeeded();
+  await reportPage.screenshot({
+    path: path.join(screenshotDir, `${viewport.id}-direct-comparison-report.png`),
+    fullPage: false,
+  });
   await speedSections.first().scrollIntoViewIfNeeded();
   await reportPage.screenshot({
     path: path.join(screenshotDir, `${viewport.id}-static-speed-report.png`),
@@ -477,6 +509,10 @@ async function staticReportScenario(context, landingPage, viewport, activeReleas
   return {
     testIds: ["P15-E2E-REPORT-001", "P15-E2E-PRINT-001"],
     popup: true,
+    directComparisonCount,
+    directChartCount: 2,
+    visibleModelCount: 8,
+    excludedGapCount: 0,
     speedSectionCount,
     chartEligibilityMatched: true,
     plottedPointCount: declaredPoints,

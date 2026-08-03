@@ -79,6 +79,15 @@ def _compare_url(baseline_id: str, candidate_id: str, metric: str) -> str:
     )
 
 
+def _compare_data_url(baseline_id: str, candidate_id: str, metric: str) -> str:
+    return (
+        "/?view=compare"
+        f"&baselineModelId={quote(baseline_id, safe='')}"
+        f"&candidateModelId={quote(candidate_id, safe='')}"
+        f"&metric={metric}"
+    )
+
+
 def load_active_catalog(
     *,
     active_release_path: Path = DEFAULT_ACTIVE_RELEASE,
@@ -252,6 +261,47 @@ def build_report_data(
         )
         for row in direct_rows
     }
+    direct_comparisons = []
+    for row in direct_rows:
+        baseline = row["baseline"]
+        candidate = row["candidate"]
+        metric = row["metric"]
+        result = row["result"]
+        direct_comparisons.append(
+            {
+                "comparisonKey": "::".join(
+                    (baseline["modelId"], candidate["modelId"], metric)
+                ),
+                "compressorType": baseline["type"],
+                "refrigerant": baseline["refrigerant"],
+                "conditionLabel": (
+                    f"{baseline['condition']} · {baseline['driveClass']}"
+                ),
+                "driveClass": baseline["driveClass"],
+                "metric": metric,
+                "baseline": {
+                    "modelId": baseline["modelId"],
+                    "manufacturer": baseline["manufacturer"],
+                    "model": baseline["model"],
+                    "value": float((baseline.get("specs") or {})[metric]),
+                    "capacityW": _capacity_w(baseline),
+                },
+                "candidate": {
+                    "modelId": candidate["modelId"],
+                    "manufacturer": candidate["manufacturer"],
+                    "model": candidate["model"],
+                    "value": float((candidate.get("specs") or {})[metric]),
+                    "capacityW": _capacity_w(candidate),
+                },
+                "capacityDiffPct": float(result["capacityDiffPct"]),
+                "deltaPct": float(result["deltaPct"]),
+                "verdict": result["verdict"],
+                "code": result["code"],
+                "compareUrl": _compare_data_url(
+                    baseline["modelId"], candidate["modelId"], metric
+                ),
+            }
+        )
     speed_comparisons = []
     seen_speed_pairs: set[tuple[str, str]] = set()
     for row in direct_rows:
@@ -312,6 +362,7 @@ def build_report_data(
         "rules": rules,
         "models": report_models,
         "directRows": direct_rows,
+        "directComparisons": direct_comparisons,
         "speedComparisons": speed_comparisons,
         "summary": {
             "samsungModels": len(samsung),
@@ -412,6 +463,8 @@ def _render_model_card(item: dict[str, Any]) -> str:
     metric_blocks = []
     for metric in ("cop", "eer"):
         rows = item["results"][metric]
+        if not rows:
+            continue
         metric_blocks.append(
             f"""
             <section class="metric-section">
@@ -422,7 +475,7 @@ def _render_model_card(item: dict[str, Any]) -> str:
                 </div>
                 <span>{len(rows)}개 직접 비교</span>
               </div>
-              {_render_direct_table(rows) if rows else _render_research(item['research'][metric])}
+              {_render_direct_table(rows)}
             </section>
             """
         )
@@ -457,6 +510,8 @@ def _render_model_card(item: dict[str, Any]) -> str:
 def _render_summary_table(data: dict[str, Any]) -> str:
     rows = []
     for item in data["models"]:
+        if not item["directReady"]:
+            continue
         model = item["model"]
         candidate_names = {}
         for metric in ("cop", "eer"):
@@ -466,7 +521,7 @@ def _render_summary_table(data: dict[str, Any]) -> str:
             ) or "없음"
         rows.append(
             f"""
-            <tr>
+            <tr data-testid="comparison-matrix-row">
               <td><span class="type-tag type-{_escape(model['type'])}">{_escape(model['type'])}</span></td>
               <td><a href="#model-{quote(model['modelId'], safe='')}">{_escape(model['model'])}</a></td>
               <td>{_escape(model['refrigerant'])}</td>
@@ -506,7 +561,7 @@ def render_report(data: dict[str, Any]) -> str:
         typed = [
             item
             for item in data["models"]
-            if item["model"]["type"] == compressor_type
+            if item["model"]["type"] == compressor_type and item["directReady"]
         ]
         type_summary = data["typeSummary"][compressor_type]
         cards = []
@@ -525,9 +580,9 @@ def render_report(data: dict[str, Any]) -> str:
               <div class="section-title">
                 <div>
                   <span>TYPE {compressor_type}</span>
-                  <h2>{TYPE_LABEL[compressor_type]} 전체 모델</h2>
+                  <h2>{TYPE_LABEL[compressor_type]} 직접 비교 모델</h2>
                 </div>
-                <p>{type_summary['models']}개 중 직접 비교 가능 {type_summary['readyModels']}개 · 고유 모델쌍 {type_summary['pairs']}개 · 지표 판정 {type_summary['comparisons']}건</p>
+                <p>비교 가능 {type_summary['readyModels']}개 · 고유 모델쌍 {type_summary['pairs']}개 · 지표 판정 {type_summary['comparisons']}건</p>
               </div>
               <div class="model-stack">{''.join(cards)}</div>
             </section>
@@ -542,7 +597,7 @@ def render_report(data: dict[str, Any]) -> str:
             <a class="type-summary type-{compressor_type}" href="#type-{compressor_type}">
               <span>{compressor_type}</span>
               <strong>{TYPE_LABEL[compressor_type]}</strong>
-              <p>{item['models']}개 모델 · 비교 가능 {item['readyModels']}개</p>
+              <p>비교 모델 {item['readyModels']}개</p>
               <small>직접 판정 {item['comparisons']}건</small>
             </a>
             """
@@ -667,7 +722,7 @@ def render_report(data: dict[str, Any]) -> str:
   <header class="topbar">
     <div class="brand"><i>S</i> Samsung Compressor Compare Lab</div>
     <nav aria-label="보고서 목차">
-      <a href="#summary">요약</a><a href="#speed-report">속도 분석</a><a href="#matrix">전체 매트릭스</a>
+      <a href="#summary">요약</a><a href="#direct-charts">상세 차트</a><a href="#speed-report">속도 분석</a><a href="#matrix">비교 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
     <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
@@ -678,8 +733,8 @@ def render_report(data: dict[str, Any]) -> str:
     <section class="hero">
       <div class="container">
         <p class="eyebrow">COMPRESSOR INTELLIGENCE · COMPARE LAB OUTPUT</p>
-        <h1>Samsung Re · Ro · Sc<br>전 모델 비교 보고서</h1>
-        <p class="hero-copy">활성 Published Release의 27개 Samsung 모델을 전수 점검하고, Compare Lab의 동일 비교 규칙으로 허용된 경쟁 모델과 COP/EER 결과만 수록했습니다.</p>
+        <h1>Samsung Re · Ro · Sc<br>직접 비교 상세 보고서</h1>
+        <p class="hero-copy">활성 Published Release의 27개 Samsung 모델을 전수 점검한 뒤, Compare Lab 안전 규칙을 통과한 8개 모델과 COP/EER 직접 비교 결과만 선별했습니다.</p>
         <div class="release-line">
           <span>{_escape(release['releaseId'])}</span>
           <span>{_escape(release['status'])}</span>
@@ -691,10 +746,9 @@ def render_report(data: dict[str, Any]) -> str:
 
     <div class="container">
       <section class="kpi-grid" aria-label="보고서 핵심 수치">
-        <div class="kpi"><span>Samsung 전 모델</span><strong>{summary['samsungModels']}</strong><small>Re 4 · Ro 12 · Sc 11</small></div>
+        <div class="kpi"><span>카탈로그 점검</span><strong>{summary['samsungModels']}</strong><small>Samsung 전체 모델</small></div>
         <div class="kpi"><span>경쟁사 모델 풀</span><strong>{summary['competitorModels']}</strong><small>Published Release 수록</small></div>
-        <div class="kpi"><span>직접 비교 가능</span><strong>{summary['readyModels']}</strong><small>Samsung 모델 기준</small></div>
-        <div class="kpi"><span>공식자료 보완</span><strong>{summary['researchModels']}</strong><small>직접 후보 0개</small></div>
+        <div class="kpi"><span>보고서 표시</span><strong>{summary['readyModels']}</strong><small>직접 비교 가능 모델만</small></div>
         <div class="kpi"><span>고유 모델쌍</span><strong>{summary['uniquePairs']}</strong><small>Samsung ↔ 경쟁사</small></div>
         <div class="kpi"><span>Compare Lab 판정</span><strong>{summary['comparisons']}</strong><small>COP/EER 합계</small></div>
       </section>
@@ -722,6 +776,15 @@ def render_report(data: dict[str, Any]) -> str:
         <p class="method-note"><strong>Δ 해석:</strong> 경쟁사 Δ = (경쟁사 지표 − Samsung 지표) ÷ Samsung 지표. 양수는 경쟁사 우위, 음수는 Samsung 우위입니다. 모든 표 행은 백엔드 판정 <code>DIRECT_OK</code>만 포함합니다.</p>
       </section>
 
+      <section class="report-section" id="direct-charts"
+               data-testid="direct-comparison-chart-shell">
+        <div class="section-title">
+          <div><span>DIRECT COMPARISON DETAIL</span><h2>COP · EER 상세 차트</h2></div>
+          <p>유형과 지표를 선택해 양사 원값, 경쟁사 Δ%, 용량 차이를 함께 확인합니다.</p>
+        </div>
+        <div id="direct-comparison-chart-root"><p>직접 비교 차트를 불러오는 중입니다.</p></div>
+      </section>
+
       <section class="report-section" id="speed-report"
                data-testid="speed-report-shell"
                data-chart-eligible="{'true' if speed_eligible else 'false'}">
@@ -729,15 +792,15 @@ def render_report(data: dict[str, Any]) -> str:
           <div><span>RPM · RPS PERFORMANCE MAP</span><h2>속도별 성능 분석</h2></div>
           <p>공식 Evidence가 연결된 원천점만 표시하며 임의 보간·외삽과 Hz 속도 변환은 사용하지 않습니다.</p>
         </div>
-        <p class="method-note">차트 가능 {speed_eligible}쌍 · 전체 직접 비교 고유 모델쌍 {len(data['speedComparisons'])}쌍. 데이터가 없는 모델쌍은 수치 대신 조사 필요 상태로 유지합니다.</p>
+        <p class="method-note">공식 RPM/RPS 성능점이 양쪽에 있는 {speed_eligible}쌍만 표시합니다. 속도 데이터가 없는 모델쌍은 이 보고서에서 제외했습니다.</p>
         <p><a class="top-action" href="/compare-lab-speed-output.csv" download>속도 성능 CSV 내려받기</a></p>
         <div id="speed-report-root"><p>속도 성능 지도를 불러오는 중입니다.</p></div>
       </section>
 
       <section class="report-section" id="matrix">
         <div class="section-title">
-          <div><span>FULL COVERAGE</span><h2>Samsung 27개 모델 전체 매트릭스</h2></div>
-          <p>COP와 EER 후보를 분리했습니다. ‘없음’ 모델은 아래 상세 영역에서 조사 사유와 목표조건을 확인할 수 있습니다.</p>
+          <div><span>DIRECT COVERAGE</span><h2>직접 비교 가능 모델 매트릭스</h2></div>
+          <p>COP 또는 EER 직접 후보가 존재하는 Samsung 모델만 표시합니다.</p>
         </div>
         {_render_summary_table(data)}
       </section>
@@ -756,7 +819,7 @@ def render_report(data: dict[str, Any]) -> str:
 </body>
 </html>
 """
-    return report_html
+    return "\n".join(line.rstrip() for line in report_html.splitlines()) + "\n"
 
 
 def _artifact_dir(output_path: Path) -> Path:
@@ -827,11 +890,17 @@ def build_report(
             )
 
     speed_json_path = artifact_dir / "compare-lab-speed-data.json"
+    eligible_speed_comparisons = [
+        item
+        for item in data["speedComparisons"]
+        if item["speedAnalysis"]["chartEligible"]
+    ]
     speed_json_path.write_text(
         json.dumps(
             {
                 "releaseId": release["releaseId"],
-                "comparisons": data["speedComparisons"],
+                "directComparisons": data["directComparisons"],
+                "comparisons": eligible_speed_comparisons,
             },
             ensure_ascii=False,
             indent=2,

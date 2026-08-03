@@ -11,7 +11,7 @@ from scripts.build_compare_lab_report import (
 )
 
 
-def test_report_covers_every_samsung_model_and_direct_result(
+def test_report_renders_only_direct_ready_models_and_results(
     tmp_path: Path,
 ) -> None:
     output = tmp_path / "compare-lab-output.html"
@@ -29,10 +29,17 @@ def test_report_covers_every_samsung_model_and_direct_result(
     assert data["summary"]["researchModels"] == 19
     assert data["summary"]["uniquePairs"] == 9
     assert data["summary"]["comparisons"] == 15
-    assert rendered.count('data-testid="samsung-model-card"') == 27
+    assert rendered.count('data-testid="samsung-model-card"') == 8
+    assert rendered.count('data-testid="comparison-matrix-row"') == 8
     assert rendered.count('data-testid="direct-comparison-row"') == 15
     assert rendered.count("DIRECT_OK") >= 15
-    assert all(item["model"] in rendered for item in samsung)
+    ready_names = {
+        item["model"]["model"] for item in data["models"] if item["directReady"]
+    }
+    excluded_names = {item["model"] for item in samsung} - ready_names
+    assert all(name in rendered for name in ready_names)
+    assert all(f'data-model="{name}"' not in rendered for name in excluded_names)
+    assert 'data-testid="research-gap"' not in rendered
 
 
 def test_report_is_standalone_semantic_html_with_safe_tables(
@@ -113,13 +120,13 @@ def test_report_build_writes_same_origin_speed_payload_and_csv(
     assert speed_json.is_file()
     assert speed_csv.is_file()
     payload = json.loads(speed_json.read_text(encoding="utf-8"))
-    eligible = [
-        item
-        for item in payload["comparisons"]
-        if item["speedAnalysis"]["chartEligible"]
-    ]
+    eligible = payload["comparisons"]
     assert payload["releaseId"] == release["releaseId"]
     assert len(eligible) == 1
+    assert all(item["speedAnalysis"]["chartEligible"] for item in eligible)
+    assert len(payload["directComparisons"]) == 15
+    assert all(item["code"] == "DIRECT_OK" for item in payload["directComparisons"])
+    assert {item["metric"] for item in payload["directComparisons"]} == {"cop", "eer"}
     assert eligible[0]["speedAnalysis"]["status"] == "CURVE_READY"
     assert eligible[0]["speedAnalysis"]["rankingAllowed"] is False
     assert eligible[0]["speedAnalysis"]["safeguards"] == {
@@ -128,6 +135,8 @@ def test_report_build_writes_same_origin_speed_payload_and_csv(
         "hzAsSpeed": False,
     }
     assert 'data-testid="speed-report-shell"' in rendered
+    assert 'data-testid="direct-comparison-chart-shell"' in rendered
+    assert 'id="direct-comparison-chart-root"' in rendered
     assert 'href="/compare-lab-speed-output.csv"' in rendered
     assert 'src="/src/compare-report.tsx"' in rendered
     assert "https://" not in rendered
@@ -143,7 +152,7 @@ def test_report_build_writes_same_origin_speed_payload_and_csv(
     assert all(row["evidence_id"] for row in speed_rows)
 
 
-def test_static_speed_report_keeps_unavailable_pairs_non_numeric(
+def test_static_report_payload_excludes_unavailable_speed_pairs(
     tmp_path: Path,
 ) -> None:
     output = tmp_path / "compare-lab-output.html"
@@ -152,17 +161,12 @@ def test_static_speed_report_keeps_unavailable_pairs_non_numeric(
     payload = json.loads(
         (tmp_path / "compare-lab-speed-data.json").read_text(encoding="utf-8")
     )
-    gaps = [
-        item
-        for item in payload["comparisons"]
-        if item["speedAnalysis"]["status"] == "DATA_REQUIRED"
-    ]
-
-    assert gaps
-    assert all(item["speedAnalysis"]["chartEligible"] is False for item in gaps)
-    assert all(item["speedAnalysis"]["metricOptions"] == [] for item in gaps)
+    assert payload["comparisons"]
     assert all(
-        not series["points"]
-        for item in gaps
-        for series in item["speedAnalysis"]["series"]
+        item["speedAnalysis"]["chartEligible"] is True
+        for item in payload["comparisons"]
+    )
+    assert all(
+        item["speedAnalysis"]["status"] != "DATA_REQUIRED"
+        for item in payload["comparisons"]
     )
