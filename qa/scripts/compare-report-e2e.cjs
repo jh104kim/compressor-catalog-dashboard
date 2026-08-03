@@ -23,12 +23,21 @@ async function main() {
   fs.mkdirSync(screenshotDir, { recursive: true });
   const browser = await chromium.launch({ headless: true });
   const results = [];
+  let releaseId = null;
 
   try {
     for (const viewport of viewports) {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
       });
+      const activeResponse = await context.request.get(
+        new URL("api/v1/releases/active", baseUrl).href,
+      );
+      invariant(activeResponse.status() === 200, `Active Release API ${activeResponse.status()}`);
+      const active = await activeResponse.json();
+      invariant(active.status === "PUBLISHED", `Active Release 상태 ${active.status}`);
+      if (releaseId === null) releaseId = active.releaseId;
+      invariant(active.releaseId === releaseId, "viewport 사이 Active Release가 변경됨");
       const errors = [];
       const externalRequests = [];
       const badResponses = [];
@@ -76,6 +85,7 @@ async function main() {
 
       const reportResponse = await context.request.get(reportUrl);
       invariant(reportResponse.status() === 200, "보고서 응답이 200이 아닙니다.");
+      invariant((await page.locator("body").innerText()).includes(releaseId), "보고서 Active Release 누락");
       const modelCount = await page
         .locator('[data-testid="samsung-model-card"]')
         .count();
@@ -103,7 +113,9 @@ async function main() {
       invariant((await csvLink.getAttribute("href")) === "/compare-lab-output.csv", "CSV 링크가 잘못됐습니다.");
       const csvResponse = await context.request.get(csvUrl);
       invariant(csvResponse.status() === 200, "CSV 응답이 200이 아닙니다.");
-      const csvLines = (await csvResponse.text())
+      const csvText = await csvResponse.text();
+      invariant(csvText.includes(releaseId), "CSV Active Release 누락");
+      const csvLines = csvText
         .replace(/^\uFEFF/, "")
         .trim()
         .split(/\r?\n/);
@@ -149,7 +161,7 @@ async function main() {
     phase: "P14",
     status: "PASS",
     reportUrl,
-    releaseId: "release:2026-07-30:005",
+    releaseId,
     retries: 0,
     results,
   };

@@ -24,6 +24,7 @@ jobs:
       PYTHONUTF8: "1"
       P0_RETRIES: "0"
       P5_RETRIES: "0"
+      P15_RETRIES: "0"
 
     steps:
       - name: Checkout
@@ -88,13 +89,20 @@ jobs:
           from backend.catalog_audit.validation import canonical_json_sha256
 
           root = Path("catalog/published")
-          expected_release_id = "release:2026-07-30:005"
           active = json.loads(
               (root / "active-release.json").read_text(encoding="utf-8")
           )
-          assert active["releaseId"] == expected_release_id
-
-          release_dir = root / "releases" / "release_2026-07-30_005"
+          release_match = re.fullmatch(
+              r"release:(\d{4}-\d{2}-\d{2}):(\d{3})",
+              active["releaseId"],
+          )
+          assert release_match is not None
+          release_dir = (
+              root
+              / "releases"
+              / f"release_{release_match.group(1)}_{release_match.group(2)}"
+          )
+          assert release_dir.is_dir()
           metadata = json.loads(
               (release_dir / "release.json").read_text(encoding="utf-8")
           )
@@ -104,7 +112,7 @@ jobs:
           summary = metadata["validationSummary"]
 
           assert metadata["status"] == "PUBLISHED"
-          assert metadata["releaseId"] == expected_release_id
+          assert metadata["releaseId"] == active["releaseId"]
           assert metadata["dataSha256"] == active["dataSha256"]
           assert canonical_json_sha256(bundle) == metadata["dataSha256"]
           assert summary["status"] == "VALIDATED"
@@ -242,12 +250,13 @@ jobs:
           set -euo pipefail
           evidence_dir="$GITHUB_WORKSPACE/qa/evidence/p5/github-actions"
           mkdir -p "$evidence_dir"
+          active_release_id="$(python -c 'import json; from pathlib import Path; print(json.loads(Path("catalog/published/active-release.json").read_text(encoding="utf-8"))["releaseId"])')"
           {
             echo "repository=${GITHUB_REPOSITORY}"
             echo "sha=${GITHUB_SHA}"
             echo "run_id=${GITHUB_RUN_ID}"
             echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
-            echo "release_id=release:2026-07-30:005"
+            echo "release_id=${active_release_id}"
             echo "retries=${P5_RETRIES}"
             python --version
             node --version
@@ -309,6 +318,12 @@ jobs:
           npm --prefix qa run test:p14 \
             2>&1 | tee "$evidence_dir/p14-analysis-playwright.log"
 
+          test "$P15_RETRIES" = "0"
+          P15_BASE_URL="$base_url" \
+          OUTPUT_DIR="$GITHUB_WORKSPACE/qa/evidence/p15/github-actions" \
+          npm --prefix qa run test:p15 \
+            2>&1 | tee "$evidence_dir/p15-speed-playwright.log"
+
       - name: Upload P0 GitHub Actions evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -325,4 +340,13 @@ jobs:
           name: p5-catalog-audit-${{ github.run_id }}-${{ github.run_attempt }}
           path: qa/evidence/p5/github-actions/**
           if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload P15 GitHub Actions evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p15-speed-performance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa/evidence/p15/github-actions/**
+          if-no-files-found: warn
           retention-days: 14

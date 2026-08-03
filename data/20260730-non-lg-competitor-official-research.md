@@ -32,6 +32,27 @@ Panasonic 공식 모델 목록의 ASHRAE 조건은 응축 54.4°C, 증발 -23.3�
 - https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models?page=1
 - https://industrial.panasonic.com/sa/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2852RPS%29
 
+#### P15 속도 성능점 보완 (2026-08-03 재확인)
+
+동일 `TKF76E25DCH` family의 Panasonic 공식 상세 페이지에서 ASHRAE-LBP
+(응축 54.4°C / 증발 -23.3°C) 속도별 원천점을 재확인했다. 공개 페이지에는
+입력전력과 EER가 없으므로 용량과 COP만 비교 지표로 사용하며, 누락값은 계산해
+채우지 않는다.
+
+| 공식 표기 | 속도 RPS | 환산 RPM | 용량 W | COP | 입력전력/EER |
+|---|---:|---:|---:|---:|---|
+| TKF76E25DCH(17RPS) | 17 | 1,020 | 46 | 2.07 | 미공개 |
+| TKF76E25DCH(27RPS) | 27 | 1,620 | 76 | 2.17 | 미공개 |
+| TKF76E25DCH(52RPS) | 52 | 3,120 | 149 | 2.06 | 미공개 |
+| TKF76E25DCH(80RPS) | 80 | 4,800 | 220 | 1.83 | 미공개 |
+
+속도별 공식 출처:
+
+- https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2817RPS%29
+- https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2827RPS%29
+- https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2852RPS%29
+- https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2880RPS%29
+
 ### 2.2 Panasonic Ro
 
 Panasonic 공식 모델 상세의 `Testing Condition`이 ARI 또는 ARI 57.5Hz인 행만 반영했다.

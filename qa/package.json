@@ -9,7 +9,8 @@
     "test:p5": "node ./scripts/p5-e2e.cjs",
     "test:p5:ci": "node ./scripts/p5-e2e.cjs",
     "test:report": "node ./scripts/compare-report-e2e.cjs",
-    "test:p14": "node ./scripts/p14-analysis-e2e.cjs"
+    "test:p14": "node ./scripts/p14-analysis-e2e.cjs",
+    "test:p15": "node ./scripts/p15-speed-e2e.cjs"
   },
   "devDependencies": {
     "playwright": "1.62.0"

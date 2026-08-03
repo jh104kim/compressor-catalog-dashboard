@@ -70,9 +70,33 @@
   // gap: have(양산) / prog(개발중) / none(공백) | type=Re/Ro/Sc | src=출처
   // postCatalog:true = 2024 카탈로그 이후 개발/양산분. "미검증" 배지로 처리하지 않는다.
   var M = function (o) { return o; };
+  // P15 성능맵은 원천 속도 단위와 실측점을 그대로 저장한다.
+  // Hz는 축 회전속도로 해석하지 않으며, 보간·외삽점은 저장하지 않는다.
+  var ENV4A5DL2B_PERFORMANCE = [{
+    mapId: "performance:samsung:env4a5dl2b:ashrae-lbp",
+    familyModel: "ENV4A5DL2B",
+    condition: "ASHRAE-LBP",
+    points: [
+      { speedValue:1650, speedUnit:"rpm", capacityW:148, inputW:75, cop:1.97, eer:6.72, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:samsung:env4a5dl2b:1650rpm", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.inputW","performanceMaps.points.cop","performanceMaps.points.eer"], note:"Samsung 공식 ENV4A5DL2B ASHRAE-LBP 1650rpm 성능점" } },
+      { speedValue:1950, speedUnit:"rpm", capacityW:174, inputW:88, cop:1.98, eer:6.77, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:samsung:env4a5dl2b:1950rpm", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.inputW","performanceMaps.points.cop","performanceMaps.points.eer"], note:"Samsung 공식 ENV4A5DL2B ASHRAE-LBP 1950rpm 성능점" } },
+      { speedValue:2800, speedUnit:"rpm", capacityW:244, inputW:130, cop:1.88, eer:6.41, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:samsung:env4a5dl2b:2800rpm", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.inputW","performanceMaps.points.cop","performanceMaps.points.eer"], note:"Samsung 공식 ENV4A5DL2B ASHRAE-LBP 2800rpm 성능점" } },
+      { speedValue:3650, speedUnit:"rpm", capacityW:315, inputW:182, cop:1.73, eer:5.91, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:samsung:env4a5dl2b:3650rpm", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.inputW","performanceMaps.points.cop","performanceMaps.points.eer"], note:"Samsung 공식 ENV4A5DL2B ASHRAE-LBP 3650rpm 성능점" } },
+    ],
+  }];
+  var TKF76E25DCH_PERFORMANCE = [{
+    mapId: "performance:panasonic:tkf76e25dch:ashrae-lbp",
+    familyModel: "TKF76E25DCH",
+    condition: "ASHRAE-LBP",
+    points: [
+      { speedValue:17, speedUnit:"rps", capacityW:46, inputW:null, cop:2.07, eer:null, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:panasonic:tkf76e25dch:17rps", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2817RPS%29", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.cop"], note:"동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점" } },
+      { speedValue:27, speedUnit:"rps", capacityW:76, inputW:null, cop:2.17, eer:null, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:panasonic:tkf76e25dch:27rps", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2827RPS%29", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.cop"], note:"동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점" } },
+      { speedValue:52, speedUnit:"rps", capacityW:149, inputW:null, cop:2.06, eer:null, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:panasonic:tkf76e25dch:52rps", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2852RPS%29", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.cop"], note:"동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점" } },
+      { speedValue:80, speedUnit:"rps", capacityW:220, inputW:null, cop:1.83, eer:null, valueKind:"MEASURED", evidence:{ evidenceId:"evidence:p15:panasonic:tkf76e25dch:80rps", sourcePath:"data/20260803-speed-performance-map-research.md", authority:"official", locator:{kind:"url", url:"https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2880RPS%29", accessedAt:"2026-08-03"}, fieldPaths:["performanceMaps.points.speedValue","performanceMaps.points.capacityW","performanceMaps.points.cop"], note:"동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점" } },
+    ],
+  }];
   var MODELS = [
     // ===== Samsung Re (왕복동, 냉장고) — 2024 catalogue + report =====
-    M({ mfr:"Samsung", type:"Re", app:"냉장고 LBP", model:"ENV4A5DL2B", refrigerant:"R600a", drive:"BLDC", cc:15.31, capW:148, inputW:75, cop:1.97, eer:6.72, condition:"ASHRAE-LBP", status:"양산", gap:"have", voltage:"115-127V", phase:"1Φ", freq:"60Hz", confidence:"Medium", src:"2024 catalogue (Re) / report §3-1" }),
+    M({ mfr:"Samsung", type:"Re", app:"냉장고 LBP", model:"ENV4A5DL2B", refrigerant:"R600a", drive:"BLDC", cc:15.31, capW:148, inputW:75, cop:1.97, eer:6.72, condition:"ASHRAE-LBP", status:"양산", gap:"have", voltage:"115-127V", phase:"1Φ", freq:"60Hz", confidence:"Medium", src:"2024 catalogue (Re) / report §3-1", performanceMaps:ENV4A5DL2B_PERFORMANCE }),
     M({ mfr:"Samsung", type:"Re", app:"냉장고 LBP", model:"CD124K-S1ZA", refrigerant:"R134a", drive:"Fixed(RSIR)", cc:null, capW:49, inputW:64, cop:0.76, eer:2.61, condition:"ASHRAE-LBP", status:"양산", gap:"have", voltage:"220V", phase:"1Φ", freq:"50Hz", confidence:"Medium", src:"report §3-1" }),
     M({ mfr:"Samsung", type:"Re", app:"냉장고 MBP", model:"MSA143K-S1B", refrigerant:"R134a", drive:"Fixed(RSCR)", cc:null, capW:112, inputW:77, cop:1.45, eer:4.95, condition:"ASHRAE-MBP", status:"양산", gap:"have", voltage:"115V", phase:"1Φ", freq:"60Hz", confidence:"High", src:"2024 catalogue p.31" }),
     M({ mfr:"Samsung", type:"Re", app:"냉장고 MBP", model:"MSA170K-S1G", refrigerant:"R134a", drive:"Fixed(RSCR)", cc:null, capW:201, inputW:132, cop:1.52, eer:5.20, condition:"ASHRAE-MBP", status:"양산", gap:"have", voltage:"220V", phase:"1Φ", freq:"50Hz", confidence:"High", nameNote:"2024 카탈로그 COP 1.52(구 1.49)", src:"2024 catalogue p.31" }),
@@ -181,7 +205,7 @@
     M({ mfr:"Secop", type:"Re", app:"상업냉장 MBP", model:"NLE12.6CNL", refrigerant:"R290", drive:"Fixed", cc:12.60, capW:1277, inputW:572, cop:2.04, eer:null, condition:"ASHRAE-MBP", status:"양산", gap:"have", confidence:"High", src:"r290 §2-5 (R290 Re 최고 MBP COP)" }),
     M({ mfr:"Secop", type:"Re", app:"상업냉장 MBP", model:"DLE4.8CN", refrigerant:"R290", drive:"Fixed", cc:4.80, capW:415, inputW:210, cop:1.98, eer:null, condition:"ASHRAE-MBP", status:"양산", gap:"have", confidence:"High", src:"r290 §2-5" }),
     M({ mfr:"Panasonic", type:"Re", app:"냉장고(인버터)", model:"EEI57T13DMH", refrigerant:"R290", drive:"Variable(인버터)", cc:5.7, capW:360, inputW:null, cop:null, eer:null, condition:"ASHRAE-LBP", status:"양산", gap:"have", voltage:"220-240V", freq:"50Hz", confidence:"Medium", src:"r290 §2-6 (COP 미공개)" }),
-    M({ mfr:"Panasonic", type:"Re", app:"냉장고(인버터)", model:"TKF76E25DCH-52RPS", aliases:["TKF76E25DCH(52RPS)"], refrigerant:"R600a", drive:"Variable(인버터)", cc:7.6, capW:149, inputW:null, cop:2.06, eer:null, condition:"ASHRAE-LBP", status:"양산", gap:"have", confidence:"High", nameNote:"공식 표기 TKF76E25DCH(52RPS)", src:"non-lg-official §2.1 Panasonic Re" }),
+    M({ mfr:"Panasonic", type:"Re", app:"냉장고(인버터)", model:"TKF76E25DCH-52RPS", aliases:["TKF76E25DCH(52RPS)"], refrigerant:"R600a", drive:"Variable(인버터)", cc:7.6, capW:149, inputW:null, cop:2.06, eer:null, condition:"ASHRAE-LBP", status:"양산", gap:"have", confidence:"High", nameNote:"공식 표기 TKF76E25DCH(52RPS)", src:"non-lg-official §2.1 Panasonic Re", performanceMaps:TKF76E25DCH_PERFORMANCE }),
     M({ mfr:"Secop", type:"Re", app:"모바일 냉장 LBP", model:"BD35F", refrigerant:"R134a", drive:"Variable(2000-3500rpm)", cc:2.0, capW:50.5, inputW:null, cop:1.15, eer:null, condition:"ASHRAE-LBP", status:"양산", gap:"have", confidence:"High", nameNote:"공식 BD Nano 비교표, 최대 속도 ASHRAE LBP", src:"non-lg-official §2.3 Secop Re" }),
   ];
 
@@ -272,7 +296,7 @@
   };
 
   window.COMPRESSOR_DATA = {
-    meta: { asOf: "2026-07-30", baseline: "Samsung", confidence: "High–Medium", nextReview: "2026-10-30", sources: 30, currentYear: 2026, samsungCatalog: 2024 },
+    meta: { asOf: "2026-08-03", baseline: "Samsung", confidence: "High–Medium", nextReview: "2026-10-30", sources: 31, currentYear: 2026, samsungCatalog: 2024 },
     tokens: T,
     conditions: CONDITIONS,
     refrigerants: REFRIGERANTS,

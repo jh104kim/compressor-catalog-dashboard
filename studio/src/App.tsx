@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 import {
   compareCatalogModelsWithReport,
@@ -35,6 +44,8 @@ const SIDEBAR_ITEMS: Array<
   ...NAV_ITEMS,
   { id: "compare-report", label: "Compare Report", kicker: "정적 보고서 ↗" },
 ];
+
+const SpeedAnalysis = lazy(() => import("./SpeedAnalysis"));
 
 const TYPE_LABEL: Record<CompressorType, string> = {
   Re: "왕복동",
@@ -212,6 +223,12 @@ function reportMatchesSelection(
   candidateModelId: string,
   comparisonMetric: "cop" | "eer",
 ) {
+  const baselineSpeedSeries = report.speedAnalysis.series.find(
+    (series) => series.role === "baseline",
+  );
+  const candidateSpeedSeries = report.speedAnalysis.series.find(
+    (series) => series.role === "candidate",
+  );
   return (
     report.releaseId === releaseId &&
     report.releaseId === report.analysis.releaseId &&
@@ -220,7 +237,9 @@ function reportMatchesSelection(
     report.comparison.metric === comparisonMetric &&
     report.analysis.baselineModelId === baselineModelId &&
     report.analysis.candidateModelId === candidateModelId &&
-    report.analysis.metric === comparisonMetric
+    report.analysis.metric === comparisonMetric &&
+    baselineSpeedSeries?.modelId === baselineModelId &&
+    candidateSpeedSeries?.modelId === candidateModelId
   );
 }
 
@@ -1155,7 +1174,16 @@ function CompareLab({
           <div><h3>두 모델을 선택해 비교 Gate를 실행하세요</h3><p>결과는 DIRECT, REFERENCE, BLOCKED 중 하나로 설명됩니다.</p></div>
         </section>
       )}
-      {comparisonReport && <AnalysisReport report={comparisonReport} />}
+      {comparisonReport ? (
+        <AnalysisReport
+          report={comparisonReport}
+          conditionLabel={
+            baseline && candidate
+              ? `${baseline.condition} · ${baseline.driveClass}`
+              : undefined
+          }
+        />
+      ) : null}
       {selectedType && researchTargets.length > 0 && (
         <section
           className="panel research-queue"
@@ -1200,7 +1228,13 @@ function CompareLab({
   );
 }
 
-function AnalysisReport({ report }: { report: ComparisonReport }) {
+function AnalysisReport({
+  report,
+  conditionLabel,
+}: {
+  report: ComparisonReport;
+  conditionLabel?: string;
+}) {
   const { analysis, comparison } = report;
   const performance = analysis.performanceInterpretation;
   const baselineName =
@@ -1343,6 +1377,12 @@ function AnalysisReport({ report }: { report: ComparisonReport }) {
           </ul>
         </article>
       </div>
+      <Suspense fallback={<div className="speed-loading">속도 분석 차트를 준비 중입니다.</div>}>
+        <SpeedAnalysis
+          analysis={report.speedAnalysis}
+          conditionLabel={conditionLabel}
+        />
+      </Suspense>
     </section>
   );
 }

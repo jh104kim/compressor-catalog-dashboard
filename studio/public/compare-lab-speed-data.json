@@ -1,0 +1,428 @@
+{
+  "releaseId": "release:2026-07-30:005",
+  "comparisons": [
+    {
+      "pairKey": "model:samsung:ENV4A5DL2B::model:panasonic:TKF76E25DCH-52RPS",
+      "baseline": {
+        "modelId": "model:samsung:ENV4A5DL2B",
+        "manufacturer": "Samsung",
+        "model": "ENV4A5DL2B"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:TKF76E25DCH-52RPS",
+        "manufacturer": "Panasonic",
+        "model": "TKF76E25DCH-52RPS"
+      },
+      "conditionLabel": "ASHRAE-LBP · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:ENV4A5DL2B",
+            "manufacturer": "Samsung",
+            "model": "ENV4A5DL2B",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:TKF76E25DCH-52RPS",
+            "manufacturer": "Panasonic",
+            "model": "TKF76E25DCH-52RPS",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UB9TK2150F::model:panasonic:9RL160Z",
+      "baseline": {
+        "modelId": "model:samsung:UB9TK2150F",
+        "manufacturer": "Samsung",
+        "model": "UB9TK2150F"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:9RL160Z",
+        "manufacturer": "Panasonic",
+        "model": "9RL160Z"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UB9TK2150F",
+            "manufacturer": "Samsung",
+            "model": "UB9TK2150F",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:9RL160Z",
+            "manufacturer": "Panasonic",
+            "model": "9RL160Z",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UF5LB3520F::model:panasonic:KKD420Z",
+      "baseline": {
+        "modelId": "model:samsung:UF5LB3520F",
+        "manufacturer": "Samsung",
+        "model": "UF5LB3520F"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KKD420Z",
+        "manufacturer": "Panasonic",
+        "model": "KKD420Z"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UF5LB3520F",
+            "manufacturer": "Samsung",
+            "model": "UF5LB3520F",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:KKD420Z",
+            "manufacturer": "Panasonic",
+            "model": "KKD420Z",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UF8LB3265F::model:panasonic:KRD220Z",
+      "baseline": {
+        "modelId": "model:samsung:UF8LB3265F",
+        "manufacturer": "Samsung",
+        "model": "UF8LB3265F"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:KRD220Z",
+        "manufacturer": "Panasonic",
+        "model": "KRD220Z"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UF8LB3265F",
+            "manufacturer": "Samsung",
+            "model": "UF8LB3265F",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:KRD220Z",
+            "manufacturer": "Panasonic",
+            "model": "KRD220Z",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UG4T200FUA::model:panasonic:5KD184XAA21",
+      "baseline": {
+        "modelId": "model:samsung:UG4T200FUA",
+        "manufacturer": "Samsung",
+        "model": "UG4T200FUA"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD184XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD184XAA21"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UG4T200FUA",
+            "manufacturer": "Samsung",
+            "model": "UG4T200FUA",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:5KD184XAA21",
+            "manufacturer": "Panasonic",
+            "model": "5KD184XAA21",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UG5TM5520F::model:panasonic:5VD550ZD",
+      "baseline": {
+        "modelId": "model:samsung:UG5TM5520F",
+        "manufacturer": "Samsung",
+        "model": "UG5TM5520F"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5VD550ZD",
+        "manufacturer": "Panasonic",
+        "model": "5VD550ZD"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UG5TM5520F",
+            "manufacturer": "Samsung",
+            "model": "UG5TM5520F",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:5VD550ZD",
+            "manufacturer": "Panasonic",
+            "model": "5VD550ZD",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:UG8TH8265F::model:panasonic:5KD240XAA21",
+      "baseline": {
+        "modelId": "model:samsung:UG8TH8265F",
+        "manufacturer": "Samsung",
+        "model": "UG8TH8265F"
+      },
+      "candidate": {
+        "modelId": "model:panasonic:5KD240XAA21",
+        "manufacturer": "Panasonic",
+        "model": "5KD240XAA21"
+      },
+      "conditionLabel": "ARI · Variable",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:UG8TH8265F",
+            "manufacturer": "Samsung",
+            "model": "UG8TH8265F",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:panasonic:5KD240XAA21",
+            "manufacturer": "Panasonic",
+            "model": "5KD240XAA21",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA029N1ULB",
+      "baseline": {
+        "modelId": "model:samsung:DS8LC5040IN",
+        "manufacturer": "Samsung",
+        "model": "DS8LC5040IN"
+      },
+      "candidate": {
+        "modelId": "model:gmcc:STDA029N1ULB",
+        "manufacturer": "GMCC",
+        "model": "STDA029N1ULB"
+      },
+      "conditionLabel": "DOE-B · Fixed",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:DS8LC5040IN",
+            "manufacturer": "Samsung",
+            "model": "DS8LC5040IN",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:gmcc:STDA029N1ULB",
+            "manufacturer": "GMCC",
+            "model": "STDA029N1ULB",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    },
+    {
+      "pairKey": "model:samsung:DS8LC5040IN::model:gmcc:STDA031N1ULB",
+      "baseline": {
+        "modelId": "model:samsung:DS8LC5040IN",
+        "manufacturer": "Samsung",
+        "model": "DS8LC5040IN"
+      },
+      "candidate": {
+        "modelId": "model:gmcc:STDA031N1ULB",
+        "manufacturer": "GMCC",
+        "model": "STDA031N1ULB"
+      },
+      "conditionLabel": "DOE-B · Fixed",
+      "speedAnalysis": {
+        "status": "DATA_REQUIRED",
+        "chartEligible": false,
+        "rankingAllowed": false,
+        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
+        "metricOptions": [],
+        "commonRange": null,
+        "series": [
+          {
+            "role": "baseline",
+            "modelId": "model:samsung:DS8LC5040IN",
+            "manufacturer": "Samsung",
+            "model": "DS8LC5040IN",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          },
+          {
+            "role": "candidate",
+            "modelId": "model:gmcc:STDA031N1ULB",
+            "manufacturer": "GMCC",
+            "model": "STDA031N1ULB",
+            "pointCount": 0,
+            "lineEligible": false,
+            "points": []
+          }
+        ],
+        "safeguards": {
+          "interpolation": false,
+          "extrapolation": false,
+          "hzAsSpeed": false
+        }
+      }
+    }
+  ]
+}

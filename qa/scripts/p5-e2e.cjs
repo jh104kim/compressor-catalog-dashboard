@@ -31,7 +31,6 @@ const MODELS = {
 };
 
 const EXPECTED = {
-  releaseId: "release:2026-07-30:005",
   sourcePath: "data/Samsung-Compressor-Catalogue_2024.pdf",
   authorityCop: "3.25",
   authorityPage: "PDF p.92",
@@ -245,7 +244,7 @@ async function inspectLayout(page) {
   });
 }
 
-async function runScenario(page, monitor, viewport, spec) {
+async function runScenario(page, monitor, viewport, spec, activeReleaseId) {
   const offsets = eventOffsets(monitor);
   const screenshotPath = path.join(
     SCREENSHOT_DIR,
@@ -265,7 +264,7 @@ async function runScenario(page, monitor, viewport, spec) {
     await assertion(result.assertions, "화면 진입", async () =>
       gotoReady(page, spec.query),
     );
-    await spec.run(page, result.assertions);
+    await spec.run(page, result.assertions, activeReleaseId);
     await page.waitForTimeout(150);
 
     result.layout = await assertion(
@@ -345,7 +344,7 @@ const SCENARIOS = [
     id: "G1-DIRECT",
     title: "R454B Sc Fixed DOE-B EER 직접 비교",
     query: "/?view=compare",
-    run: async (page, log) => {
+    run: async (page, log, activeReleaseId) => {
       const metric = page.getByLabel("비교 지표");
       await assertion(log, "G1 Sc 유형과 EER 선택", async () => {
         await page.getByRole("tab", { name: "Sc 스크롤" }).click();
@@ -596,7 +595,7 @@ const SCENARIOS = [
     id: "G5-RELEASE-SAFETY",
     title: "활성 Published Release와 View-first 경계",
     query: "/?view=release",
-    run: async (page, log) => {
+    run: async (page, log, activeReleaseId) => {
       let releaseIds;
       await assertion(log, "G5 Release ID·상태·해시", async () => {
         releaseIds = (await page.getByTestId("release-id").allInnerTexts()).map(
@@ -604,7 +603,7 @@ const SCENARIOS = [
         );
         invariant(
           releaseIds.length >= 1 &&
-            releaseIds.every((value) => value === EXPECTED.releaseId),
+            releaseIds.every((value) => value === activeReleaseId),
           `Release ID 불일치: ${releaseIds.join(", ")}`,
         );
         const statuses = (
@@ -648,7 +647,7 @@ const SCENARIOS = [
           (value) => value.trim(),
         );
         invariant(
-          after.length >= 1 && after.every((value) => value === EXPECTED.releaseId),
+          after.length >= 1 && after.every((value) => value === activeReleaseId),
           `새로고침 후 Release가 변경됨: ${after.join(", ")}`,
         );
         return { before: releaseIds, after };
@@ -659,7 +658,7 @@ const SCENARIOS = [
     id: "G7-B1-EXPANSION",
     title: "B1 Scroll p.92 검토 Batch와 비교 차단",
     query: "/?view=release",
-    run: async (page, log) => {
+    run: async (page, log, activeReleaseId) => {
       await assertion(log, "G7 B1 16행·8개 신규 후보", async () => {
         await requireVisible(page.getByTestId("expansion-batch"), "B1 확장 Batch");
         const total = (
@@ -706,7 +705,7 @@ const SCENARIOS = [
     query: `/?view=model&modelId=${encodeURIComponent(
       MODELS.authority,
     )}&evidence=1`,
-    run: async (page, log) => {
+    run: async (page, log, activeReleaseId) => {
       await assertion(log, "G6 Evidence chain", async () => {
         await requireVisible(page.getByTestId("evidence-panel"), "Evidence 패널");
         const modelId = (
@@ -723,7 +722,7 @@ const SCENARIOS = [
         ).trim();
         invariant(modelId === MODELS.authority, `Evidence modelId 오류: ${modelId}`);
         invariant(
-          releaseId === EXPECTED.releaseId,
+          releaseId === activeReleaseId,
           `Evidence releaseId 오류: ${releaseId}`,
         );
         invariant(
@@ -776,17 +775,26 @@ async function runViewport(browser, viewport) {
   });
   const page = await context.newPage();
   const monitor = createMonitor(page);
+  const activeResponse = await context.request.get(
+    new URL("api/v1/releases/active", BASE_URL).toString(),
+  );
+  invariant(activeResponse.status() === 200, `Active Release API ${activeResponse.status()}`);
+  const activeRelease = await activeResponse.json();
+  invariant(activeRelease.status === "PUBLISHED", `Active Release 상태 ${activeRelease.status}`);
+  const activeReleaseId = activeRelease.releaseId;
+  invariant(typeof activeReleaseId === "string" && activeReleaseId.length > 0, "Active Release ID 누락");
   const result = {
     id: viewport.id,
     viewport: { width: viewport.width, height: viewport.height },
     status: "FAIL",
     scenarios: [],
     browserGates: null,
+    activeReleaseId,
   };
 
   for (const scenario of SCENARIOS) {
     result.scenarios.push(
-      await runScenario(page, monitor, viewport, scenario),
+      await runScenario(page, monitor, viewport, scenario, activeReleaseId),
     );
   }
 

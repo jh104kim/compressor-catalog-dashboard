@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from .analysis import build_comparison_analysis
 from .comparison import compare_models
 from .expansion import ExpansionBatchError, load_expansion_batch
+from .performance_map import build_speed_analysis
 from .release import FileReleaseStore, ReleaseIntegrityError
 
 
@@ -190,10 +191,19 @@ def create_app(
             result,
             release_id=release_id,
         )
+        speed_analysis = build_speed_analysis(
+            baseline,
+            candidate,
+            comparison_allowed=(
+                result.verdict == "DIRECT" and result.ranking_allowed
+            ),
+            comparison_reason=result.reason,
+        )
         return {
             "releaseId": release_id,
             "comparison": result.to_dict(),
             "analysis": analysis,
+            "speedAnalysis": speed_analysis,
         }
 
     @app.get("/api/v1/portfolio/{compressor_type}/{refrigerant}")

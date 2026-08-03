@@ -176,6 +176,14 @@
         "$ref": "#/$defs/evidence"
       }
     },
+    "performanceMaps": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/performanceMap"
+      }
+    },
     "releaseId": {
       "type": "string",
       "pattern": "^release:[0-9]{4}-[0-9]{2}-[0-9]{2}:[0-9]{3}$"
@@ -408,6 +416,119 @@
           ]
         }
       }
+    },
+    "performanceMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapId",
+        "familyModel",
+        "condition",
+        "points"
+      ],
+      "properties": {
+        "mapId": {
+          "type": "string",
+          "pattern": "^performance:[a-z0-9._:-]+$"
+        },
+        "familyModel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition": {
+          "enum": [
+            "ARI",
+            "DOE-A",
+            "DOE-B",
+            "EN12900",
+            "ASHRAE-LBP",
+            "ASHRAE-MBP",
+            "CECOMAF",
+            "SEER60",
+            "HP-heating",
+            "UNKNOWN"
+          ]
+        },
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/performancePoint"
+          }
+        }
+      }
+    },
+    "performancePoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "speedValue",
+        "speedUnit",
+        "capacityW",
+        "inputW",
+        "cop",
+        "eer",
+        "valueKind",
+        "evidence"
+      ],
+      "properties": {
+        "speedValue": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speedUnit": {
+          "enum": [
+            "rpm",
+            "rps"
+          ]
+        },
+        "capacityW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "inputW": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "cop": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "eer": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "valueKind": {
+          "enum": [
+            "MEASURED",
+            "DERIVED"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence",
+          "required": [
+            "evidenceId"
+          ]
+        }
+      },
+      "anyOf": [
+        { "properties": { "capacityW": { "type": "number" } } },
+        { "properties": { "inputW": { "type": "number" } } },
+        { "properties": { "cop": { "type": "number" } } },
+        { "properties": { "eer": { "type": "number" } } }
+      ]
     }
   }
 }

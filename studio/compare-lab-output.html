@@ -111,7 +111,7 @@
   <header class="topbar">
     <div class="brand"><i>S</i> Samsung Compressor Compare Lab</div>
     <nav aria-label="보고서 목차">
-      <a href="#summary">요약</a><a href="#matrix">전체 매트릭스</a>
+      <a href="#summary">요약</a><a href="#speed-report">속도 분석</a><a href="#matrix">전체 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
     <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
@@ -185,6 +185,18 @@
           <div><strong>동일 지표 보유</strong><span>COP 또는 EER가 양쪽 모두 존재</span></div>
         </div>
         <p class="method-note"><strong>Δ 해석:</strong> 경쟁사 Δ = (경쟁사 지표 − Samsung 지표) ÷ Samsung 지표. 양수는 경쟁사 우위, 음수는 Samsung 우위입니다. 모든 표 행은 백엔드 판정 <code>DIRECT_OK</code>만 포함합니다.</p>
+      </section>
+
+      <section class="report-section" id="speed-report"
+               data-testid="speed-report-shell"
+               data-chart-eligible="false">
+        <div class="section-title">
+          <div><span>RPM · RPS PERFORMANCE MAP</span><h2>속도별 성능 분석</h2></div>
+          <p>공식 Evidence가 연결된 원천점만 표시하며 임의 보간·외삽과 Hz 속도 변환은 사용하지 않습니다.</p>
+        </div>
+        <p class="method-note">차트 가능 0쌍 · 전체 직접 비교 고유 모델쌍 9쌍. 데이터가 없는 모델쌍은 수치 대신 조사 필요 상태로 유지합니다.</p>
+        <p><a class="top-action" href="/compare-lab-speed-output.csv" download>속도 성능 CSV 내려받기</a></p>
+        <div id="speed-report-root"><p>속도 성능 지도를 불러오는 중입니다.</p></div>
       </section>
 
       <section class="report-section" id="matrix">
@@ -2800,5 +2812,6 @@
       <p><a href="/?view=compare">Compare Lab으로 돌아가기</a></p>
     </div>
   </footer>
+  <script type="module" src="/src/compare-report.tsx"></script>
 </body>
 </html>

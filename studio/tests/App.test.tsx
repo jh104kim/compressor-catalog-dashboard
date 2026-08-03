@@ -73,6 +73,30 @@ const samsungRe = {
   specs: { capacityW: 210, cop: 1.75, eer: 5.97 },
 };
 
+const speedSamsung = {
+  ...samsungRe,
+  modelId: "model:samsung:ENV4A5DL2B",
+  model: "ENV4A5DL2B",
+  condition: "ASHRAE-LBP",
+  driveClass: "Variable",
+  specs: { capacityW: 148, inputW: 75, cop: 1.97, eer: 6.72 },
+};
+
+const speedCompetitor = {
+  ...speedSamsung,
+  modelId: "model:panasonic:TKF76E25DCH-52RPS",
+  model: "TKF76E25DCH-52RPS",
+  manufacturer: "Panasonic",
+  sourceLayer: "competitor_research",
+  specs: { capacityW: 149, inputW: 72.3, cop: 2.06, eer: 7.03 },
+  evidence: {
+    sourcePath: "data/20260730-non-lg-competitor-official-research.md",
+    authority: "official",
+    locator: { kind: "markdown-section", section: "Panasonic Re" },
+    fieldPaths: ["specs.cop"],
+  },
+};
+
 const directComparison = {
   releaseId: "release:2026-07-30:001",
   verdict: "DIRECT",
@@ -148,8 +172,150 @@ const directAnalysis = {
   ],
 };
 
+const curveSpeedAnalysis = {
+  status: "CURVE_READY",
+  chartEligible: true,
+  rankingAllowed: false,
+  reason: "양쪽 모델에 검증된 다중 속도 성능점과 공통 운전영역이 있습니다.",
+  metricOptions: ["capacityW", "inputW", "cop", "eer"],
+  commonRange: {
+    rpm: { min: 1650, max: 2800 },
+    rps: { min: 27.5, max: 46.6667 },
+  },
+  series: [
+    {
+      role: "baseline",
+      modelId: speedSamsung.modelId,
+      manufacturer: "Samsung",
+      model: speedSamsung.model,
+      pointCount: 2,
+      lineEligible: true,
+      points: [
+        {
+          speedValue: 1650,
+          speedUnit: "rpm",
+          rpm: 1650,
+          rps: 27.5,
+          capacityW: 88,
+          inputW: 47,
+          cop: 1.87,
+          eer: 6.38,
+          valueKind: "MEASURED",
+          evidence: {
+            evidenceId: "evidence:samsung-env4:1650",
+            sourcePath: "data/compressor_deep_research_report.md",
+            authority: "secondary",
+            locator: { kind: "markdown-section", section: "report §3-1" },
+            fieldPaths: ["performanceMaps.points[0]"],
+          },
+        },
+        {
+          speedValue: 2800,
+          speedUnit: "rpm",
+          rpm: 2800,
+          rps: 46.6667,
+          capacityW: 148,
+          inputW: 75,
+          cop: 1.97,
+          eer: 6.72,
+          valueKind: "MEASURED",
+          evidence: {
+            evidenceId: "evidence:samsung-env4:2800",
+            sourcePath: "data/compressor_deep_research_report.md",
+            authority: "secondary",
+            locator: { kind: "markdown-section", section: "report §3-1" },
+            fieldPaths: ["performanceMaps.points[1]"],
+          },
+        },
+      ],
+    },
+    {
+      role: "candidate",
+      modelId: speedCompetitor.modelId,
+      manufacturer: "Panasonic",
+      model: speedCompetitor.model,
+      pointCount: 2,
+      lineEligible: true,
+      points: [
+        {
+          speedValue: 27,
+          speedUnit: "rps",
+          rpm: 1620,
+          rps: 27,
+          capacityW: 79,
+          inputW: 42,
+          cop: 1.88,
+          eer: 6.41,
+          valueKind: "MEASURED",
+          evidence: {
+            evidenceId: "evidence:panasonic-tkf:27",
+            sourcePath: "data/20260730-non-lg-competitor-official-research.md",
+            authority: "official",
+            locator: { kind: "markdown-section", section: "Panasonic Re" },
+            fieldPaths: ["performanceMaps.points[1]"],
+          },
+        },
+        {
+          speedValue: 52,
+          speedUnit: "rps",
+          rpm: 3120,
+          rps: 52,
+          capacityW: 149,
+          inputW: 72.3,
+          cop: 2.06,
+          eer: 7.03,
+          valueKind: "MEASURED",
+          evidence: {
+            evidenceId: "evidence:panasonic-tkf:52",
+            sourcePath: "data/20260730-non-lg-competitor-official-research.md",
+            authority: "official",
+            locator: { kind: "markdown-section", section: "Panasonic Re" },
+            fieldPaths: ["performanceMaps.points[3]"],
+          },
+        },
+      ],
+    },
+  ],
+  safeguards: {
+    interpolation: false,
+    extrapolation: false,
+    hzAsSpeed: false,
+  },
+};
+
+const dataRequiredSpeedAnalysis = {
+  ...curveSpeedAnalysis,
+  status: "DATA_REQUIRED",
+  chartEligible: false,
+  rankingAllowed: false,
+  reason: "양쪽 모델의 검증된 속도별 성능점이 필요합니다.",
+  metricOptions: [],
+  commonRange: null,
+  series: [
+    {
+      role: "baseline",
+      modelId: directSamsung.modelId,
+      manufacturer: "Samsung",
+      model: directSamsung.model,
+      pointCount: 0,
+      lineEligible: false,
+      points: [],
+    },
+    {
+      role: "candidate",
+      modelId: directCompetitor.modelId,
+      manufacturer: "GMCC",
+      model: directCompetitor.model,
+      pointCount: 0,
+      lineEligible: false,
+      points: [],
+    },
+  ],
+};
+
 let comparePayload: Record<string, unknown>;
 let analysisPayload: Record<string, unknown>;
+let speedAnalysisPayload: Record<string, unknown>;
 let reportReleaseId = "release:2026-07-30:001";
 let compareResponseDelayMs = 0;
 let failActiveRelease = false;
@@ -190,6 +356,21 @@ async function chooseDirectPair(user: ReturnType<typeof userEvent.setup>) {
   );
 }
 
+async function chooseSpeedPair(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole("tab", { name: "Re 왕복동" }));
+  await user.selectOptions(screen.getByLabelText("비교 지표"), "cop");
+  await user.click(
+    screen.getByRole("option", {
+      name: `Samsung 기준 모델 ${speedSamsung.model}`,
+    }),
+  );
+  await user.click(
+    screen.getByRole("option", {
+      name: `경쟁 모델 ${speedCompetitor.manufacturer} ${speedCompetitor.model}`,
+    }),
+  );
+}
+
 describe("Catalog Audit Studio", () => {
   beforeEach(() => {
     window.history.replaceState({}, "", "/");
@@ -208,6 +389,7 @@ describe("Catalog Audit Studio", () => {
       rankingAllowed: false,
     };
     analysisPayload = directAnalysis;
+    speedAnalysisPayload = dataRequiredSpeedAnalysis;
     reportReleaseId = "release:2026-07-30:001";
     modelItems = [samsung, competitor];
     vi.stubGlobal(
@@ -307,6 +489,7 @@ describe("Catalog Audit Studio", () => {
                   releaseId: reportReleaseId,
                   comparison: comparePayload,
                   analysis: analysisPayload,
+                  speedAnalysis: speedAnalysisPayload,
                 }), {
                   status: 200,
                   headers: { "Content-Type": "application/json" },
@@ -319,6 +502,7 @@ describe("Catalog Audit Studio", () => {
             releaseId: reportReleaseId,
             comparison: comparePayload,
             analysis: analysisPayload,
+            speedAnalysis: speedAnalysisPayload,
           });
         }
         if (url.includes("/compare")) {
@@ -586,6 +770,98 @@ describe("Catalog Audit Studio", () => {
     expect(report).not.toHaveTextContent("열위");
     expect(report).not.toHaveTextContent("순위");
     expect(report).not.toHaveTextContent("Δ");
+  });
+
+  it("P15-UT-SPEED-001 검증된 다중 속도점만 RPM/RPS와 지표별 차트·표로 표시한다", async () => {
+    modelItems = [speedSamsung, speedCompetitor];
+    comparePayload = {
+      ...directComparison,
+      baselineModelId: speedSamsung.modelId,
+      candidateModelId: speedCompetitor.modelId,
+      metric: "cop",
+      capacityDiffPct: 0.68,
+      deltaPct: 4.57,
+    };
+    analysisPayload = {
+      ...directAnalysis,
+      baselineModelId: speedSamsung.modelId,
+      candidateModelId: speedCompetitor.modelId,
+      metric: "cop",
+      evidenceRefs: [
+        {
+          ...directAnalysis.evidenceRefs[0],
+          modelId: speedSamsung.modelId,
+          model: speedSamsung.model,
+        },
+        {
+          ...directAnalysis.evidenceRefs[1],
+          modelId: speedCompetitor.modelId,
+          manufacturer: speedCompetitor.manufacturer,
+          model: speedCompetitor.model,
+        },
+      ],
+    };
+    speedAnalysisPayload = curveSpeedAnalysis;
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseSpeedPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+
+    const speedSection = await screen.findByTestId(
+      "speed-analysis",
+      undefined,
+      { timeout: 3_000 },
+    );
+    expect(speedSection).toHaveTextContent("CURVE_READY");
+    expect(screen.getByTestId("speed-chart")).toHaveAttribute(
+      "data-point-count",
+      "4",
+    );
+    expect(screen.getByTestId("speed-unit-toggle")).toHaveTextContent("RPM");
+    expect(screen.getByRole("button", { name: "RPM" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await user.click(screen.getByRole("button", { name: "RPS" }));
+    expect(screen.getByRole("button", { name: "RPS" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await user.click(screen.getByRole("button", { name: "EER" }));
+    expect(screen.getByRole("button", { name: "EER" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
+    const table = screen.getByTestId("speed-data-table");
+    expect(within(table).getByText("속도별 원시 성능점")).toBeInTheDocument();
+    expect(within(table).getAllByRole("row")).toHaveLength(5);
+    expect(table).toHaveTextContent("evidence:samsung-env4:1650");
+    expect(table).toHaveTextContent("MEASURED");
+    expect(screen.queryByText(/보간|외삽한 값/)).not.toBeInTheDocument();
+  });
+
+  it("P15-UT-SPEED-002 속도 데이터 미확보 모델은 차트를 숨기고 조사 필요를 알린다", async () => {
+    modelItems = [directSamsung, directCompetitor];
+    comparePayload = directComparison;
+    speedAnalysisPayload = dataRequiredSpeedAnalysis;
+    await renderReady();
+    const user = await openView(/Compare Lab/);
+    await chooseDirectPair(user);
+    await user.click(screen.getByRole("button", { name: "안전 비교 실행" }));
+
+    expect(await screen.findByTestId(
+      "speed-analysis",
+      undefined,
+      { timeout: 3_000 },
+    )).toHaveTextContent(
+      "DATA_REQUIRED",
+    );
+    expect(screen.getByTestId("speed-data-gap")).toHaveTextContent(
+      "검증된 속도별 성능점이 필요",
+    );
+    expect(screen.queryByTestId("speed-chart")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("speed-data-table")).not.toBeInTheDocument();
   });
 
   it("P14-UT-STALE-001 선택 변경 후 도착한 지연 분석 응답을 폐기한다", async () => {

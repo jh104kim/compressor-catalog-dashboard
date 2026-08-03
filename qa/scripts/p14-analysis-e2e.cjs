@@ -10,7 +10,6 @@ const outputDir = path.resolve(
     path.join(__dirname, "..", "evidence", "p14", "analysis"),
 );
 const screenshotDir = path.join(outputDir, "screenshots");
-const releaseId = "release:2026-07-30:005";
 const baselineId = "model:samsung:DS8LC5040IN";
 const candidateId = "model:gmcc:STDA031N1ULB";
 const blockedCandidateId = "model:gmcc:ATQ360D1UMU";
@@ -67,6 +66,17 @@ async function gotoCompare(page) {
   await page.getByTestId("app-shell").waitFor({ state: "visible" });
 }
 
+async function getActiveReleaseId(context) {
+  const response = await context.request.get(
+    new URL("api/v1/releases/active", baseUrl).href,
+  );
+  invariant(response.status() === 200, `Active Release API ${response.status()}`);
+  const active = await response.json();
+  invariant(active.status === "PUBLISHED", `Active Release 상태 ${active.status}`);
+  invariant(typeof active.releaseId === "string" && active.releaseId.length > 0, "Active Release ID 누락");
+  return active.releaseId;
+}
+
 async function chooseDirectPair(page) {
   await page.getByRole("tab", { name: "Sc 스크롤" }).click();
   await page.getByLabel("비교 지표").selectOption("eer");
@@ -85,7 +95,7 @@ function decodeReportHref(href) {
   return JSON.parse(decodeURIComponent(href.slice(comma + 1)));
 }
 
-async function directAnalysisScenario(page, viewport) {
+async function directAnalysisScenario(page, viewport, releaseId) {
   await gotoCompare(page);
   await chooseDirectPair(page);
   const responsePromise = page.waitForResponse(
@@ -148,7 +158,7 @@ async function directAnalysisScenario(page, viewport) {
   };
 }
 
-async function blockedApiScenario(context) {
+async function blockedApiScenario(context, releaseId) {
   const response = await context.request.post(
     new URL("api/v1/compare/report", baseUrl).href,
     {
@@ -161,6 +171,7 @@ async function blockedApiScenario(context) {
   );
   invariant(response.status() === 200, `BLOCKED API ${response.status()}`);
   const payload = await response.json();
+  invariant(payload.releaseId === releaseId, "BLOCKED Release 불일치");
   invariant(payload.comparison.verdict === "BLOCKED", "BLOCKED 판정이 아닙니다.");
   invariant(payload.comparison.rankingAllowed === false, "BLOCKED rankingAllowed 오류");
   invariant(payload.comparison.deltaPct === null, "BLOCKED deltaPct 오류");
@@ -196,15 +207,19 @@ async function main() {
   fs.mkdirSync(screenshotDir, { recursive: true });
   const browser = await chromium.launch({ headless: true });
   const results = [];
+  let releaseId = null;
   try {
     for (const viewport of viewports) {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
       });
+      const contextReleaseId = await getActiveReleaseId(context);
+      if (releaseId === null) releaseId = contextReleaseId;
+      invariant(contextReleaseId === releaseId, "viewport 사이 Active Release가 변경됨");
       const page = await context.newPage();
       const monitor = monitorPage(page);
-      const direct = await directAnalysisScenario(page, viewport);
-      const blocked = await blockedApiScenario(context);
+      const direct = await directAnalysisScenario(page, viewport, releaseId);
+      const blocked = await blockedApiScenario(context, releaseId);
       const stale = await staleScenario(page);
       invariant(monitor.errors.length === 0, monitor.errors.join("\n"));
       invariant(monitor.externalRequests.length === 0, "외부 요청이 발생했습니다.");

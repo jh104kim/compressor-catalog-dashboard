@@ -179,10 +179,59 @@ export interface ComparisonAnalysis {
   evidenceRefs: ComparisonEvidenceRef[];
 }
 
+export type SpeedMetric = "capacityW" | "inputW" | "cop" | "eer";
+export type SpeedUnit = "rpm" | "rps";
+
+export interface SpeedPerformancePoint {
+  speedValue: number;
+  speedUnit: SpeedUnit;
+  rpm: number;
+  rps: number;
+  capacityW: number | null;
+  inputW: number | null;
+  cop: number | null;
+  eer: number | null;
+  valueKind: "MEASURED" | "DERIVED";
+  evidence: Evidence & { evidenceId: string };
+}
+
+export interface SpeedPerformanceSeries {
+  role: "baseline" | "candidate";
+  modelId: string;
+  manufacturer: string;
+  model: string;
+  pointCount: number;
+  lineEligible: boolean;
+  points: SpeedPerformancePoint[];
+}
+
+export interface SpeedAnalysisResult {
+  status:
+    | "CURVE_READY"
+    | "POINT_READY"
+    | "REFERENCE_ONLY"
+    | "DATA_REQUIRED";
+  chartEligible: boolean;
+  rankingAllowed: boolean;
+  reason: string;
+  metricOptions: SpeedMetric[];
+  commonRange: {
+    rpm: { min: number; max: number };
+    rps: { min: number; max: number };
+  } | null;
+  series: SpeedPerformanceSeries[];
+  safeguards: {
+    interpolation: false;
+    extrapolation: false;
+    hzAsSpeed: false;
+  };
+}
+
 export interface ComparisonReport {
   releaseId: string;
   comparison: ComparisonResult;
   analysis: ComparisonAnalysis;
+  speedAnalysis: SpeedAnalysisResult;
 }
 
 export interface PortfolioStatus {

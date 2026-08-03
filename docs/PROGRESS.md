@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-08-03 — Phase P15 RPM/RPS 성능 맵·Recharts 🚧
+
+- **계약 고정**: `REQ-P15-001~007`, 속도 성능점 Evidence·RPM/RPS 60배·Hz 금지·eligible 전용 차트·DATA_REQUIRED·stale·정적 보고서 회귀를 정의.
+- **E2E 선작성**: desktop `1440×1024`, mobile `390×844`, retries 0의 P15 Playwright와 CI Gate를 추가.
+- **RED 확인**: 활성 Release 005에서 `speedAnalysis` 부재로 `속도 상태 undefined` 실패를 재현하고 `qa/evidence/p15/red-contract/p15-speed-e2e.json`에 기록.
+- **문제/결정**: Release 번호는 동적 조회, Re Golden은 정확히 겹치는 속도점이 없어 ranking 불허, 미검증 Ro/Sc는 DATA_REQUIRED·차트 0으로 고정.
+- **지표 안전성**: Panasonic 공개 속도점에 inputW/EER가 없어 가짜 파생을 금지하고, 현재 양쪽 완결 지표인 용량·COP만 노출하도록 계약을 수정.
+- **현재 상태**: 데이터/API/UI/정적 보고서 구현과 GREEN·회귀·CI·평가 수치는 `PENDING`.
+- **증거**: `docs/13-speed-performance-map-tdd-plan.md`, `tests/p15-speed-performance-contract.md`, `qa/test-runs/RUN-20260803-016-P15-RED-GREEN.md`, `qa/evaluations/EVAL-20-P15.md`.
+
+---
+
 ## 2026-07-31 — Phase P14-B~E 안전 비교 추가 분석·레포팅 ✅
 
 - **P14-B 분석 API**: `POST /api/v1/compare/report`와 결정론적 분석 엔진을 추가. DIRECT만 수치 해석하며 REFERENCE/BLOCKED는 직접 성능 판단을 생성하지 않음.

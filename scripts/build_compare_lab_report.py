@@ -17,11 +17,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from backend.catalog_audit.comparison import compare_models
+from backend.catalog_audit.performance_map import build_speed_analysis
 
 
 DEFAULT_ACTIVE_RELEASE = ROOT / "catalog" / "published" / "active-release.json"
 DEFAULT_RULES = ROOT / "config" / "p0_catalog_rules.json"
-DEFAULT_OUTPUT = ROOT / "studio" / "public" / "compare-lab-output.html"
+DEFAULT_OUTPUT = ROOT / "studio" / "compare-lab-output.html"
+DEFAULT_PUBLIC_DIR = ROOT / "studio" / "public"
 
 TYPE_ORDER = ("Re", "Ro", "Sc")
 TYPE_LABEL = {"Re": "왕복동", "Ro": "로터리", "Sc": "스크롤"}
@@ -250,6 +252,34 @@ def build_report_data(
         )
         for row in direct_rows
     }
+    speed_comparisons = []
+    seen_speed_pairs: set[tuple[str, str]] = set()
+    for row in direct_rows:
+        baseline = row["baseline"]
+        candidate = row["candidate"]
+        pair = (baseline["modelId"], candidate["modelId"])
+        if pair in seen_speed_pairs:
+            continue
+        seen_speed_pairs.add(pair)
+        speed_comparisons.append(
+            {
+                "pairKey": "::".join(pair),
+                "baseline": {
+                    "modelId": baseline["modelId"],
+                    "manufacturer": baseline["manufacturer"],
+                    "model": baseline["model"],
+                },
+                "candidate": {
+                    "modelId": candidate["modelId"],
+                    "manufacturer": candidate["manufacturer"],
+                    "model": candidate["model"],
+                },
+                "conditionLabel": (
+                    f"{baseline['condition']} · {baseline['driveClass']}"
+                ),
+                "speedAnalysis": build_speed_analysis(baseline, candidate),
+            }
+        )
     type_summary = {}
     for compressor_type in TYPE_ORDER:
         typed = [
@@ -282,6 +312,7 @@ def build_report_data(
         "rules": rules,
         "models": report_models,
         "directRows": direct_rows,
+        "speedComparisons": speed_comparisons,
         "summary": {
             "samsungModels": len(samsung),
             "competitorModels": len(competitors),
@@ -519,6 +550,10 @@ def render_report(data: dict[str, Any]) -> str:
 
     warnings = release["validationSummary"].get("warningCount", 0)
     tolerance = rules["benchmark"]["similarityCapacityTolerancePct"]
+    speed_eligible = sum(
+        item["speedAnalysis"]["chartEligible"]
+        for item in data["speedComparisons"]
+    )
     report_html = f"""<!doctype html>
 <html lang="ko">
 <head>
@@ -632,7 +667,7 @@ def render_report(data: dict[str, Any]) -> str:
   <header class="topbar">
     <div class="brand"><i>S</i> Samsung Compressor Compare Lab</div>
     <nav aria-label="보고서 목차">
-      <a href="#summary">요약</a><a href="#matrix">전체 매트릭스</a>
+      <a href="#summary">요약</a><a href="#speed-report">속도 분석</a><a href="#matrix">전체 매트릭스</a>
       <a href="#type-Re">Re</a><a href="#type-Ro">Ro</a><a href="#type-Sc">Sc</a>
     </nav>
     <a class="top-action" href="/compare-lab-output.csv" download>CSV 내려받기</a>
@@ -687,6 +722,18 @@ def render_report(data: dict[str, Any]) -> str:
         <p class="method-note"><strong>Δ 해석:</strong> 경쟁사 Δ = (경쟁사 지표 − Samsung 지표) ÷ Samsung 지표. 양수는 경쟁사 우위, 음수는 Samsung 우위입니다. 모든 표 행은 백엔드 판정 <code>DIRECT_OK</code>만 포함합니다.</p>
       </section>
 
+      <section class="report-section" id="speed-report"
+               data-testid="speed-report-shell"
+               data-chart-eligible="{'true' if speed_eligible else 'false'}">
+        <div class="section-title">
+          <div><span>RPM · RPS PERFORMANCE MAP</span><h2>속도별 성능 분석</h2></div>
+          <p>공식 Evidence가 연결된 원천점만 표시하며 임의 보간·외삽과 Hz 속도 변환은 사용하지 않습니다.</p>
+        </div>
+        <p class="method-note">차트 가능 {speed_eligible}쌍 · 전체 직접 비교 고유 모델쌍 {len(data['speedComparisons'])}쌍. 데이터가 없는 모델쌍은 수치 대신 조사 필요 상태로 유지합니다.</p>
+        <p><a class="top-action" href="/compare-lab-speed-output.csv" download>속도 성능 CSV 내려받기</a></p>
+        <div id="speed-report-root"><p>속도 성능 지도를 불러오는 중입니다.</p></div>
+      </section>
+
       <section class="report-section" id="matrix">
         <div class="section-title">
           <div><span>FULL COVERAGE</span><h2>Samsung 27개 모델 전체 매트릭스</h2></div>
@@ -705,10 +752,17 @@ def render_report(data: dict[str, Any]) -> str:
       <p><a href="/?view=compare">Compare Lab으로 돌아가기</a></p>
     </div>
   </footer>
+  <script type="module" src="/src/compare-report.tsx"></script>
 </body>
 </html>
 """
     return report_html
+
+
+def _artifact_dir(output_path: Path) -> Path:
+    if output_path.resolve() == DEFAULT_OUTPUT.resolve():
+        return DEFAULT_PUBLIC_DIR
+    return output_path.parent
 
 
 def build_report(
@@ -724,7 +778,9 @@ def build_report(
     data = build_report_data(release, bundle, rules)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(render_report(data), encoding="utf-8")
-    csv_path = output_path.with_suffix(".csv")
+    artifact_dir = _artifact_dir(output_path)
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    csv_path = artifact_dir / output_path.with_suffix(".csv").name
     fieldnames = [
         "release_id",
         "compressor_type",
@@ -769,6 +825,87 @@ def build_report(
                     "code": result["code"],
                 }
             )
+
+    speed_json_path = artifact_dir / "compare-lab-speed-data.json"
+    speed_json_path.write_text(
+        json.dumps(
+            {
+                "releaseId": release["releaseId"],
+                "comparisons": data["speedComparisons"],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    speed_csv_path = artifact_dir / "compare-lab-speed-output.csv"
+    speed_fields = [
+        "release_id",
+        "pair_key",
+        "role",
+        "model_id",
+        "manufacturer",
+        "model",
+        "condition",
+        "speed_value",
+        "speed_unit",
+        "rpm",
+        "rps",
+        "capacity_w",
+        "input_w",
+        "cop",
+        "eer",
+        "value_kind",
+        "evidence_id",
+        "source_path",
+        "authority",
+        "locator",
+    ]
+    with speed_csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=speed_fields)
+        writer.writeheader()
+        for comparison in data["speedComparisons"]:
+            analysis = comparison["speedAnalysis"]
+            if not analysis["chartEligible"]:
+                continue
+            for series in analysis["series"]:
+                for point in series["points"]:
+                    evidence = point["evidence"]
+                    writer.writerow(
+                        {
+                            "release_id": release["releaseId"],
+                            "pair_key": comparison["pairKey"],
+                            "role": series["role"],
+                            "model_id": series["modelId"],
+                            "manufacturer": series["manufacturer"],
+                            "model": series["model"],
+                            "condition": comparison["conditionLabel"],
+                            "speed_value": point["speedValue"],
+                            "speed_unit": point["speedUnit"],
+                            "rpm": point["rpm"],
+                            "rps": point["rps"],
+                            "capacity_w": point.get("capacityW"),
+                            "input_w": point.get("inputW"),
+                            "cop": point.get("cop"),
+                            "eer": point.get("eer"),
+                            "value_kind": point["valueKind"],
+                            "evidence_id": evidence["evidenceId"],
+                            "source_path": evidence["sourcePath"],
+                            "authority": evidence["authority"],
+                            "locator": json.dumps(
+                                evidence["locator"],
+                                ensure_ascii=False,
+                                sort_keys=True,
+                            ),
+                        }
+                    )
+    data["outputs"] = {
+        "html": str(output_path.resolve()),
+        "csv": str(csv_path.resolve()),
+        "speedJson": str(speed_json_path.resolve()),
+        "speedCsv": str(speed_csv_path.resolve()),
+    }
     return data
 
 
@@ -791,8 +928,10 @@ def main() -> int:
         f"ready={summary['readyModels']} "
         f"pairs={summary['uniquePairs']} "
         f"comparisons={summary['comparisons']} "
-        f"output={args.output.resolve()} "
-        f"csv={args.output.with_suffix('.csv').resolve()}"
+        f"output={data['outputs']['html']} "
+        f"csv={data['outputs']['csv']} "
+        f"speed_json={data['outputs']['speedJson']} "
+        f"speed_csv={data['outputs']['speedCsv']}"
     )
     return 0
 

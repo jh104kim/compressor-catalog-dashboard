@@ -3,6 +3,14 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        app: "index.html",
+        compareReport: "compare-lab-output.html",
+      },
+    },
+  },
   server: {
     port: 5174,
     proxy: {

@@ -1,6 +1,6 @@
 {
   "snapshotVersion": 1,
-  "capturedAt": "2026-07-30T19:00:10+09:00",
+  "capturedAt": "2026-08-03T18:55:35+09:00",
   "timezone": "Asia/Seoul",
   "repository": {
     "name": "jh104kim/compressor-catalog-dashboard",
@@ -18,9 +18,9 @@
   },
   "source": {
     "path": "frontend/compressor-data.js",
-    "sha256": "75a25fd84cae000b5f84bffc07581263a2bb4b29035fbffd283624575de5ec7d",
-    "asOf": "2026-07-30",
-    "sourceCount": 30
+    "sha256": "1301684f329f058d8fa38a3508ed0f47f1c1cc5e7de3087ad72c84e1d982fae7",
+    "asOf": "2026-08-03",
+    "sourceCount": 31
   },
   "authority": {
     "manufacturer": "Samsung",

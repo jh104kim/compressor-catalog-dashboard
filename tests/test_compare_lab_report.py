@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import re
 from pathlib import Path
 
@@ -22,7 +23,7 @@ def test_report_covers_every_samsung_model_and_direct_result(
         item for item in bundle["models"] if item["manufacturer"] == "Samsung"
     ]
 
-    assert release["releaseId"] == "release:2026-07-30:005"
+    assert data["release"]["releaseId"] == release["releaseId"]
     assert data["summary"]["samsungModels"] == 27
     assert data["summary"]["readyModels"] == 8
     assert data["summary"]["researchModels"] == 19
@@ -38,7 +39,6 @@ def test_report_is_standalone_semantic_html_with_safe_tables(
     tmp_path: Path,
 ) -> None:
     output = tmp_path / "compare-lab-output.html"
-
     build_report(output_path=output)
     rendered = output.read_text(encoding="utf-8")
 
@@ -97,3 +97,72 @@ def test_report_build_writes_matching_csv_export(tmp_path: Path) -> None:
         "code",
     }
     assert {row["code"] for row in rows} == {"DIRECT_OK"}
+
+
+def test_report_build_writes_same_origin_speed_payload_and_csv(
+    tmp_path: Path,
+) -> None:
+    output = tmp_path / "compare-lab-output.html"
+    release, _, _ = load_active_catalog()
+
+    build_report(output_path=output)
+    rendered = output.read_text(encoding="utf-8")
+    speed_json = tmp_path / "compare-lab-speed-data.json"
+    speed_csv = tmp_path / "compare-lab-speed-output.csv"
+
+    assert speed_json.is_file()
+    assert speed_csv.is_file()
+    payload = json.loads(speed_json.read_text(encoding="utf-8"))
+    eligible = [
+        item
+        for item in payload["comparisons"]
+        if item["speedAnalysis"]["chartEligible"]
+    ]
+    assert payload["releaseId"] == release["releaseId"]
+    assert len(eligible) == 1
+    assert eligible[0]["speedAnalysis"]["status"] == "CURVE_READY"
+    assert eligible[0]["speedAnalysis"]["rankingAllowed"] is False
+    assert eligible[0]["speedAnalysis"]["safeguards"] == {
+        "interpolation": False,
+        "extrapolation": False,
+        "hzAsSpeed": False,
+    }
+    assert 'data-testid="speed-report-shell"' in rendered
+    assert 'href="/compare-lab-speed-output.csv"' in rendered
+    assert 'src="/src/compare-report.tsx"' in rendered
+    assert "https://" not in rendered
+
+    with speed_csv.open(encoding="utf-8-sig", newline="") as handle:
+        speed_rows = list(csv.DictReader(handle))
+    expected_points = sum(
+        len(series["points"])
+        for item in eligible
+        for series in item["speedAnalysis"]["series"]
+    )
+    assert len(speed_rows) == expected_points
+    assert all(row["evidence_id"] for row in speed_rows)
+
+
+def test_static_speed_report_keeps_unavailable_pairs_non_numeric(
+    tmp_path: Path,
+) -> None:
+    output = tmp_path / "compare-lab-output.html"
+
+    build_report(output_path=output)
+    payload = json.loads(
+        (tmp_path / "compare-lab-speed-data.json").read_text(encoding="utf-8")
+    )
+    gaps = [
+        item
+        for item in payload["comparisons"]
+        if item["speedAnalysis"]["status"] == "DATA_REQUIRED"
+    ]
+
+    assert gaps
+    assert all(item["speedAnalysis"]["chartEligible"] is False for item in gaps)
+    assert all(item["speedAnalysis"]["metricOptions"] == [] for item in gaps)
+    assert all(
+        not series["points"]
+        for item in gaps
+        for series in item["speedAnalysis"]["series"]
+    )

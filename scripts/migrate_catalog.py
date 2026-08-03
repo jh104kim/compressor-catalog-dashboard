@@ -259,6 +259,8 @@ def _canonical_model(raw: dict[str, Any]) -> dict[str, Any]:
         result["nameNote"] = raw["nameNote"]
     if raw.get("aliases") is not None:
         result["aliases"] = raw["aliases"]
+    if raw.get("performanceMaps") is not None:
+        result["performanceMaps"] = raw["performanceMaps"]
     return result
 
 
