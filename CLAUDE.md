@@ -2,13 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프로젝트. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·Reporting 뷰로 시각화한다.
+Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프로젝트. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·모델 분석·Reporting·보완 과제 뷰로 시각화한다.
 
 ## 디렉토리 구조
 
 ```
 2606-Compressor-Catalog-Dashboard/
 ├── CLAUDE.md
+├── README.md
 ├── data/      ← 리서치 원천 데이터 (Markdown) = 콘텐츠의 1차 출처
 ├── docs/      ← 작업 문서 (아키텍처/계획/진행 스냅샷)
 └── frontend/  ← 대시보드 (Design Component HTML + 런타임 + 데이터 단일소스)
@@ -28,12 +29,13 @@ Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프�
 | `r454b_scroll_manufacturer_comparison.md` | R454B 스크롤 조건별 비교·정규화 순위·근접 경쟁모델 매칭 |
 
 ### frontend/ — Design Component (DC) 대시보드
+- **`index.html`** — 기본 진입점. `/` 접근 시 `Compressor Dashboard.dc.html`로 자동 이동.
 - **`compressor-data.js`** — **데이터 단일 진실 소스(SSOT)**. `data/*.md`를 Samsung 기준으로 구조화해 `window.COMPRESSOR_DATA`에 노출. 모든 탭이 이 객체만 읽는다. 수치 변경은 반드시 여기서. `.dc.html`의 `<head>`에서 `support.js`보다 **먼저** 로드되어야 함(동기 실행으로 렌더 전 준비됨).
 - `Compressor Dashboard.dc.html` — 대시보드 본체. 파일명에 공백 있음. 하단 `<script type="text/x-dc" data-dc-script>` 의 `class Component extends DCLogic`가 `window.COMPRESSOR_DATA`를 읽어 `renderVals()`로 바인딩. (데이터를 여기 하드코딩하지 말 것 — SSOT 사용)
 - `support.js` — `dc-runtime` (자동 생성됨, **직접 편집 금지**). `{{ }}` 보간·디렉티브를 React 18로 컴파일. React/ReactDOM 18.3.1을 unpkg CDN에서 로드.
 
 ### `window.COMPRESSOR_DATA` 스키마 (compressor-data.js)
-`meta` · `tokens`(색상) · `conditions`(측정조건+환산계수) · `refrigerants` · `manufacturers` · `models`(45개: Samsung+경쟁사, 모델별 cc·용량·COP·EER·`condition`·status·gap·src) · `benchmarkGroups`(동일 비교군 9개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `kpi`.
+`meta` · `tokens`(색상) · `conditions`(측정조건+환산계수) · `refrigerants` · `manufacturers` · `models`(68개: Samsung 27 + 경쟁사 41, 모델별 cc·용량·COP·EER·`condition`·status·gap·src) · `benchmarkGroups`(동일 비교군 12개) · `gaps` · `priorities`(P1~P6) · `regulations` · `roadmap` · `samsungMoves` · `catalogSources` · `kpi`.
 
 ## DC 프레임워크 사용법 (support.js 런타임)
 
@@ -54,10 +56,10 @@ Samsung(당사) 관점의 **압축기 경쟁 인텔리전스 대시보드** 프�
 ```bash
 cd frontend
 python -m http.server 8000     # 또는: npx serve .
-# 브라우저: http://localhost:8000/Compressor%20Dashboard.dc.html
+# 브라우저: http://localhost:8000/
 ```
 
-빌드 단계 없음. `.dc.html`/`compressor-data.js` 편집 후 새로고침이면 끝. 단계별 E2E는 서버 실행 후 브라우저/프리뷰로 각 탭 렌더·전환·필터를 실제 확인한다.
+빌드 단계 없음. `index.html`은 대시보드 본체로 자동 이동한다. `.dc.html`/`compressor-data.js` 편집 후 새로고침이면 끝. 단계별 E2E는 서버 실행 후 브라우저/프리뷰로 각 탭 렌더·전환·필터를 실제 확인한다.
 
 ## 도메인 핵심 개념
 

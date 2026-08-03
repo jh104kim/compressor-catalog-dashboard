@@ -20,6 +20,7 @@
   aside::-webkit-scrollbar { width: 6px; }
   aside::-webkit-scrollbar-thumb { background: #E4E4E4; border-radius: 3px; }
   .dc-kpi-panel{ min-width: 0; }
+  .dc-ticket-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
   .dc-scroll-x{ width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
     background:
       linear-gradient(to right, #fff 40%, rgba(255,255,255,0)) left center,
@@ -60,6 +61,7 @@
     .dc-cards3{ grid-template-columns: 1fr !important; }
     .dc-gaps4{ grid-template-columns: 1fr 1fr !important; }
     .dc-report{ grid-template-columns: 1fr !important; }
+    .dc-ticket-grid{ grid-template-columns: 1fr !important; }
     main section{ padding-left: 18px !important; padding-right: 18px !important; }
     main h1{ font-size: 27px !important; }
     .dc-kpi-panel{ padding: 20px !important; }
@@ -895,23 +897,29 @@
           <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
             <sc-for list="{{ backlogSections }}" as="sec" hint-placeholder-count="4">
               <div>
-                <!-- category header -->
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid {{ sec.catColor }}22;">
-                  <span style="font-size: 16px; font-weight: 800; color: {{ sec.catColor }};">{{ sec.catLabel }}</span>
-                  <span style="font-size: 12px; font-weight: 700; color: {{ sec.catColor }}; background: {{ sec.catBg }}; padding: 3px 10px; border-radius: 20px;">{{ sec.count }}건</span>
+                <!-- priority ticket header -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid {{ sec.catColor }}22; flex-wrap: wrap;">
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <span style="font-size: 16px; font-weight: 800; color: {{ sec.catColor }};">{{ sec.catLabel }}</span>
+                      <span style="font-size: 12px; font-weight: 700; color: {{ sec.catColor }}; background: {{ sec.catBg }}; padding: 3px 10px; border-radius: 20px;">{{ sec.count }}건</span>
+                    </div>
+                    <div style="font-size: 12px; color: #717171; font-weight: 600; margin-top: 5px;">{{ sec.catDesc }}</div>
+                  </div>
                 </div>
                 <!-- item cards -->
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                   <sc-for list="{{ sec.items }}" as="bi" hint-placeholder-count="3">
-                    <div style="border: 1px solid #EBEBEB; border-radius: 16px; padding: 20px 24px; background: #fff; border-left: 4px solid {{ bi.catColor }};">
+                    <div style="border: 1px solid #EBEBEB; border-radius: 16px; padding: 20px 24px; background: #fff; border-left: 4px solid {{ bi.priorityColor }};">
                       <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px;">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                          <span style="font-size: 11px; font-weight: 800; color: {{ bi.priorityColor }}; background: {{ bi.priorityBg }}; padding: 3px 9px; border-radius: 6px;">{{ bi.priority }}</span>
+                          <span style="font-size: 11px; font-weight: 800; color: {{ bi.priorityColor }}; background: {{ bi.priorityBg }}; padding: 3px 9px; border-radius: 6px;">{{ bi.ticketId }}</span>
+                          <span style="font-size: 11px; font-weight: 800; color: {{ bi.catColor }}; background: {{ bi.catBg }}; padding: 3px 9px; border-radius: 6px;">{{ bi.cat }}</span>
                           <span style="font-size: 15px; font-weight: 700; color: #222;">{{ bi.title }}</span>
                         </div>
                         <span style="font-size: 12px; font-weight: 700; color: {{ bi.statusFg }}; background: {{ bi.statusBg }}; padding: 4px 12px; border-radius: 20px; white-space: nowrap; flex: none;">{{ bi.status }}</span>
                       </div>
-                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px;">
+                      <div class="dc-ticket-grid">
                         <div>
                           <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">필요 데이터</div>
                           <div style="font-size: 13px; font-weight: 600; color: #555; line-height: 1.5;">{{ bi.need }}</div>
@@ -927,6 +935,10 @@
                         <div>
                           <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">영향 비교군</div>
                           <div style="font-size: 12px; font-weight: 700; color: #1D6FB8; background: #EEF6FF; padding: 4px 10px; border-radius: 8px; display: inline-block;">{{ bi.impactLabel }}</div>
+                        </div>
+                        <div>
+                          <div style="font-size: 10.5px; font-weight: 700; color: #b0b0b0; letter-spacing: 0.05em; margin-bottom: 4px;">완료 기준</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #067647; line-height: 1.5;">{{ bi.done }}</div>
                         </div>
                       </div>
                       <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #F5F5F5; font-size: 12px; color: #9b9b9b; font-weight: 500;">
@@ -1498,22 +1510,34 @@ class Component extends DCLogic {
         impactGroup:'r454b-sc-fix-doea', impactLabel:'R454B 스크롤 Fixed · DOE-A',
         status:'부분확인', statusBg:'#FFF4E2', statusFg:'#B25E00' },
     ];
-    BL_ITEMS.forEach(function(x){ x.contactHref = 'https://' + x.contact; });
+    const blMeta = {
+      P1: { label:'P1 즉시 실행', desc:'비교 신뢰도나 핵심 공백 판단에 바로 영향을 주는 티켓', color:'#C13515', bg:'#FDEEEA' },
+      P2: { label:'P2 후속 보완', desc:'동일조건 비교군 확대와 모델 분석 품질을 높이는 티켓', color:'#B25E00', bg:'#FFF4E2' },
+      P3: { label:'P3 관찰/보류', desc:'근거가 일부 있거나 공개 데이터 확인 난도가 높은 티켓', color:'#717171', bg:'#F5F5F5' },
+    };
+    const blSeq = { P1:0, P2:0, P3:0 };
+    BL_ITEMS.forEach(function(x){
+      blSeq[x.priority] = (blSeq[x.priority] || 0) + 1;
+      x.ticketId = x.priority + '-' + String(blSeq[x.priority]).padStart(2, '0');
+      x.contactHref = 'https://' + x.contact;
+      x.done = x.done || '출처 URL·측정조건·수치를 확인하고 data md와 SSOT에 반영';
+    });
     const blTotal = BL_ITEMS.length;
     const blDone = BL_ITEMS.filter(function(x){ return x.status === '부분확인' || x.status === '간접확인'; }).length;
     const blPct = Math.round(blDone / blTotal * 100);
     const backlogBadge = (blTotal - blDone) + '건';
-    const blCats = ['제조사 직접 문의','온라인 즉시 조회','ARI 조건 재확인','검증 보류'];
-    const backlogSections = blCats.map(function(cat){
-      const items = BL_ITEMS.filter(function(x){ return x.cat === cat; });
+    const blPriorities = ['P1','P2','P3'];
+    const backlogSections = blPriorities.map(function(pr){
+      const items = BL_ITEMS.filter(function(x){ return x.priority === pr; });
       if (!items.length) return null;
-      return { catLabel: cat, catColor: items[0].catColor, catBg: items[0].catBg, catIcon: items[0].catIcon, items: items, count: items.length };
+      const meta = blMeta[pr] || blMeta.P3;
+      return { catLabel: meta.label, catColor: meta.color, catBg: meta.bg, catDesc: meta.desc, items: items, count: items.length };
     }).filter(function(x){ return x !== null; });
     const blStats = [
-      { label:'전체 과제', value: String(blTotal), color:'#222' },
-      { label:'미확보', value: String(BL_ITEMS.filter(function(x){ return x.status==='미확보'; }).length), color:'#C13515' },
-      { label:'부분/간접 확인', value: String(blDone), color:'#B25E00' },
-      { label:'조건 불일치', value: String(BL_ITEMS.filter(function(x){ return x.status==='조건불일치'; }).length), color:'#FC642D' },
+      { label:'전체 티켓', value: String(blTotal), color:'#222' },
+      { label:'P1 즉시', value: String(BL_ITEMS.filter(function(x){ return x.priority==='P1'; }).length), color:'#C13515' },
+      { label:'P2 후속', value: String(BL_ITEMS.filter(function(x){ return x.priority==='P2'; }).length), color:'#B25E00' },
+      { label:'미해결', value: String(blTotal - blDone), color:'#FC642D' },
     ];
 
     // ---------- search (header) ----------

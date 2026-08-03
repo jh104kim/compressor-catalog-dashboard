@@ -1,6 +1,6 @@
 # 대시보드 개선 계획 (Architecture & Plan)
 
-> 작성: 2026-06-19 · 최종갱신: 2026-06-23
+> 작성: 2026-06-19 · 최종갱신: 2026-06-24
 > Samsung(당사) 관점 압축기 경쟁 인텔리전스 대시보드
 
 ## 1. 데이터 단일소스 (SSOT)
@@ -49,11 +49,15 @@
 - [x] 가로 스크롤 그림자 어포던스(Lea Verou)
 - [x] 인쇄/PDF(@media print)
 - [x] 반응형(1024/820/480px, 와이드테이블 가로스크롤)
+- [x] 5개 탭 반응형 E2E(500px/1280px): KPI · Decision · 모델 분석 · Reporting · 보완 과제
+- [x] `frontend/index.html` 기본 진입점 추가
 - [x] 카탈로그 출처·신선도 사이드바
 - [x] Samsung 최신 동향 섹션(Decision 탭)
 - [x] 조건 배지 필터(Analysis 탭)
 - [x] 보완 스펙 패널(Analysis 탭)
+- [x] 보완 과제 탭 P1/P2/P3 티켓형 정리 + 완료 기준 표기
 - [x] 연락처 링크 클릭 가능(보완 과제 탭)
+- [x] README 정적 호스팅 체크리스트
 
 ## 6. 데이터 정정 이력
 
@@ -69,10 +73,10 @@
 ```bash
 cd frontend
 python -m http.server 8000
-# 브라우저: http://localhost:8000/Compressor%20Dashboard.dc.html
+# 브라우저: http://localhost:8000/
 ```
 
-Claude Preview 도구로 각 탭 렌더·전환·필터·드릴다운·검색 실기능 확인. 콘솔 에러 0, 미해결 `{{ }}` 0 기준. 결과는 `docs/PROGRESS.md`에 스냅샷.
+브라우저로 각 탭 렌더·전환·필터·드릴다운·검색 실기능 확인. 콘솔 에러 0, 미해결 `{{ }}` 0, 페이지 전체 가로 넘침 0 기준. 결과는 `docs/PROGRESS.md`에 스냅샷.
 
 ## 8. 잔여/후속 과제
 

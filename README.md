@@ -1,6 +1,6 @@
 # 압축기 경쟁 인텔리전스 대시보드
 
-Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·Reporting·분석 뷰로 시각화한다.
+Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 공개 카탈로그/웹 기반 리서치 데이터를 KPI·Decision·모델 분석·Reporting·보완 과제 뷰로 시각화한다.
 
 ---
 
@@ -9,10 +9,10 @@ Samsung(당사) 관점의 압축기 경쟁 인텔리전스 대시보드. 공개 
 ```bash
 cd frontend
 python -m http.server 8000
-# 브라우저: http://localhost:8000/Compressor%20Dashboard.dc.html
+# 브라우저: http://localhost:8000/
 ```
 
-> **주의**: `file://` 직접 열기 불가(런타임이 `fetch` 사용). HTTP 서버 필수. 인터넷 연결 필요(React CDN unpkg).
+> **주의**: `file://` 직접 열기 불가(런타임이 `fetch` 사용). HTTP 서버 필수. 인터넷 연결 필요(React CDN unpkg). `index.html`은 `Compressor Dashboard.dc.html`로 자동 이동하는 진입점입니다.
 
 ---
 
@@ -39,6 +39,7 @@ python -m http.server 8000
 │   ├── PROGRESS.md                  # 단계별 진행 스냅샷
 │   └── DATA-ENRICHMENT.md          # 데이터 보완 브리프 (Tier 1~3)
 └── frontend/                        # 대시보드 (정적 파일)
+    ├── index.html                   # 기본 진입점 (대시보드로 자동 이동)
     ├── Compressor Dashboard.dc.html # 대시보드 본체
     ├── compressor-data.js           # 데이터 단일소스 (SSOT)
     └── support.js                   # DC 런타임 (직접 편집 금지)
@@ -139,6 +140,15 @@ class Component extends DCLogic {
 
 ---
 
+## E2E 검증 현황
+
+- 2026-06-24 기준 500px 모바일 / 1280px 데스크톱 폭에서 5개 탭 모두 반응형 검증 완료.
+- 검증 탭: KPI 현황, Decision 전략, 모델 분석, Reporting, 보완 과제.
+- 기준: 페이지 전체 가로 넘침 0, 미해결 `{{ }}` 0, 콘솔 에러 0.
+- 와이드 표는 페이지를 밀어내지 않고 `dc-scroll-x` 내부 가로 스크롤로 유지.
+
+---
+
 ## 데이터 업데이트 방법
 
 1. `data/` 폴더의 md 파일을 최신 리서치로 갱신
@@ -157,7 +167,7 @@ class Component extends DCLogic {
 cd frontend && python -m http.server 8000
 
 # 옵션 B: GitHub Pages / Netlify
-# frontend/ 폴더 통째로 업로드 (index.html 없으면 파일명 포함 URL 필요)
+# frontend/ 폴더 통째로 업로드 (index.html이 기본 진입점)
 
 # 옵션 C: nginx
 location / { root /var/www/compressor-dashboard; }
@@ -167,6 +177,15 @@ aws s3 sync frontend/ s3://버킷명/ --delete
 ```
 
 **핵심 요건**: HTTP 서버 필수 + React CDN 인터넷 접근 가능. `file://` 직접 열기 금지.
+
+### 정적 호스팅 체크리스트
+
+- 배포 루트는 `frontend/`로 지정한다.
+- `index.html`, `Compressor Dashboard.dc.html`, `compressor-data.js`, `support.js`가 같은 폴더에 있어야 한다.
+- React CDN(`unpkg.com`) 접근이 막히지 않는 네트워크에서 연다.
+- 파일명에 공백이 있으므로 직접 링크가 필요하면 `Compressor%20Dashboard.dc.html`처럼 URL 인코딩한다.
+- 배포 후 `/` 접속 → KPI 화면 렌더 → 탭 전환 → 콘솔 에러 0 순서로 확인한다.
+- 기존에 열어둔 브라우저가 있으면 `Ctrl+Shift+R`로 캐시를 비우고 다시 확인한다.
 
 ---
 
