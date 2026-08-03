@@ -56,10 +56,11 @@
 - 최종 로컬 판정: **PASS**
 
 Python 94, Vitest 35/35, build 581 modules, P15 8/8 2회, P5 16/16,
-report 2/2, P14 6/6, P0 characterization을 근거로 로컬 판정을 확정한다.
-원격 배포 Gate는 아래 실행 결과가 추가돼야 닫힌다.
+report 2/2, P14 6/6, P0 characterization과 동일 head 원격 Gate PASS를 근거로
+최종 판정을 확정한다.
 
 ## 원격 Gate
 
 - 구현 commit: `0f0d126fd40cfca4c6222358fa54be9c03304e0e`
-- GitHub Actions 원격 run: **PENDING** — push 또는 PR 실행 후 run ID·URL·결과 기록
+- 릴리스·증거 commit: `bc0bb706f3d2fa9656f85852abbe7d64dbae3d4f`
+- GitHub Actions push Gate: [run 30804663489](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30804663489) — **PASS**

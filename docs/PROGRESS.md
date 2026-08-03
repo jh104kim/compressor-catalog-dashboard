@@ -16,7 +16,7 @@
 - **회귀**: P5 16/16, 정적 보고서 2/2, P14 6/6, P0 characterization PASS.
 - **오탐 개선**: 최초 print→screen 직후 Recharts 1-frame reflow를 overflow 231px로 감지. offender 진단 후 2 rAF 뒤 측정하도록 보완하고 후속 2회 overflow 0을 확인.
 - **독립 Judge**: Task 100/100, 품질축 `5.0/5.0/5.0/4.9/4.9`, 환산 99.2/100, Critical 0·Major 0으로 로컬 PASS.
-- **현재 상태**: 로컬 Goal은 완료. GitHub Actions 원격 run만 **PENDING**이며 push/PR 후 run ID·URL·결과를 기록해야 함.
+- **현재 상태**: 로컬 Goal과 GitHub Actions push Gate를 완료. commit `bc0bb70`의 run [30804663489](https://github.com/jh104kim/compressor-catalog-dashboard/actions/runs/30804663489) **PASS**.
 - **증거**: `docs/13-speed-performance-map-tdd-plan.md`, `tests/p15-speed-performance-contract.md`, `qa/test-runs/RUN-20260803-016-P15-RED-GREEN.md`, `qa/evaluations/EVAL-20-P15.md`.
 
 ---
