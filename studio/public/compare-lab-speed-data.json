@@ -1,5 +1,5 @@
 {
-  "releaseId": "release:2026-07-30:005",
+  "releaseId": "release:2026-08-03:001",
   "comparisons": [
     {
       "pairKey": "model:samsung:ENV4A5DL2B::model:panasonic:TKF76E25DCH-52RPS",
@@ -15,30 +15,268 @@
       },
       "conditionLabel": "ASHRAE-LBP · Variable",
       "speedAnalysis": {
-        "status": "DATA_REQUIRED",
-        "chartEligible": false,
+        "status": "CURVE_READY",
+        "chartEligible": true,
         "rankingAllowed": false,
-        "reason": "양쪽 모델의 검증된 RPM/RPS 성능점이 모두 필요합니다.",
-        "metricOptions": [],
-        "commonRange": null,
+        "reason": "양쪽에 두 개 이상의 검증된 성능점과 공통 속도 범위가 있습니다. 동일 속도 실측점이 없어 곡선 관찰만 가능하며 순위를 만들지 않습니다.",
+        "metricOptions": [
+          "capacityW",
+          "cop"
+        ],
+        "commonRange": {
+          "rpm": {
+            "min": 1650,
+            "max": 3650
+          },
+          "rps": {
+            "min": 27.5,
+            "max": 60.833333333333336
+          }
+        },
         "series": [
           {
             "role": "baseline",
             "modelId": "model:samsung:ENV4A5DL2B",
             "manufacturer": "Samsung",
             "model": "ENV4A5DL2B",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
+            "pointCount": 4,
+            "lineEligible": true,
+            "points": [
+              {
+                "speedValue": 1650,
+                "speedUnit": "rpm",
+                "rpm": 1650,
+                "rps": 27.5,
+                "capacityW": 148,
+                "inputW": 75,
+                "cop": 1.97,
+                "eer": 6.72,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:samsung:env4a5dl2b:1650rpm",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.inputW",
+                    "performanceMaps.points.cop",
+                    "performanceMaps.points.eer"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/"
+                  },
+                  "note": "Samsung 공식 ENV4A5DL2B ASHRAE-LBP 1650rpm 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 1950,
+                "speedUnit": "rpm",
+                "rpm": 1950,
+                "rps": 32.5,
+                "capacityW": 174,
+                "inputW": 88,
+                "cop": 1.98,
+                "eer": 6.77,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:samsung:env4a5dl2b:1950rpm",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.inputW",
+                    "performanceMaps.points.cop",
+                    "performanceMaps.points.eer"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/"
+                  },
+                  "note": "Samsung 공식 ENV4A5DL2B ASHRAE-LBP 1950rpm 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 2800,
+                "speedUnit": "rpm",
+                "rpm": 2800,
+                "rps": 46.666666666666664,
+                "capacityW": 244,
+                "inputW": 130,
+                "cop": 1.88,
+                "eer": 6.41,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:samsung:env4a5dl2b:2800rpm",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.inputW",
+                    "performanceMaps.points.cop",
+                    "performanceMaps.points.eer"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/"
+                  },
+                  "note": "Samsung 공식 ENV4A5DL2B ASHRAE-LBP 2800rpm 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 3650,
+                "speedUnit": "rpm",
+                "rpm": 3650,
+                "rps": 60.833333333333336,
+                "capacityW": 315,
+                "inputW": 182,
+                "cop": 1.73,
+                "eer": 5.91,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:samsung:env4a5dl2b:3650rpm",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.inputW",
+                    "performanceMaps.points.cop",
+                    "performanceMaps.points.eer"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://www.samsung.com/global/business/compressor/recipro-compressor/bldc-r600a-lbp-ac115-127v-60hz/"
+                  },
+                  "note": "Samsung 공식 ENV4A5DL2B ASHRAE-LBP 3650rpm 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              }
+            ]
           },
           {
             "role": "candidate",
             "modelId": "model:panasonic:TKF76E25DCH-52RPS",
             "manufacturer": "Panasonic",
             "model": "TKF76E25DCH-52RPS",
-            "pointCount": 0,
-            "lineEligible": false,
-            "points": []
+            "pointCount": 4,
+            "lineEligible": true,
+            "points": [
+              {
+                "speedValue": 17,
+                "speedUnit": "rps",
+                "rpm": 1020,
+                "rps": 17,
+                "capacityW": 46,
+                "inputW": null,
+                "cop": 2.07,
+                "eer": null,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:panasonic:tkf76e25dch:17rps",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.cop"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2817RPS%29"
+                  },
+                  "note": "동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 27,
+                "speedUnit": "rps",
+                "rpm": 1620,
+                "rps": 27,
+                "capacityW": 76,
+                "inputW": null,
+                "cop": 2.17,
+                "eer": null,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:panasonic:tkf76e25dch:27rps",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.cop"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2827RPS%29"
+                  },
+                  "note": "동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 52,
+                "speedUnit": "rps",
+                "rpm": 3120,
+                "rps": 52,
+                "capacityW": 149,
+                "inputW": null,
+                "cop": 2.06,
+                "eer": null,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:panasonic:tkf76e25dch:52rps",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.cop"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2852RPS%29"
+                  },
+                  "note": "동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              },
+              {
+                "speedValue": 80,
+                "speedUnit": "rps",
+                "rpm": 4800,
+                "rps": 80,
+                "capacityW": 220,
+                "inputW": null,
+                "cop": 1.83,
+                "eer": null,
+                "valueKind": "MEASURED",
+                "evidence": {
+                  "authority": "official",
+                  "evidenceId": "evidence:p15:panasonic:tkf76e25dch:80rps",
+                  "fieldPaths": [
+                    "performanceMaps.points.speedValue",
+                    "performanceMaps.points.capacityW",
+                    "performanceMaps.points.cop"
+                  ],
+                  "locator": {
+                    "accessedAt": "2026-08-03",
+                    "kind": "url",
+                    "url": "https://industrial.panasonic.com/ww/products/pt/reciprocating-compressors-vs/models/TKF76E25DCH%2880RPS%29"
+                  },
+                  "note": "동일 TKF76E25DCH family의 Panasonic 공식 ASHRAE 54.4°C/-23.3°C 성능점",
+                  "sourcePath": "data/20260803-speed-performance-map-research.md"
+                }
+              }
+            ]
           }
         ],
         "safeguards": {

@@ -14,8 +14,9 @@ Ro/Sc 비교쌍에는 곡선을 만들지 않고 `DATA_REQUIRED`와 확보해야
   반환한다.
 - Compare Lab은 유형 → Samsung 모델 → 직접 비교 가능 경쟁 모델 → 지표 순으로
   선택하고 `comparisonRevision`으로 지연 응답을 폐기한다.
-- Published 005에는 직접 비교 지표행 15개·고유 모델쌍 9개가 있지만 속도별
-  성능점은 구조화돼 있지 않다.
+- RED 기준 Published 005에는 직접 비교 지표행 15개·고유 모델쌍 9개가 있었지만
+  속도별 성능점은 구조화돼 있지 않았다. 구현 결과는 활성
+  `release:2026-08-03:001`의 별도 `performanceMaps`로 발행한다.
 - 원천 후보 중 Samsung `ENV4A5DL2B`와 Panasonic
   `TKF76E25DCH-52RPS`가 첫 Re 수직 슬라이스 대상이다.
 - `Hz`는 시험/전원 주파수일 수 있으므로 축 회전속도 RPM/RPS로 변환할 수 없다.
@@ -118,7 +119,7 @@ Release ID는 하드코딩하지 않고 `/api/v1/releases/active` 응답을 사�
 | 데이터 | 한쪽만 다중 속도점이면 그럴듯한 가짜 곡선 생성 가능 | 양쪽 Gate 충족 전 `DATA_REQUIRED` 또는 참고 상태 |
 | 지표 | Panasonic 공개점에 inputW/EER가 없어 4지표 강제 시 가짜 파생 위험 | 양쪽 Evidence 완결 지표만 metricOptions에 포함 |
 | 수학 | 선형/스플라인 보간이 미측정 성능처럼 보일 수 있음 | 원천점만 plot, 생성점 0, 점 수 동일성 검사 |
-| Release | P15 통합 시 005에서 후속 Release로 변경 예정 | 활성 Release API로 동적 추적 |
+| Release | RED 기준 005에서 구현 Release 001로 변경 | 활성 Release API로 동적 추적 |
 | 접근성 | SVG만으로 수치를 읽기 어려움 | 동일 원시점 표와 Evidence 열 필수 |
 | 정적 출력 | Recharts가 인쇄/팝업에서 누락될 수 있음 | production build 후 print media와 팝업 E2E |
 

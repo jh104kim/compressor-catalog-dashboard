@@ -38,6 +38,14 @@ function approximatelyEqual(left, right, tolerance = 1e-9) {
   return Math.abs(left - right) <= tolerance;
 }
 
+async function waitForLayout(page) {
+  await page.evaluate(
+    () => new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    ),
+  );
+}
+
 function attachGuards(context) {
   const errors = [];
   const externalRequests = [];
@@ -279,10 +287,36 @@ async function curveScenario(page, viewport, activeReleaseId) {
   invariant(await speedAnalysis.isVisible(), "인쇄 화면에서 속도 분석이 숨겨졌습니다.");
   invariant(!(await page.getByTestId("comparison-panel").isVisible()), "인쇄 화면에 선택 UI가 남았습니다.");
   await page.emulateMedia({ media: "screen" });
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  await waitForLayout(page);
+  const overflowState = await page.evaluate(() => {
+    const root = document.documentElement;
+    const viewportWidth = root.clientWidth;
+    const offenders = [...document.querySelectorAll("*")]
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          tag: element.tagName,
+          testId: element.getAttribute("data-testid"),
+          className: element.className?.toString().slice(0, 80) || "",
+          right: Math.round(rect.right),
+          width: Math.round(rect.width),
+        };
+      })
+      .filter((item) => item.right > viewportWidth + 1)
+      .sort((left, right) => right.right - left.right)
+      .slice(0, 5);
+    return {
+      overflow: root.scrollWidth - viewportWidth,
+      scrollWidth: root.scrollWidth,
+      viewportWidth,
+      offenders,
+    };
+  });
+  invariant(
+    overflowState.overflow <= 1,
+    `CURVE 페이지 가로 overflow ${overflowState.overflow}px ${JSON.stringify(overflowState.offenders)}`,
   );
-  invariant(overflow <= 1, `CURVE 페이지 가로 overflow ${overflow}px`);
+  const overflow = overflowState.overflow;
   return {
     testIds: ["P15-E2E-CURVE-001", "P15-E2E-UNIT-001", "P15-E2E-METRIC-001"],
     status: payload.speedAnalysis.status,
@@ -434,6 +468,7 @@ async function staticReportScenario(context, landingPage, viewport, activeReleas
   invariant(await speedSections.first().isVisible(), "정적 print에서 속도 섹션 누락");
   invariant(await charts.first().isVisible(), "정적 print에서 속도 차트 누락");
   await reportPage.emulateMedia({ media: "screen" });
+  await waitForLayout(reportPage);
   const overflow = await reportPage.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

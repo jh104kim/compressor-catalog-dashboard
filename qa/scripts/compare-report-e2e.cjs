@@ -109,7 +109,10 @@ async function main() {
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
       invariant(overflow <= 1, `페이지 가로 overflow ${overflow}px`);
-      const csvLink = page.getByRole("link", { name: "CSV 내려받기" });
+      const csvLink = page.getByRole("link", {
+        name: "CSV 내려받기",
+        exact: true,
+      });
       invariant((await csvLink.getAttribute("href")) === "/compare-lab-output.csv", "CSV 링크가 잘못됐습니다.");
       const csvResponse = await context.request.get(csvUrl);
       invariant(csvResponse.status() === 200, "CSV 응답이 200이 아닙니다.");

@@ -4,14 +4,19 @@
 
 ---
 
-## 2026-08-03 — Phase P15 RPM/RPS 성능 맵·Recharts 🚧
+## 2026-08-03 — Phase P15 RPM/RPS 성능 맵·Recharts ✅ 로컬 완료
 
 - **계약 고정**: `REQ-P15-001~007`, 속도 성능점 Evidence·RPM/RPS 60배·Hz 금지·eligible 전용 차트·DATA_REQUIRED·stale·정적 보고서 회귀를 정의.
 - **E2E 선작성**: desktop `1440×1024`, mobile `390×844`, retries 0의 P15 Playwright와 CI Gate를 추가.
 - **RED 확인**: 활성 Release 005에서 `speedAnalysis` 부재로 `속도 상태 undefined` 실패를 재현하고 `qa/evidence/p15/red-contract/p15-speed-e2e.json`에 기록.
 - **문제/결정**: Release 번호는 동적 조회, Re Golden은 정확히 겹치는 속도점이 없어 ranking 불허, 미검증 Ro/Sc는 DATA_REQUIRED·차트 0으로 고정.
 - **지표 안전성**: Panasonic 공개 속도점에 inputW/EER가 없어 가짜 파생을 금지하고, 현재 양쪽 완결 지표인 용량·COP만 노출하도록 계약을 수정.
-- **현재 상태**: 데이터/API/UI/정적 보고서 구현과 GREEN·회귀·CI·평가 수치는 `PENDING`.
+- **구현/Release**: `release:2026-08-03:001`, commit `0f0d126fd40cfca4c6222358fa54be9c03304e0e`. Compare Lab과 정적 보고서에 eligible Re RPM/RPS Recharts·원시점 표·Evidence·속도 CSV·print를 반영.
+- **GREEN**: Python 94 passed(warning 1), Vitest 35/35, build 581 modules, P15 desktop/mobile 8/8을 retries 0으로 2회 연속 PASS. API/차트/표 8=8=8, Evidence 100%, DATA_REQUIRED chart 0, stale 0, 오류·외부요청·쓰기·overflow 0.
+- **회귀**: P5 16/16, 정적 보고서 2/2, P14 6/6, P0 characterization PASS.
+- **오탐 개선**: 최초 print→screen 직후 Recharts 1-frame reflow를 overflow 231px로 감지. offender 진단 후 2 rAF 뒤 측정하도록 보완하고 후속 2회 overflow 0을 확인.
+- **독립 Judge**: Task 100/100, 품질축 `5.0/5.0/5.0/4.9/4.9`, 환산 99.2/100, Critical 0·Major 0으로 로컬 PASS.
+- **현재 상태**: 로컬 Goal은 완료. GitHub Actions 원격 run만 **PENDING**이며 push/PR 후 run ID·URL·결과를 기록해야 함.
 - **증거**: `docs/13-speed-performance-map-tdd-plan.md`, `tests/p15-speed-performance-contract.md`, `qa/test-runs/RUN-20260803-016-P15-RED-GREEN.md`, `qa/evaluations/EVAL-20-P15.md`.
 
 ---

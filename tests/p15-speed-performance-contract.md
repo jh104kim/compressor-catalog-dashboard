@@ -199,5 +199,5 @@ retries 0으로 실행한다.
 `expected`, `actual`, `evidence_path`, `version_or_commit`,
 `reviewer_or_judge`가 모두 필요하다.
 
-실행 전에는 점수, PASS 건수, Release 번호, CI run ID를 `PENDING`으로 기록한다.
+실행 전에는 점수, PASS 건수, Release 번호, CI run ID를 `미실행`으로 기록한다.
 실제 명령 출력과 JSON/스크린샷이 생긴 뒤에만 값을 확정한다.
