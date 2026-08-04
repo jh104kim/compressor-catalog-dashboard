@@ -1,6 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const playwrightProxy = process.env.PLAYWRIGHT_PROXY_SERVER;
 
 const baseUrl = process.env.REPORT_BASE_URL || "http://127.0.0.1:8000/";
 const outputDir = path.resolve(
@@ -17,11 +18,25 @@ function invariant(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function isReportUrl(actualUrl) {
+  const actual = new URL(actualUrl);
+  const expected = new URL(reportUrl);
+  return (
+    actual.origin === expected.origin &&
+    [expected.pathname, expected.pathname.replace(/\.html$/, "")].includes(
+      actual.pathname,
+    )
+  );
+}
+
 async function main() {
   fs.mkdirSync(outputDir, { recursive: true });
   const screenshotDir = path.join(outputDir, "screenshots");
   fs.mkdirSync(screenshotDir, { recursive: true });
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    ...(playwrightProxy ? { proxy: { server: playwrightProxy } } : {}),
+  });
   const results = [];
   let releaseId = null;
 
@@ -82,7 +97,7 @@ async function main() {
       attachGuards(page);
       await page.waitForLoadState("networkidle");
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      invariant(page.url() === reportUrl, `팝업 URL 불일치: ${page.url()}`);
+      invariant(isReportUrl(page.url()), `팝업 URL 불일치: ${page.url()}`);
       const directReport = page.getByTestId("direct-comparison-report");
       await directReport.waitFor({ state: "visible" });
 

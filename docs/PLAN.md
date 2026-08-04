@@ -1,7 +1,7 @@
 # Catalog Audit Studio 전체 개발 계획
 
-> 최종 갱신: 2026-08-03
-> 현재 기본 제품: Published Release 기반 FastAPI + React Studio
+> 최종 갱신: 2026-08-04
+> 현재 기본 제품: Published Release 기반 FastAPI + React Studio + Cloudflare 경량 Worker
 
 ## Goal
 
@@ -20,6 +20,7 @@ Samsung Re/Ro/Sc 모델을 기준으로 공개 카탈로그를 검증하고, 같
 | P16 | 직접 비교 가능한 항목만 상세 Recharts 보고서에 표시 | 완료 |
 | P17 | README·운영 문서·QA 인덱스·폴더 정비 | 완료 |
 | P18 | 직전 Published Release 대비 모델·필드 변경 Diff | 완료 |
+| P19 | 무료 한도 경량 Cloudflare Worker·정적 asset 배포 | 영구 계정 인증 대기 |
 
 ## 현재 제품 범위
 
@@ -31,6 +32,7 @@ Samsung Re/Ro/Sc 모델을 기준으로 공개 카탈로그를 검증하고, 같
 - 직전 Release 대비 추가·삭제·수치·Evidence·성능맵 변경 추적
 - Published Release 조회 전용 UI; 편집·발행 UI 없음
 - Legacy DC는 `/legacy/` 회귀 기준선으로 유지
+- Cloudflare에서는 의존성 없는 JavaScript Worker가 같은 조회·비교 API를 제공
 
 ## 공통 완료기준
 

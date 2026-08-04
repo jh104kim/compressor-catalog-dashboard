@@ -1,0 +1,151 @@
+{
+  "phase": "P15-E",
+  "status": "PASS",
+  "activeReleaseId": "release:2026-08-03:001",
+  "retries": 0,
+  "viewportCount": 2,
+  "scenarioCount": 8,
+  "hardGates": {
+    "evidenceCoveragePct": 100,
+    "hzAsSpeedCount": 0,
+    "interpolatedPointCount": 0,
+    "extrapolatedPointCount": 0,
+    "chartEligibilityMismatchCount": 0,
+    "critical": 0,
+    "major": 0
+  },
+  "results": [
+    {
+      "viewport": {
+        "id": "desktop-1440x1024",
+        "width": 1440,
+        "height": 1024
+      },
+      "status": "PASS",
+      "scenarios": {
+        "curve": {
+          "testIds": [
+            "P15-E2E-CURVE-001",
+            "P15-E2E-UNIT-001",
+            "P15-E2E-METRIC-001"
+          ],
+          "status": "CURVE_READY",
+          "chartEligible": true,
+          "rankingAllowed": false,
+          "apiPointCount": 8,
+          "plottedPointCount": 8,
+          "tableRowCount": 8,
+          "evidenceCoveragePct": 100,
+          "metricOptions": [
+            "capacityW",
+            "cop"
+          ],
+          "metricCount": 2,
+          "overflowPx": 0
+        },
+        "dataRequired": {
+          "testId": "P15-E2E-GAP-001",
+          "status": "DATA_REQUIRED",
+          "chartCount": 0,
+          "gapCount": 1,
+          "overflowPx": 0
+        },
+        "stale": {
+          "testId": "P15-E2E-STALE-001",
+          "delayedMs": 650,
+          "staleResults": 0,
+          "staleSpeedAnalyses": 0,
+          "staleCharts": 0,
+          "staleTables": 0
+        },
+        "staticReport": {
+          "testIds": [
+            "P15-E2E-REPORT-001",
+            "P15-E2E-PRINT-001"
+          ],
+          "popup": true,
+          "directComparisonCount": 15,
+          "directChartCount": 2,
+          "visibleModelCount": 8,
+          "excludedGapCount": 0,
+          "speedSectionCount": 1,
+          "chartEligibilityMatched": true,
+          "plottedPointCount": 8,
+          "speedCsv": true,
+          "legacyCsv": true,
+          "compareLabLink": true,
+          "overflowPx": 0
+        }
+      },
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0,
+      "forbiddenWrites": 0
+    },
+    {
+      "viewport": {
+        "id": "mobile-390x844",
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "scenarios": {
+        "curve": {
+          "testIds": [
+            "P15-E2E-CURVE-001",
+            "P15-E2E-UNIT-001",
+            "P15-E2E-METRIC-001"
+          ],
+          "status": "CURVE_READY",
+          "chartEligible": true,
+          "rankingAllowed": false,
+          "apiPointCount": 8,
+          "plottedPointCount": 8,
+          "tableRowCount": 8,
+          "evidenceCoveragePct": 100,
+          "metricOptions": [
+            "capacityW",
+            "cop"
+          ],
+          "metricCount": 2,
+          "overflowPx": 0
+        },
+        "dataRequired": {
+          "testId": "P15-E2E-GAP-001",
+          "status": "DATA_REQUIRED",
+          "chartCount": 0,
+          "gapCount": 1,
+          "overflowPx": 0
+        },
+        "stale": {
+          "testId": "P15-E2E-STALE-001",
+          "delayedMs": 650,
+          "staleResults": 0,
+          "staleSpeedAnalyses": 0,
+          "staleCharts": 0,
+          "staleTables": 0
+        },
+        "staticReport": {
+          "testIds": [
+            "P15-E2E-REPORT-001",
+            "P15-E2E-PRINT-001"
+          ],
+          "popup": true,
+          "directComparisonCount": 15,
+          "directChartCount": 2,
+          "visibleModelCount": 8,
+          "excludedGapCount": 0,
+          "speedSectionCount": 1,
+          "chartEligibilityMatched": true,
+          "plottedPointCount": 8,
+          "speedCsv": true,
+          "legacyCsv": true,
+          "compareLabLink": true,
+          "overflowPx": 0
+        }
+      },
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0,
+      "forbiddenWrites": 0
+    }
+  ]
+}

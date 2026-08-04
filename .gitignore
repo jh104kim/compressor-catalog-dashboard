@@ -45,3 +45,12 @@ studio/dist/
 studio/*.tsbuildinfo
 studio/vite.config.js
 studio/vite.config.d.ts
+
+# Cloudflare local deployment state
+cloudflare/.wrangler/
+cloudflare/.venv/
+cloudflare/.venv-workers/
+cloudflare/backend/
+cloudflare/runtime_data/
+cloudflare/python_modules/
+cloudflare/.dev.vars*

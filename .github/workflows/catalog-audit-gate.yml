@@ -180,6 +180,10 @@ jobs:
         working-directory: qa
         run: npm ci
 
+      - name: Run lightweight Cloudflare Worker contracts
+        working-directory: cloudflare
+        run: npm test
+
       - name: Install Playwright Chromium
         working-directory: qa
         run: npx playwright install --with-deps chromium
@@ -243,6 +247,12 @@ jobs:
       - name: Build Studio
         working-directory: studio
         run: npm run build
+
+      - name: Prepare and dry-run Cloudflare deployment
+        working-directory: cloudflare
+        run: |
+          python ../scripts/prepare_cloudflare_deploy.py
+          npx --yes wrangler@4.118.0 deploy --dry-run
 
       - name: Run P5 same-origin Chromium once with retries 0
         shell: bash

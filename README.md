@@ -211,11 +211,40 @@ P15/P16 E2E 8/8, 정적 보고서 회귀 2/2, 콘솔·페이지·외부요청·�
 0이다. 실행할 때마다
 현재 결과와 [`docs/PROGRESS.md`](docs/PROGRESS.md)를 함께 확인한다.
 
+## Cloudflare 경량 배포
+
+무료 Workers 한도에 맞춰 운영 배포는 Python/FastAPI를 번들하지 않는다.
+`cloudflare/worker.js`가 기존 조회·비교·분석 API 계약을 유지하고, 검증된
+Published Release는 배포 전에 `studio/dist/_runtime/` JSON asset으로 생성한다.
+
+```powershell
+$env:PYTHONUTF8='1'
+$env:NODE_OPTIONS='--use-system-ca' # 사내 인증서 환경에서만 필요
+
+python scripts/build_compare_lab_report.py
+npm --prefix studio run build
+python scripts/prepare_cloudflare_deploy.py
+npm --prefix cloudflare test
+
+Push-Location cloudflare
+npx --yes wrangler@4.118.0 deploy --dry-run
+npx --yes wrangler@4.118.0 login
+npx --yes wrangler@4.118.0 deploy
+Pop-Location
+```
+
+배포 후 `/api/v1/health`, 랜딩 페이지, Compare Lab, Compare Report,
+Release Diff, RPM/RPS 차트를 확인한다. 임시 preview 계정은 단일 asset 5MB
+제한 때문에 8.57MB 공식 PDF가 제외될 수 있으므로 영구 계정 배포에서 PDF
+응답까지 최종 확인한다. 상세 계약은
+[P19 Cloudflare 배포 문서](docs/16-cloudflare-lightweight-deploy.md)를 따른다.
+
 ## 프로젝트 폴더
 
 ```text
 backend/   FastAPI 조회·검증·비교·분석·속도맵
 catalog/   staging, 확장 검토 Batch, 불변 Published Release
+cloudflare/ 의존성 없는 JavaScript Worker와 Wrangler 설정
 config/    권위값·GAP·비교 정책
 data/      PDF와 Markdown 리서치 원천
 docs/      아키텍처·운영·TDD 계획·진행 기록
@@ -236,6 +265,7 @@ tests/     Python 및 UI 테스트 계약
 - [운영·발행·롤백](docs/07-operations-and-362-expansion.md)
 - [CI Gate](docs/08-ci-gate.md)
 - [P18 Release Diff TDD](docs/15-release-diff-tdd-plan.md)
+- [P19 Cloudflare 경량 배포](docs/16-cloudflare-lightweight-deploy.md)
 - [QA 인덱스](qa/README.md)
 - [테스트 계약 인덱스](tests/README.md)
 

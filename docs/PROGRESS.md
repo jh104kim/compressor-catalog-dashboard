@@ -4,6 +4,19 @@
 
 ---
 
+## 2026-08-04 — Phase P19 Cloudflare 경량 배포 ⏳
+
+- **TDD**: Python Worker 계약을 JavaScript Worker·runtime JSON·100KB 미만·runtime dependency 0개 기준으로 변경하고 4건 RED 후 GREEN 확인.
+- **경량화**: Python Worker gzip 6.68MB를 JavaScript Worker 25KB, Wrangler gzip 6.75KB로 축소. 무료 3MB Worker 한도보다 충분히 작음.
+- **API 동등성**: health, Active Release, Diff, Catalog, Portfolio, Evidence, Compare, Compare Report 8개 경로를 FastAPI 응답과 완전 일치 확인.
+- **로컬 Worker E2E**: P5 16/16, Compare Report 2/2, P14 6/6, P15/P16 8/8 PASS. 정적 보고서의 Cloudflare 확장자 없는 canonical URL을 E2E에서 허용.
+- **임시 원격 배포**: Workers preview에서 Report 2/2, P14 6/6, P15/P16 8/8 PASS. P5는 preview 단일 asset 5MB 제한으로 공식 PDF만 제외되어 14/16; 나머지 오류·overflow 0.
+- **사내망 대응**: E2E에 선택적 `PLAYWRIGHT_PROXY_SERVER`를 추가해 로컬에는 영향 없이 원격 Chromium 검증 가능.
+- **남은 Gate**: Cloudflare 계정 로그인 후 PDF 포함 영구 `workers.dev` 배포, P5 16/16 원격 재검증, Git main 반영.
+- **증거**: `docs/16-cloudflare-lightweight-deploy.md`, `tests/p19-cloudflare-deploy-contract.md`, `qa/test-runs/RUN-20260804-019-P19-CLOUDFLARE.md`, `qa/evaluations/EVAL-22-P19.md`, `qa/evidence/p19/`.
+
+---
+
 ## 2026-08-03 — Phase P18 Published Release 변경 Diff ✅
 
 - **TDD 계약**: `REQ-P18-001~006`과 synthetic/실제 Release/API/UI/E2E 테스트를 먼저 작성하고 엔진·API·화면 부재 RED를 확인.

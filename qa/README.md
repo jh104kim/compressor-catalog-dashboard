@@ -38,6 +38,16 @@ npm --prefix qa run test:p15
 - `qa/test-runs/RUN-20260803-018-P18-RED-GREEN.md`
 - `qa/evaluations/EVAL-21-P18.md`
 
+P19 Cloudflare 배포 증거:
+
+- `qa/evidence/p19/p5/`, `report/`, `p14/`, `p15/` — 로컬 Worker PASS
+- `qa/evidence/p19/remote-*` — 임시 원격 Worker 검수
+- `qa/test-runs/RUN-20260804-019-P19-CLOUDFLARE.md`
+- `qa/evaluations/EVAL-22-P19.md`
+
+사내 프록시를 통한 원격 E2E만 `PLAYWRIGHT_PROXY_SERVER=$env:HTTPS_PROXY`를
+설정한다. localhost 검증에서는 설정하지 않는다.
+
 공통 Gate는 retries 0, 외부 요청·console/page 오류·HTTP 400+·금지 쓰기·페이지
 전체 overflow 0이다. 중간 디버그 캡처는 `.gitignore`로 제외하고 최종 증거만
 커밋한다.

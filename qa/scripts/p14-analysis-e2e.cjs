@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const playwrightProxy = process.env.PLAYWRIGHT_PROXY_SERVER;
 
 const baseUrl = process.env.P14_BASE_URL || "http://127.0.0.1:8000/";
 const outputDir = path.resolve(
@@ -205,7 +206,10 @@ async function staleScenario(page) {
 
 async function main() {
   fs.mkdirSync(screenshotDir, { recursive: true });
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    ...(playwrightProxy ? { proxy: { server: playwrightProxy } } : {}),
+  });
   const results = [];
   let releaseId = null;
   try {

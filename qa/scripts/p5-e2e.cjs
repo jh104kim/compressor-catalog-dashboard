@@ -19,6 +19,7 @@ const SCREENSHOT_DIR = path.join(OUTPUT_DIR, "screenshots");
 const RESULT_PATH = path.join(OUTPUT_DIR, "p5-e2e.json");
 const BASE_ORIGIN = new URL(BASE_URL).origin;
 const BROWSER_EXECUTABLE = process.env.BROWSER_EXECUTABLE || "";
+const PLAYWRIGHT_PROXY = process.env.PLAYWRIGHT_PROXY_SERVER || "";
 
 const MODELS = {
   g1Baseline: "model:samsung:DS8LC5040IN",
@@ -883,6 +884,7 @@ async function main() {
   try {
     browser = await chromium.launch({
       headless: true,
+      ...(PLAYWRIGHT_PROXY ? { proxy: { server: PLAYWRIGHT_PROXY } } : {}),
       ...(BROWSER_EXECUTABLE
         ? { executablePath: BROWSER_EXECUTABLE }
         : {}),

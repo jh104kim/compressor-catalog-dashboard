@@ -1,0 +1,57 @@
+{
+  "phase": "P14",
+  "status": "PASS",
+  "reportUrl": "http://127.0.0.1:8791/compare-lab-output.html",
+  "releaseId": "release:2026-08-03:001",
+  "retries": 0,
+  "results": [
+    {
+      "viewport": {
+        "id": "desktop-1440x1024",
+        "width": 1440,
+        "height": 1024
+      },
+      "status": "PASS",
+      "landingPopup": true,
+      "modelCount": 8,
+      "comparisonCount": 15,
+      "directChartCount": 2,
+      "matrixRowCount": 8,
+      "excludedGapCount": 0,
+      "csvComparisonRows": 15,
+      "typeCounts": {
+        "Re": 1,
+        "Ro": 6,
+        "Sc": 1
+      },
+      "overflowPx": 0,
+      "compareLabLink": "DIRECT_OK",
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "viewport": {
+        "id": "mobile-390x844",
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "landingPopup": true,
+      "modelCount": 8,
+      "comparisonCount": 15,
+      "directChartCount": 2,
+      "matrixRowCount": 8,
+      "excludedGapCount": 0,
+      "csvComparisonRows": 15,
+      "typeCounts": {
+        "Re": 1,
+        "Ro": 6,
+        "Sc": 1
+      },
+      "overflowPx": 0,
+      "compareLabLink": "DIRECT_OK",
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0
+    }
+  ]
+}

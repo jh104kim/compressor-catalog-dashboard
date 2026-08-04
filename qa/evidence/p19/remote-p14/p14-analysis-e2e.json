@@ -1,0 +1,69 @@
+{
+  "phase": "P14-E",
+  "status": "PASS",
+  "releaseId": "release:2026-08-03:001",
+  "retries": 0,
+  "scenarioCount": 6,
+  "results": [
+    {
+      "viewport": {
+        "id": "desktop-1440x1024",
+        "width": 1440,
+        "height": 1024
+      },
+      "status": "PASS",
+      "scenarios": {
+        "direct": {
+          "code": "DIRECT_OK",
+          "evidenceRefs": 2,
+          "sections": 5,
+          "jsonTrace": true,
+          "printLayout": true,
+          "overflowPx": 0
+        },
+        "blocked": {
+          "code": "BLOCKED_TYPE_MISMATCH",
+          "forbiddenTerms": 0
+        },
+        "stale": {
+          "delayedMs": 650,
+          "staleResults": 0,
+          "staleReports": 0
+        }
+      },
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0,
+      "forbiddenWrites": 0
+    },
+    {
+      "viewport": {
+        "id": "mobile-390x844",
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "scenarios": {
+        "direct": {
+          "code": "DIRECT_OK",
+          "evidenceRefs": 2,
+          "sections": 5,
+          "jsonTrace": true,
+          "printLayout": true,
+          "overflowPx": 0
+        },
+        "blocked": {
+          "code": "BLOCKED_TYPE_MISMATCH",
+          "forbiddenTerms": 0
+        },
+        "stale": {
+          "delayedMs": 650,
+          "staleResults": 0,
+          "staleReports": 0
+        }
+      },
+      "consolePageNetworkErrors": 0,
+      "externalRequests": 0,
+      "forbiddenWrites": 0
+    }
+  ]
+}
