@@ -11,6 +11,12 @@ Samsung(당사) 관점에서 공개 카탈로그와 리서치 데이터를 점�
 
 저장소: [jh104kim/compressor-catalog-dashboard](https://github.com/jh104kim/compressor-catalog-dashboard)
 
+현재 Cloudflare 검수 페이지:
+[Samsung Compressor Catalog Audit Studio 열기](https://samsung-compressor-catalog-dashboard.prong-workshop.workers.dev/)
+
+> 임시 Preview 주소로 약 1시간 후 만료될 수 있다. Cloudflare 계정 인증 후
+> 영구 주소가 발급되면 이 링크를 교체한다.
+
 ## 현재 기준
 
 | 항목 | 값 |
