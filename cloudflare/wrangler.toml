@@ -1,6 +1,7 @@
 name = "samsung-compressor-catalog-dashboard"
 main = "worker.js"
 compatibility_date = "2026-08-04"
+compatibility_flags = ["global_fetch_strictly_public"]
 workers_dev = true
 preview_urls = true
 

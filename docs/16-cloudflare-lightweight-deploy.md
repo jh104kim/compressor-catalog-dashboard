@@ -19,6 +19,8 @@ Published Release SHA 검증
 - `studio/dist`: SPA, 정적 보고서, CSV, Legacy, 공식 PDF, runtime JSON
 - `prepare_cloudflare_deploy.py`: 활성·직전 Release SHA 검증 후 asset 생성
 - Publish·Rollback API와 쓰기 저장소는 배포 Worker에 포함하지 않는다.
+- `global_fetch_strictly_public`: 임시 Preview에서 `ASSETS.fetch()`가 같은
+  Workers 영역 요청으로 판정되어 Error 1042가 나는 문제를 방지한다.
 
 ## 완료 기준
 
@@ -49,6 +51,7 @@ Pop-Location
 임시 preview 배포는 공식 PDF 8.57MB가 preview 단일 asset 5MB 제한을 넘는다.
 따라서 preview는 UI/API 검수에만 사용하고, 영구 계정 배포에서 PDF 포함 최종
 검수를 수행한다. 임시 URL과 claim token은 운영 문서나 Git에 저장하지 않는다.
+임시 URL은 약 1시간 후 만료되므로 운영 주소로 공유하지 않는다.
 
 ## 현재 결과
 
@@ -56,4 +59,7 @@ Pop-Location
 - API parity: 8/8 PASS
 - 로컬 Chromium: 32/32 PASS
 - 임시 원격 Chromium: 30/32 PASS; PDF 2건만 preview 제한으로 제외
+- 2026-08-05 Preview 복구: 기존 URL 만료 확인 → 신규 배포 최초 Error 1042 재현
+  → 호환 플래그 적용 후 랜딩·health·Compare Report 모두 HTTP 200,
+  Report 2/2·P14 분석 6/6 PASS
 - 상태: 영구 Cloudflare 계정 인증 대기

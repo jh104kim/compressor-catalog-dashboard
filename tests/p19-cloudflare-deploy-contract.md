@@ -11,12 +11,13 @@
 | `REQ-P19-005` | 공식 PDF와 Legacy 기준 화면을 정적 asset으로 함께 제공한다. |
 | `REQ-P19-006` | 배포 URL에서 health, Release Diff, Compare Lab, Compare Report를 실제 검증한다. |
 | `REQ-P19-007` | Worker script는 100KB 미만이며 npm runtime dependency를 사용하지 않는다. |
+| `REQ-P19-008` | 임시 Preview에서도 정적 asset binding 호출이 Error 1042 없이 동작한다. |
 
 ## 테스트
 
 | ID | 검증 |
 |---|---|
-| `P19-UT-CONFIG-001` | JavaScript Worker, static assets, SPA, `/api/*` worker-first 설정 |
+| `P19-UT-CONFIG-001` | JavaScript Worker, static assets, SPA, `/api/*` worker-first, `global_fetch_strictly_public` 설정 |
 | `P19-UT-PACK-001` | 검증된 Published Release를 읽어 active·catalog·diff·rules·B1 runtime JSON 생성 |
 | `P19-UT-ASSET-001` | 공식 PDF와 Legacy 파일을 production asset에 복사 |
 | `P19-UT-BOUNDARY-001` | JavaScript fetch handler와 조회 전용 경계 |

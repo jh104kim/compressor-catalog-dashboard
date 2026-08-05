@@ -18,7 +18,7 @@ def test_p19_wrangler_routes_api_before_spa_assets() -> None:
 
     assert config["name"] == "samsung-compressor-catalog-dashboard"
     assert config["main"] == "worker.js"
-    assert "compatibility_flags" not in config
+    assert config["compatibility_flags"] == ["global_fetch_strictly_public"]
     assert config["assets"] == {
         "directory": "../studio/dist",
         "binding": "ASSETS",

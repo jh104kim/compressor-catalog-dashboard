@@ -4,6 +4,16 @@
 
 ---
 
+## 2026-08-05 — Phase P20 Cloudflare Preview 접속 복구 ✅
+
+- **재현**: 만료된 임시 URL은 응답 불가, 신규 Preview는 랜딩·API 모두 Cloudflare Error 1042 반환.
+- **원인**: 임시 Worker가 `ASSETS.fetch()`를 같은 Workers 영역 호출로 판정.
+- **TDD**: `global_fetch_strictly_public` 설정 계약을 먼저 추가해 RED 확인 후 Wrangler 설정에 반영해 GREEN 전환.
+- **원격 검증**: 호환 플래그 적용 재배포 후 `/`, `/api/v1/health`, `/compare-lab-output` 모두 HTTP 200. Report 2/2, P14 분석 6/6 PASS.
+- **운영 경계**: 임시 주소는 약 1시간 후 만료되며, 영구 배포는 Cloudflare 계정 인증이 필요.
+
+---
+
 ## 2026-08-04 — Phase P19 Cloudflare 경량 배포 ⏳
 
 - **TDD**: Python Worker 계약을 JavaScript Worker·runtime JSON·100KB 미만·runtime dependency 0개 기준으로 변경하고 4건 RED 후 GREEN 확인.
